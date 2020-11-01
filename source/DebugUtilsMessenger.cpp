@@ -1,10 +1,10 @@
-#include <vks/DebugUtilsMessenger.hpp>
-#include <vks/Instance.hpp>
+#include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/Instance.hpp>
 
 #include <iostream>
 #include <stdexcept>
 
-using namespace vks;
+using namespace vkl;
 
 DebugUtilsMessenger::DebugUtilsMessenger(const Instance& instance)
     : m_debugMessenger(VK_NULL_HANDLE), m_instance(instance) {

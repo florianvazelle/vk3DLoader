@@ -1,9 +1,9 @@
-#include <vks/QueueFamily.hpp>
+#include <vkl/QueueFamily.hpp>
 
 #include <iostream>
 #include <vector>
 
-using namespace vks;
+using namespace vkl;
 
 QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device,
                                                   const VkSurfaceKHR& surface) {

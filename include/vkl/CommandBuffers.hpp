@@ -5,13 +5,13 @@
 #include <NonCopyable.hpp>
 #include <functional>
 #include <vector>
-#include <vks/CommandPool.hpp>
-#include <vks/Device.hpp>
-#include <vks/GraphicsPipeline.hpp>
-#include <vks/RenderPass.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/CommandPool.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/GraphicsPipeline.hpp>
+#include <vkl/RenderPass.hpp>
+#include <vkl/SwapChain.hpp>
 
-namespace vks {
+namespace vkl {
 
   class CommandBuffers : public NonCopyable {
   public:
@@ -42,6 +42,6 @@ namespace vks {
     virtual void createCommandBuffers() = 0;
     void destroyCommandBuffers();
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // COMMANDBUFFERS_HPP

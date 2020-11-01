@@ -1,6 +1,6 @@
 #include <doctest/doctest.h>
 
-#include <vks/ShaderLoader.hpp>
+#include <vkl/ShaderLoader.hpp>
 
 // Obvious test, you can remove
 TEST_CASE("Load Shader") {

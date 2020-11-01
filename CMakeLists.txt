@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 
 # ---- Project ----
 
-project(VulkanStarter VERSION 1.2.3.4 LANGUAGES CXX)
+project(vk3DLoader VERSION 1.2.3.4 LANGUAGES CXX)
 set(LIBRARY_NAME vkStarter)
 set(PROJECT_CXX_STANDARD 17)
 

@@ -1,9 +1,9 @@
-#include <vks/Instance.hpp>
+#include <vkl/Instance.hpp>
 
-#include <vks/DebugUtilsMessenger.hpp>
-#include <vks/Window.hpp>
+#include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/Window.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 const std::vector<const char*> Instance::ValidationLayers = {"VK_LAYER_KHRONOS_validation"};
 const std::vector<const char*> Instance::DeviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};

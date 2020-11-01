@@ -10,7 +10,7 @@
 
 #include <NonCopyable.hpp>
 
-namespace vks {
+namespace vkl {
 
   class Instance : public NonCopyable {
   public:
@@ -32,6 +32,6 @@ namespace vks {
     static void GetRequiredExtensions(std::vector<const char*>& extensions, bool validationLayers);
   };
 
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // INSTANCE_HPP

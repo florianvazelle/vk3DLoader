@@ -19,19 +19,19 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
 
-#include <vks/Basic/BasicCommandBuffers.hpp>
-#include <vks/Basic/BasicRenderPass.hpp>
-#include <vks/DebugUtilsMessenger.hpp>
-#include <vks/Device.hpp>
-#include <vks/GraphicsPipeline.hpp>
-#include <vks/ImGui/ImGuiApp.hpp>
-#include <vks/Instance.hpp>
-#include <vks/ShaderLoader.hpp>
-#include <vks/SwapChain.hpp>
-#include <vks/SyncObjects.hpp>
-#include <vks/Window.hpp>
+#include <vkl/Basic/BasicCommandBuffers.hpp>
+#include <vkl/Basic/BasicRenderPass.hpp>
+#include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/GraphicsPipeline.hpp>
+#include <vkl/ImGui/ImGuiApp.hpp>
+#include <vkl/Instance.hpp>
+#include <vkl/ShaderLoader.hpp>
+#include <vkl/SwapChain.hpp>
+#include <vkl/SyncObjects.hpp>
+#include <vkl/Window.hpp>
 
-namespace vks {
+namespace vkl {
 
   class Application {
   public:
@@ -63,4 +63,4 @@ namespace vks {
     void recreateSwapChain(bool& framebufferResized);
   };
 
-}  // namespace vks
+}  // namespace vkl

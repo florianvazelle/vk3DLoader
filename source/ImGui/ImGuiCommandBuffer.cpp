@@ -1,4 +1,4 @@
-#include <vks/ImGui/ImGuiCommandBuffers.hpp>
+#include <vkl/ImGui/ImGuiCommandBuffers.hpp>
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-using namespace vks;
+using namespace vkl;
 
 ImGuiCommandBuffers::ImGuiCommandBuffers(const Device& device,
                                          const RenderPass& renderPass,

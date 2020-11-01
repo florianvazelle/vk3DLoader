@@ -1,12 +1,12 @@
-#include <vks/GraphicsPipeline.hpp>
+#include <vkl/GraphicsPipeline.hpp>
 
 #include <iostream>
-#include <vks/Device.hpp>
-#include <vks/RenderPass.hpp>
-#include <vks/ShaderLoader.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/RenderPass.hpp>
+#include <vkl/ShaderLoader.hpp>
+#include <vkl/SwapChain.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 GraphicsPipeline::GraphicsPipeline(const Device& device,
                                    const SwapChain& swapChain,

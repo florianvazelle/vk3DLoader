@@ -1,4 +1,4 @@
-#include <vks/Application.hpp>
+#include <vkl/Application.hpp>
 
 int main() {
   // need to init glfw first, to get the suitable glfw extension for the vkinstance
@@ -8,7 +8,7 @@ int main() {
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
   // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-  vks::Application app;
+  vkl::Application app;
 
   try {
     app.run();

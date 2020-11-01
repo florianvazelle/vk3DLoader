@@ -11,7 +11,7 @@
 
 #include <NonCopyable.hpp>
 
-namespace vks {
+namespace vkl {
 
   class Instance;
 
@@ -19,7 +19,7 @@ namespace vks {
   public:
     // using DrawFrameFunc = void(*)(bool& framebufferResized);
 
-    Window(const glm::ivec2& dimensions, const std::string& title, const vks::Instance& instance);
+    Window(const glm::ivec2& dimensions, const std::string& title, const vkl::Instance& instance);
     Window() = delete;
     ~Window();
     void mainLoop();
@@ -45,7 +45,7 @@ namespace vks {
     glm::ivec2 m_dimensions;
     std::string m_title;
 
-    const vks::Instance& m_instance;
+    const vkl::Instance& m_instance;
     VkSurfaceKHR m_surface;
 
     bool m_framebufferResized;
@@ -54,6 +54,6 @@ namespace vks {
     static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
   };
 
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // WINDOW_HPP

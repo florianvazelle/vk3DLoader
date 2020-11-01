@@ -3,9 +3,9 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <vks/CommandBuffers.hpp>
+#include <vkl/CommandBuffers.hpp>
 
-namespace vks {
+namespace vkl {
 
   class BasicCommandBuffers : public CommandBuffers {
   public:
@@ -20,6 +20,6 @@ namespace vks {
     void createCommandBuffers();
   };
 
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // BASICCOMMANDBUFFERS_HPP

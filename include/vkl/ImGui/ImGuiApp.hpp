@@ -10,15 +10,15 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
 
-#include <vks/CommandPool.hpp>
-#include <vks/Device.hpp>
-#include <vks/ImGui/ImGuiCommandBuffers.hpp>
-#include <vks/ImGui/ImGuiRenderPass.hpp>
-#include <vks/Instance.hpp>
-#include <vks/SwapChain.hpp>
-#include <vks/Window.hpp>
+#include <vkl/CommandPool.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/ImGui/ImGuiCommandBuffers.hpp>
+#include <vkl/ImGui/ImGuiRenderPass.hpp>
+#include <vkl/Instance.hpp>
+#include <vkl/SwapChain.hpp>
+#include <vkl/Window.hpp>
 
-namespace vks {
+namespace vkl {
 
   class ImGuiApp {
   public:
@@ -54,6 +54,6 @@ namespace vks {
 
     void createImGuiDescriptorPool();
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // IMGUIAPP_HPP

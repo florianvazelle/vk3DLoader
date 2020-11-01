@@ -6,7 +6,7 @@
 #include <NonCopyable.hpp>
 #include <vector>
 
-namespace vks {
+namespace vkl {
   class Device;
   class Window;
 
@@ -63,6 +63,6 @@ namespace vks {
     static VkPresentModeKHR ChooseSwapPresentMode(
         const std::vector<VkPresentModeKHR>& availablePresentModes);
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // SWAPCHAIN_HPP

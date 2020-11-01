@@ -6,7 +6,7 @@
 #include <NonCopyable.hpp>
 #include <vector>
 
-namespace vks {
+namespace vkl {
 
   class Device;
   class SwapChain;
@@ -37,6 +37,6 @@ namespace vks {
     void createPipeline();
     VkShaderModule createShaderModule(const std::vector<char>& code);
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // GRAPHICSPIPELINE_HPP

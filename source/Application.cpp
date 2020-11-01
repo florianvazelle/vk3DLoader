@@ -1,6 +1,6 @@
-#include <vks/Application.hpp>
+#include <vkl/Application.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;

@@ -5,7 +5,7 @@
 #include <NonCopyable.hpp>
 #include <vector>
 
-namespace vks {
+namespace vkl {
   class Device;
 
   class SyncObjects : public NonCopyable {
@@ -29,6 +29,6 @@ namespace vks {
     std::vector<VkFence> m_imagesInFlight;
   };
 
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // SYNCOBJECTS_HPP

@@ -1,8 +1,8 @@
-#include <vks/Basic/BasicCommandBuffers.hpp>
+#include <vkl/Basic/BasicCommandBuffers.hpp>
 
 #include <stdexcept>
 
-using namespace vks;
+using namespace vkl;
 
 BasicCommandBuffers::BasicCommandBuffers(const Device& device,
                                          const RenderPass& renderPass,

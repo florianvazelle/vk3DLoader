@@ -5,7 +5,7 @@
 #include <NonCopyable.hpp>
 #include <vector>
 
-namespace vks {
+namespace vkl {
   class Device;
   class SwapChain;
 
@@ -35,6 +35,6 @@ namespace vks {
 
     void destroyFrameBuffers();
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // RENDERPASS_HPP

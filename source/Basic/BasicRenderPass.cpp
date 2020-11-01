@@ -1,9 +1,9 @@
 #include <iostream>
-#include <vks/Basic/BasicRenderPass.hpp>
-#include <vks/Device.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/Basic/BasicRenderPass.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/SwapChain.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 BasicRenderPass::BasicRenderPass(const Device& device, const SwapChain& swapChain)
     : RenderPass(device, swapChain) {

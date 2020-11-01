@@ -4,7 +4,7 @@
 #include <vulkan/vulkan.h>
 #include <NonCopyable.hpp>
 
-namespace vks {
+namespace vkl {
   class Device;
 
   class CommandPool : public NonCopyable {
@@ -20,6 +20,6 @@ namespace vks {
 
     const Device& m_device;
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // COMMANDPOOL_HPP

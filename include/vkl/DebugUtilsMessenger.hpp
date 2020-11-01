@@ -5,7 +5,7 @@
 
 #include <NonCopyable.hpp>
 
-namespace vks {
+namespace vkl {
 
   class Instance;
 
@@ -29,6 +29,6 @@ namespace vks {
     VkDebugUtilsMessengerEXT m_debugMessenger;
   };
 
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // DEBUGUTILSMESSENGER_HPP

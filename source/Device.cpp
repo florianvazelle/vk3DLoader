@@ -1,16 +1,16 @@
-#include <vks/Device.hpp>
+#include <vkl/Device.hpp>
 
-#include <vks/Instance.hpp>
-#include <vks/Window.hpp>
+#include <vkl/Instance.hpp>
+#include <vkl/Window.hpp>
 
 #include <map>
 #include <set>
 #include <vector>
 
-#include <vks/QueueFamily.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/QueueFamily.hpp>
+#include <vkl/SwapChain.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 Device::Device(const Instance& instance,
                const Window& window,

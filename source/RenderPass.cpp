@@ -1,10 +1,10 @@
 
 #include <iostream>
-#include <vks/Device.hpp>
-#include <vks/RenderPass.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/RenderPass.hpp>
+#include <vkl/SwapChain.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 RenderPass::RenderPass(const Device& device, const SwapChain& swapChain)
     : m_renderPass(VK_NULL_HANDLE),

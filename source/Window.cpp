@@ -1,11 +1,11 @@
-#include <vks/Window.hpp>
+#include <vkl/Window.hpp>
 
-#include <vks/Instance.hpp>
+#include <vkl/Instance.hpp>
 
 #include <exception>
 #include <iostream>
 
-using namespace vks;
+using namespace vkl;
 
 Window::Window(const glm::ivec2& dimensions, const std::string& title, const Instance& instance)
     : m_dimensions(dimensions),

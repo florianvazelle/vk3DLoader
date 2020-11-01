@@ -1,13 +1,13 @@
-#include <vks/CommandBuffers.hpp>
-#include <vks/CommandPool.hpp>
-#include <vks/Device.hpp>
-#include <vks/GraphicsPipeline.hpp>
-#include <vks/RenderPass.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/CommandBuffers.hpp>
+#include <vkl/CommandPool.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/GraphicsPipeline.hpp>
+#include <vkl/RenderPass.hpp>
+#include <vkl/SwapChain.hpp>
 
 #include <stdexcept>
 
-using namespace vks;
+using namespace vkl;
 
 CommandBuffers::CommandBuffers(const Device& device,
                                const RenderPass& renderPass,

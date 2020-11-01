@@ -4,7 +4,7 @@
 #include <vulkan/vulkan.h>
 #include <optional>
 
-namespace vks {
+namespace vkl {
   struct QueueFamilyIndices {
     // Drawing command support
     std::optional<uint32_t> graphicsFamily;
@@ -22,6 +22,6 @@ namespace vks {
     static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& device,
                                                 const VkSurfaceKHR& surface);
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // QUEUEFAMILY_HPP

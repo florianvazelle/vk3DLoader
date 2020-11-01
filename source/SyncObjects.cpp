@@ -1,9 +1,9 @@
-#include <vks/Device.hpp>
-#include <vks/SyncObjects.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/SyncObjects.hpp>
 
 #include <stdexcept>
 
-using namespace vks;
+using namespace vkl;
 
 SyncObjects::SyncObjects(const Device& device, uint32_t numImages, uint32_t maxFramesInFlight)
     : m_device(device),

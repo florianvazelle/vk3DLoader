@@ -1,15 +1,16 @@
-# VulkanStarter [![Actions Status](https://github.com/florianvazelle/VulkanStarter/workflows/Windows/badge.svg)](https://github.com/florianvazelle/VulkanStarter/actions) [![Actions Status](https://github.com/florianvazelle/VulkanStarter/workflows/Ubuntu/badge.svg)](https://github.com/florianvazelle/VulkanStarter/actions)
+# vk3DLoader [![Actions Status](https://github.com/florianvazelle/vk3DLoader/workflows/Windows/badge.svg)](https://github.com/florianvazelle/vk3DLoader/actions) [![Actions Status](https://github.com/florianvazelle/vk3DLoader/workflows/Ubuntu/badge.svg)](https://github.com/florianvazelle/vk3DLoader/actions)
 
-This is a template to setting up a new Vulkan C++ project.
+This is work in progress Vulkan project to load and visualize a 3D model.
 
-## Features
+## Roadmap
 
-- Sources, headers and mains separated in distinct folders
-- Use of modern [CMake](https://cmake.org/) for much easier compiling
-- Automatically compile shaders with [`glslValidator`](https://github.com/KhronosGroup/glslang)
-- Integrated test suite using [Doctest](https://github.com/onqtam/doctest)
-- Continuous integration via [GitHub Actions](https://help.github.com/en/actions)
-- Support [Conan](https://conan.io/) package manager to quick install your package
+- Implement :
+  - Descriptor sets
+  - Dynamic uniform buffers
+  - Push constants
+- 🏆 Support obj/fbx/gltf model loading
+
+Bonus: Normal mapping
 
 ## Building
 
@@ -20,7 +21,7 @@ Use the following command to build and run the executable target.
 ```bash
 cmake -Bbuild
 cmake --build build
-./build/bin/VulkanStarter
+./build/bin/vk3DLoader
 ```
 
 ### Build and run test suite
@@ -30,7 +31,7 @@ Use the following commands from the project's root directory to run the test sui
 ```bash
 cmake -Bbuild
 cmake --build build
-./build/bin/VulkanStarterTests
+./build/bin/vk3DLoaderTests
 ```
 
 ## Dependencies
@@ -40,9 +41,3 @@ cmake --build build
     - GCC 7+ or Clang 5+
 - [CMake](https://cmake.org/) for build system creation (>= 3.8)
 - [Conan](https://conan.io/) for install packages (>= 1.0)
-
-## References
-
-- To include ImGui : [with Conan](https://blog.conan.io/2019/06/26/An-introduction-to-the-Dear-ImGui-library.html), [with Vulkan](https://frguthmann.github.io/posts/vulkan_imgui/)
-- Vulkan code sample : [VulkanTutorial](https://github.com/Overv/VulkanTutorial), [vkSandbox](https://github.com/tstullich/vk-sandbox)
-- Inspirational templates : [CppProject](https://github.com/tweether/cpp-project), [ModernCppStarter](https://github.com/TheLartians/ModernCppStarter)

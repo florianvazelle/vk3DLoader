@@ -3,9 +3,9 @@
 
 #include <vulkan/vulkan.h>
 #include <stdexcept>
-#include <vks/RenderPass.hpp>
+#include <vkl/RenderPass.hpp>
 
-namespace vks {
+namespace vkl {
   class ImGuiRenderPass : public RenderPass {
   public:
     ImGuiRenderPass(const Device& device, const SwapChain& swapChain);
@@ -13,6 +13,6 @@ namespace vks {
   private:
     void createRenderPass();
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // IMGUIRENDERPASS_HPP

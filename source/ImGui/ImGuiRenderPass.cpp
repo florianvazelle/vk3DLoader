@@ -1,10 +1,10 @@
 
 #include <iostream>
-#include <vks/Device.hpp>
-#include <vks/ImGui/ImGuiRenderPass.hpp>
-#include <vks/SwapChain.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/ImGui/ImGuiRenderPass.hpp>
+#include <vkl/SwapChain.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 ImGuiRenderPass::ImGuiRenderPass(const Device& device, const SwapChain& swapChain)
     : RenderPass(device, swapChain) {

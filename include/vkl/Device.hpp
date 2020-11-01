@@ -5,9 +5,9 @@
 #include <vector>
 
 #include <NonCopyable.hpp>
-#include <vks/QueueFamily.hpp>
+#include <vkl/QueueFamily.hpp>
 
-namespace vks {
+namespace vkl {
 
   class Instance;
   class Window;
@@ -45,6 +45,6 @@ namespace vks {
 
     static bool IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // DEVICE_HPP

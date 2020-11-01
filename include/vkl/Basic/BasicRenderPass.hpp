@@ -3,9 +3,9 @@
 
 #include <vulkan/vulkan.h>
 #include <stdexcept>
-#include <vks/RenderPass.hpp>
+#include <vkl/RenderPass.hpp>
 
-namespace vks {
+namespace vkl {
   class BasicRenderPass : public RenderPass {
   public:
     BasicRenderPass(const Device& device, const SwapChain& swapChain);
@@ -13,6 +13,6 @@ namespace vks {
   private:
     void createRenderPass();
   };
-}  // namespace vks
+}  // namespace vkl
 
 #endif  // BASICRENDERPASS_HPP

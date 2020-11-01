@@ -1,6 +1,6 @@
-#include <vks/ImGui/ImGuiApp.hpp>
+#include <vkl/ImGui/ImGuiApp.hpp>
 
-using namespace vks;
+using namespace vkl;
 
 ImGuiApp::ImGuiApp(const Instance& instance,
                    Window& window,

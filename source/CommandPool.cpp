@@ -1,9 +1,9 @@
-#include <vks/CommandPool.hpp>
-#include <vks/Device.hpp>
+#include <vkl/CommandPool.hpp>
+#include <vkl/Device.hpp>
 
 #include <stdexcept>
 
-using namespace vks;
+using namespace vkl;
 
 CommandPool::CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags)
     : m_device(device), m_flags(flags) {

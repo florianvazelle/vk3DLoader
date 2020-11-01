@@ -1,11 +1,11 @@
-#include <vks/SwapChain.hpp>
+#include <vkl/SwapChain.hpp>
 
-#include <vks/Device.hpp>
-#include <vks/Window.hpp>
+#include <vkl/Device.hpp>
+#include <vkl/Window.hpp>
 
 #include <iostream>
 
-using namespace vks;
+using namespace vkl;
 
 SwapChain::SwapChain(const Device& device, const Window& window)
     : m_swapChain(VK_NULL_HANDLE),
