@@ -31,6 +31,8 @@
 #include <vkl/SyncObjects.hpp>
 #include <vkl/Window.hpp>
 
+#define ENGINE_NAME "No Engine"
+
 namespace vkl {
 
   class Application {

@@ -1,6 +1,7 @@
 #include <vkl/Instance.hpp>
 
 #include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/Utils.hpp>
 #include <vkl/Window.hpp>
 
 using namespace vkl;
@@ -14,6 +15,7 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
     throw std::runtime_error("validation layers requested, but not available!");
   }
 
+  // appInfo permet de décrire notre application
   VkApplicationInfo appInfo{};
   appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   appInfo.pApplicationName = appName;
@@ -22,6 +24,8 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
   appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
   appInfo.apiVersion = VK_API_VERSION_1_0;
 
+  // createInfo est utilisé pour informer Vulkan de nos informations d'application, des couches que
+  // nous utiliserons et des extensions que nous voulons.
   VkInstanceCreateInfo createInfo{};
   createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   createInfo.pApplicationInfo = &appInfo;
@@ -44,8 +48,18 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
     createInfo.pNext = nullptr;
   }
 
-  if (vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS) {
-    throw std::runtime_error("failed to create instance!");
+  VkResult result = vkCreateInstance(&createInfo, nullptr, &m_instance);
+
+  if (result == VK_ERROR_INCOMPATIBLE_DRIVER) {
+    exitOnError(
+        "Cannot find a compatible Vulkan installable client "
+        "driver (ICD). Please make sure your driver supports "
+        "Vulkan before continuing. The call to vkCreateInstance failed.");
+  } else if (result != VK_SUCCESS) {
+    exitOnError(
+        "The call to vkCreateInstance failed. Please make sure "
+        "you have a Vulkan installable client driver (ICD) before "
+        "continuing.");
   }
 }
 

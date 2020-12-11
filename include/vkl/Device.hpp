@@ -12,6 +12,16 @@ namespace vkl {
   class Instance;
   class Window;
 
+  /**
+   * Les devices permettent d'interagir avec notre application Vulkan.
+   * Il y a deux types de device : physiques et logiques.
+   * Un device physique est un composant unique du système. Il peut également s'agir de
+   * plusieurs composants fonctionnant conjointement pour fonctionner comme un seul appareil. Un
+   * périphérique logique est notre interface avec le périphérique physique.
+   *
+   * Un VkPhysicalDevice est un type de données qui représentee chaque élément matériel.
+   */
+
   class Device : public NonCopyable {
   public:
     Device(const Instance& instance,
