@@ -8,9 +8,9 @@ const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
 Application::Application()
-    : instance("vk3DLoader", ENGINE_NAME, true),
+    : instance(APP_NAME, ENGINE_NAME, true),
       debugMessenger(instance),
-      window({WIDTH, HEIGHT}, "vk3DLoader", instance),
+      window({WIDTH, HEIGHT}, APP_NAME, instance),
       device(instance, window, Instance::DeviceExtensions),
       swapChain(device, window),
       renderPass(device, swapChain),

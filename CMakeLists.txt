@@ -79,6 +79,8 @@ set_target_properties(
 )
 
 add_compile_definitions(DATA_PATH="${PROJECT_SOURCE_DIR}/data")
+add_compile_definitions(ENGINE_NAME="No Engine")
+add_compile_definitions(APP_NAME="${PROJECT_NAME}")
 
 # Set up tests (see test/CMakeLists.txt).
 if(ENABLE_TESTING)

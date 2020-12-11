@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(_WIN32)
-#  include <winuser.h>
+#  include <windows.h>
 #else
 #  include <iostream>
 #endif
