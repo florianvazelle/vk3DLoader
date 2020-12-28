@@ -8,6 +8,16 @@
 namespace vkl {
   class Device;
 
+  /**
+   * Note Exposé : Il y a deux manières de synchroniser les évènements de la swap chain : les fences
+   * et les sémaphores.
+   *
+   * Une fence peut être accédé depuis le programme à l'aide de fonctions telles que vkWaitForFences
+   * alors que les sémaphores ne le permettent pas.
+   * Les fences sont généralement utilisées pour synchroniser votre programme avec les opérations
+   * alors que les sémaphores synchronisent les opérations entre elles.
+   */
+
   class SyncObjects : public NonCopyable {
   public:
     SyncObjects(const Device& device, uint32_t numImages, uint32_t maxFramesInFlight);

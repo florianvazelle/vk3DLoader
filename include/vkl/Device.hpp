@@ -13,7 +13,7 @@ namespace vkl {
   class Window;
 
   /**
-   * Les devices permettent d'interagir avec notre application Vulkan.
+   * Note Exposé : Les devices permettent d'interagir avec notre application Vulkan.
    * Il y a deux types de device : physiques et logiques.
    * Un device physique est un composant unique du système. Il peut également s'agir de
    * plusieurs composants fonctionnant conjointement pour fonctionner comme un seul appareil. Un

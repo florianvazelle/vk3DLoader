@@ -30,6 +30,20 @@ void Application::mainLoop() {
   vkDeviceWaitIdle(device.logical());
 }
 
+/**
+ * Note Exposé :
+ * La fonction réalisera les opérations suivantes :
+ * - Acquérir une image depuis la swap chain
+ * - Exécuter le command buffer correspondant au framebuffer dont l'attachement est l'image obtenue
+ * - Retourner l'image à la swap chain pour présentation
+ *
+ * Les opérations sont par défaut exécutées de manière asynchrones, or chacune des opérations que
+ * nous voulons lancer dépendent des résultats de l'opération la précédant
+ *
+ * Voir SyncObject.
+ *
+ */
+
 void Application::drawFrame(bool& framebufferResized) {
   vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE,
                   UINT64_MAX);

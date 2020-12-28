@@ -16,6 +16,13 @@ namespace vkl {
     std::vector<VkPresentModeKHR> presentModes;
   };
 
+  /**
+   * Note Exposé : Une SwapChain est un tableau d'images prêtes à être présentées.
+   * Une des utilisations est le contrôle du frame rate.
+   * Le GPU effectue un rendu complet en une seule image, puis l'affiche. Une fois qu'il a fini de
+   * dessiner le premier cadre, il commence à dessiner la deuxième frame.
+   */
+
   class SwapChain : public NonCopyable {
   public:
     explicit SwapChain(const Device& device, const Window& window);

@@ -29,7 +29,15 @@ void BasicRenderPass::createRenderPass() {
   colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
   colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-  // Post-rendering subpasses
+  /**
+   * Note Exposé : Les subpasses sont des opérations de rendu dépendant du contenu présent dans le
+   * framebuffer quand elles commencent. Elles peuvent consister en des opérations de
+   * post-processing exécutées l'une après l'autre. En regroupant toutes ces opérations en une seule
+   * passe, Vulkan peut alors réaliser des optimisations et conserver de la bande passante pour de
+   * potentiellement meilleures performances.
+   */
+
+  /* Post-rendering subpasses */
 
   // Subpass attachment reference
   VkAttachmentReference colorRef = {};

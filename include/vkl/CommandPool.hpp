@@ -7,6 +7,11 @@
 namespace vkl {
   class Device;
 
+  /**
+   * Note Exposé : Les command pools gèrent la mémoire utilisée par les command buffers, et ce sont
+   * les command pools qui instancient les command buffers.
+   */
+
   class CommandPool : public NonCopyable {
   public:
     CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags);

@@ -13,9 +13,9 @@
 namespace vkl {
 
   /**
-   * Un VkInstance est un objet qui contient toutes les informations dont notre application Vulkan a
-   * besoin pour fonctionner. Contrairement à OpenGL, Vulkan n'a pas d'état global. Pour cette
-   * raison, nous devons à la place stocker nos états dans cet objet.
+   * Note Exposé : Un VkInstance est un objet qui contient toutes les informations dont notre
+   * application Vulkan a besoin pour fonctionner. Contrairement à OpenGL, Vulkan n'a pas d'état
+   * global. Pour cette raison, nous devons à la place stocker nos états dans cet objet.
    */
 
   class Instance : public NonCopyable {

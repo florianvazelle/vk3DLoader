@@ -9,6 +9,12 @@ namespace vkl {
   class Device;
   class SwapChain;
 
+  /**
+   * Note Exposé : Le render pass permet d'inquier combien chaque framebuffer
+   * aura de buffers de couleur et de profondeur, combien de samples il faudra utiliser avec chaque
+   * frambuffer et comment les utiliser tout au long des opérations de rendu.
+   */
+
   class RenderPass : public NonCopyable {
   public:
     RenderPass(const Device& device, const SwapChain& swapChain);
