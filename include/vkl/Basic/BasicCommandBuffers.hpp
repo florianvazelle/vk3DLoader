@@ -3,7 +3,9 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
+
 #include <vkl/CommandBuffers.hpp>
+#include <vkl/VertexBuffer.hpp>
 
 namespace vkl {
 
@@ -13,11 +15,14 @@ namespace vkl {
                         const RenderPass& renderpass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
-                        const CommandPool& commandPool);
+                        const CommandPool& commandPool,
+                        const VertexBuffer& vertexBuffer);
     void recreate();
 
   private:
     void createCommandBuffers();
+
+    const VertexBuffer& m_vertexBuffer;
   };
 
 }  // namespace vkl

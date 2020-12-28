@@ -7,18 +7,28 @@ const uint32_t HEIGHT = 600;
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
+const std::vector<Vertex> triangle = {{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+                                      {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+                                      {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
+
 Application::Application()
     : instance(APP_NAME, ENGINE_NAME, true),
       debugMessenger(instance),
       window({WIDTH, HEIGHT}, APP_NAME, instance),
       device(instance, window, Instance::DeviceExtensions),
+      vertexTriangleBuffer(device, triangle),
       swapChain(device, window),
       renderPass(device, swapChain),
       graphicsPipeline(device, swapChain, renderPass),
       commandPool(device, 0),
-      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
+      commandBuffers(device,
+                     renderPass,
+                     swapChain,
+                     graphicsPipeline,
+                     commandPool,
+                     vertexTriangleBuffer),
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
-      interface(instance, window, device, swapChain, graphicsPipeline) {}
+      /* ImGui */ interface(instance, window, device, swapChain, graphicsPipeline) {}
 
 void Application::mainLoop() {
   window.setDrawFrameFunc([this](bool& framebufferResized) {

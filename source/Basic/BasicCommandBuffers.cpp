@@ -8,8 +8,10 @@ BasicCommandBuffers::BasicCommandBuffers(const Device& device,
                                          const RenderPass& renderPass,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
-                                         const CommandPool& commandPool)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool) {
+                                         const CommandPool& commandPool,
+                                         const VertexBuffer& vertexBuffer)
+    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
+      m_vertexBuffer(vertexBuffer) {
   createCommandBuffers();
 }
 
@@ -56,7 +58,11 @@ void BasicCommandBuffers::createCommandBuffers() {
     vkCmdBindPipeline(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,
                       m_graphicsPipeline.pipeline());
 
-    vkCmdDraw(m_commandBuffers[i], 3, 1, 0, 0);
+    VkBuffer vertexBuffers[] = {m_vertexBuffer.handle()};
+    VkDeviceSize offsets[] = {0};
+    vkCmdBindVertexBuffers(m_commandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+    vkCmdDraw(m_commandBuffers[i], static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
 
     vkCmdEndRenderPass(m_commandBuffers[i]);
 

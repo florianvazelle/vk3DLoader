@@ -29,6 +29,7 @@
 #include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
+#include <vkl/VertexBuffer.hpp>
 #include <vkl/Window.hpp>
 
 namespace vkl {
@@ -40,10 +41,15 @@ namespace vkl {
     void run() { mainLoop(); }
 
   private:
+    // Note : Order is taken into account
+
     Instance instance;
     DebugUtilsMessenger debugMessenger;
     Window window;
     Device device;
+
+    VertexBuffer vertexTriangleBuffer;
+
     SwapChain swapChain;
     BasicRenderPass renderPass;
     GraphicsPipeline graphicsPipeline;
