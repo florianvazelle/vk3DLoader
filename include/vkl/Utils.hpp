@@ -19,6 +19,7 @@ static void exitOnError(const char* msg) {
   exit(EXIT_FAILURE);
 }
 
+#include <stdexcept>
 #include <vkl/Device.hpp>
 
 /**

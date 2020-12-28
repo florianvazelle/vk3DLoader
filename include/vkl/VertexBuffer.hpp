@@ -2,6 +2,7 @@
 #define VERTEXBUFFER_HPP
 
 #include <vulkan/vulkan.h>
+#include <stdexcept>
 
 #include <NonCopyable.hpp>
 #include <vkl/Device.hpp>
