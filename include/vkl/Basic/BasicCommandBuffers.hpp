@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <vkl/CommandBuffers.hpp>
-#include <vkl/VertexBuffer.hpp>
+#include <vkl/buffer/VertexBuffer.hpp>
 
 namespace vkl {
 

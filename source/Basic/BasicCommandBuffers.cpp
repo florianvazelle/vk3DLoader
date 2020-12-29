@@ -58,7 +58,7 @@ void BasicCommandBuffers::createCommandBuffers() {
     vkCmdBindPipeline(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,
                       m_graphicsPipeline.pipeline());
 
-    VkBuffer vertexBuffers[] = {m_vertexBuffer.handle()};
+    VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(m_commandBuffers[i], 0, 1, vertexBuffers, offsets);
 

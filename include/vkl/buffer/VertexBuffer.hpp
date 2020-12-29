@@ -7,21 +7,16 @@
 #include <NonCopyable.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/Vertex.hpp>
+#include <vkl/buffer/Buffer.hpp>
 
 namespace vkl {
-  class VertexBuffer : public NonCopyable {
+  class VertexBuffer : public Buffer {
   public:
     VertexBuffer(const Device& device, const std::vector<Vertex>& vertices);
-    ~VertexBuffer();
 
-    inline const VkBuffer& handle() const { return m_vertexBuffer; }
     inline const size_t size() const { return m_vertices.size(); }
 
   private:
-    VkBuffer m_vertexBuffer;
-    VkDeviceMemory m_vertexBufferMemory;
-
-    const Device& m_device;
     const std::vector<Vertex>& m_vertices;
   };
 

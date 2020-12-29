@@ -29,8 +29,8 @@
 #include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
-#include <vkl/VertexBuffer.hpp>
 #include <vkl/Window.hpp>
+#include <vkl/buffer/VertexBuffer.hpp>
 
 namespace vkl {
 
