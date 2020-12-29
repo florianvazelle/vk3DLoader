@@ -82,6 +82,15 @@ add_compile_definitions(DATA_PATH="${PROJECT_SOURCE_DIR}/data")
 add_compile_definitions(ENGINE_NAME="No Engine")
 add_compile_definitions(APP_NAME="${PROJECT_NAME}")
 
+# To fix, error C7555: use of designated initializers requires at least '/std:c++latest'
+if (MSVC_VERSION GREATER_EQUAL "1900")
+    include(CheckCXXCompilerFlag)
+    CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
+    if (_cpp_latest_flag_supported)
+        add_compile_options("/std:c++latest")
+    endif()
+endif()
+
 # Set up tests (see test/CMakeLists.txt).
 if(ENABLE_TESTING)
   enable_testing()
