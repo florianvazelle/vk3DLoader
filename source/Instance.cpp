@@ -16,36 +16,37 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
   }
 
   // appInfo permet de décrire notre application
-  VkApplicationInfo appInfo{};
-  appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-  appInfo.pApplicationName = appName;
-  appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-  appInfo.pEngineName = engineName;
-  appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-  appInfo.apiVersion = VK_API_VERSION_1_0;
+  VkApplicationInfo appInfo = {
+      .sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+      .pApplicationName   = appName,
+      .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
+      .pEngineName        = engineName,
+      .engineVersion      = VK_MAKE_VERSION(1, 0, 0),
+      .apiVersion         = VK_API_VERSION_1_0,
+  };
 
   // createInfo est utilisé pour informer Vulkan de nos informations d'application, des couches que
   // nous utiliserons et des extensions que nous voulons.
-  VkInstanceCreateInfo createInfo{};
-  createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-  createInfo.pApplicationInfo = &appInfo;
+  VkInstanceCreateInfo createInfo = {
+      .sType            = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+      .pApplicationInfo = &appInfo,
+  };
 
   std::vector<const char*> extensions;
   GetRequiredExtensions(extensions, validationLayers);
-  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+  createInfo.enabledExtensionCount   = static_cast<uint32_t>(extensions.size());
   createInfo.ppEnabledExtensionNames = extensions.data();
 
-  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = {
+      .pNext = nullptr,
+  };
+
   if (validationLayers) {
-    createInfo.enabledLayerCount = static_cast<uint32_t>(Instance::ValidationLayers.size());
+    createInfo.enabledLayerCount   = static_cast<uint32_t>(Instance::ValidationLayers.size());
     createInfo.ppEnabledLayerNames = Instance::ValidationLayers.data();
 
     DebugUtilsMessenger::PopulateDebugMessengerCreateInfo(debugCreateInfo);
     createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
-  } else {
-    createInfo.enabledLayerCount = 0;
-
-    createInfo.pNext = nullptr;
   }
 
   VkResult result = vkCreateInstance(&createInfo, nullptr, &m_instance);

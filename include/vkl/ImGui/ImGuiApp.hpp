@@ -30,13 +30,9 @@ namespace vkl {
     ~ImGuiApp();
 
     inline VkCommandBuffer& command(uint32_t index) { return commandBuffers.command(index); }
-    inline const VkCommandBuffer& command(uint32_t index) const {
-      return commandBuffers.command(index);
-    }
+    inline const VkCommandBuffer& command(uint32_t index) const { return commandBuffers.command(index); }
 
-    void recordCommandBuffers(uint32_t bufferIdx) {
-      commandBuffers.recordCommandBuffers(bufferIdx);
-    }
+    void recordCommandBuffers(uint32_t bufferIdx) { commandBuffers.recordCommandBuffers(bufferIdx); }
 
     void recreate();
 

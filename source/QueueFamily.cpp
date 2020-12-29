@@ -5,8 +5,7 @@
 
 using namespace vkl;
 
-QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device,
-                                                  const VkSurfaceKHR& surface) {
+QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device, const VkSurfaceKHR& surface) {
   QueueFamilyIndices indices;
 
   // Get queue families

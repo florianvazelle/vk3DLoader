@@ -16,11 +16,10 @@ namespace vkl {
 
   class QueueFamily {
   public:
-    QueueFamily() = delete;
+    QueueFamily()  = delete;
     ~QueueFamily() = delete;
 
-    static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& device,
-                                                const VkSurfaceKHR& surface);
+    static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
   };
 }  // namespace vkl
 

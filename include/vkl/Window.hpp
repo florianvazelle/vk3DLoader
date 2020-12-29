@@ -31,9 +31,7 @@ namespace vkl {
 
     inline const VkSurfaceKHR& surface() const { return m_surface; }
 
-    inline void framebufferSize(glm::ivec2& size) const {
-      glfwGetFramebufferSize(m_window, &size[0], &size[1]);
-    }
+    inline void framebufferSize(glm::ivec2& size) const { glfwGetFramebufferSize(m_window, &size[0], &size[1]); }
 
     inline void setDrawFrameFunc(const std::function<void(bool&)>& func) { m_drawFrameFunc = func; }
 

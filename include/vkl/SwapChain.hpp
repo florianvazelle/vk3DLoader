@@ -40,10 +40,8 @@ namespace vkl {
     inline const SwapChainSupportDetails& supportDetails() const { return m_supportDetails; }
     inline VkImageView imageView(uint32_t index) const { return m_imageViews[index]; }
 
-    static SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice& device,
-                                                         const VkSurfaceKHR& surface);
-    static VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities,
-                                       const Window& window);
+    static SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
+    static VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, const Window& window);
 
   private:
     const Device& m_device;
@@ -65,10 +63,8 @@ namespace vkl {
 
     void destroyImageViews();
 
-    static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(
-        const std::vector<VkSurfaceFormatKHR>& availableFormats);
-    static VkPresentModeKHR ChooseSwapPresentMode(
-        const std::vector<VkPresentModeKHR>& availablePresentModes);
+    static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+    static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
   };
 }  // namespace vkl
 

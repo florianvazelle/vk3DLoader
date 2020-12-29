@@ -24,9 +24,7 @@ namespace vkl {
 
   class Device : public NonCopyable {
   public:
-    Device(const Instance& instance,
-           const Window& window,
-           const std::vector<const char*>& extensions);
+    Device(const Instance& instance, const Window& window, const std::vector<const char*>& extensions);
     ~Device();
 
     inline const VkPhysicalDevice& physical() const { return m_physical; }
@@ -46,8 +44,7 @@ namespace vkl {
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
 
-    static bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device,
-                                            const std::vector<const char*>& extensions);
+    static bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device, const std::vector<const char*>& extensions);
 
     static VkPhysicalDevice PickPhysicalDevice(const VkInstance& instance,
                                                const VkSurfaceKHR& surface,

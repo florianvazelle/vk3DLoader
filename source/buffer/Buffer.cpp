@@ -12,15 +12,14 @@ Buffer::~Buffer() {
   vkFreeMemory(m_device.logical(), m_bufferMemory, nullptr);
 }
 
-void Buffer::createBuffer(VkDeviceSize size,
-                          VkBufferUsageFlags usage,
-                          VkMemoryPropertyFlags properties) {
+void Buffer::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
   // Step 1 - Création du m_buffer
-  VkBufferCreateInfo bufferInfo{};
-  bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-  bufferInfo.size = size;
-  bufferInfo.usage = usage;
-  bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+  VkBufferCreateInfo bufferInfo = {
+      .sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+      .size        = size,
+      .usage       = usage,
+      .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+  };
 
   if (vkCreateBuffer(m_device.logical(), &bufferInfo, nullptr, &m_buffer) != VK_SUCCESS) {
     throw std::runtime_error("echec de la creation d'un m_buffer!");
@@ -32,10 +31,11 @@ void Buffer::createBuffer(VkDeviceSize size,
   vkGetBufferMemoryRequirements(m_device.logical(), m_buffer, &memRequirements);
 
   // On rempli la structure VkMemoryAllocateInfo
-  VkMemoryAllocateInfo allocInfo{};
-  allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-  allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+  VkMemoryAllocateInfo allocInfo = {
+      .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+      .allocationSize  = memRequirements.size,
+      .memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties),
+  };
 
   // Si l'allocation a réussi, nous pouvons associer cette mémoire au m_buffer
   if (vkAllocateMemory(m_device.logical(), &allocInfo, nullptr, &m_bufferMemory) != VK_SUCCESS) {

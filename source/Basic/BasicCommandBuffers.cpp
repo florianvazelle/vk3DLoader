@@ -10,8 +10,7 @@ BasicCommandBuffers::BasicCommandBuffers(const Device& device,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool,
                                          const VertexBuffer& vertexBuffer)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
-      m_vertexBuffer(vertexBuffer) {
+    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool), m_vertexBuffer(vertexBuffer) {
   createCommandBuffers();
 }
 
@@ -23,14 +22,14 @@ void BasicCommandBuffers::recreate() {
 void BasicCommandBuffers::createCommandBuffers() {
   m_commandBuffers.resize(m_renderPass.size());
 
-  VkCommandBufferAllocateInfo allocInfo{};
-  allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  allocInfo.commandPool = m_commandPool.handle();
-  allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  allocInfo.commandBufferCount = (uint32_t)m_commandBuffers.size();
+  VkCommandBufferAllocateInfo allocInfo = {
+      .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+      .commandPool        = m_commandPool.handle(),
+      .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+      .commandBufferCount = (uint32_t)m_commandBuffers.size(),
+  };
 
-  if (vkAllocateCommandBuffers(m_device.logical(), &allocInfo, m_commandBuffers.data())
-      != VK_SUCCESS) {
+  if (vkAllocateCommandBuffers(m_device.logical(), &allocInfo, m_commandBuffers.data()) != VK_SUCCESS) {
     throw std::runtime_error("failed to allocate command buffers!");
   }
 
@@ -42,24 +41,26 @@ void BasicCommandBuffers::createCommandBuffers() {
       throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = m_renderPass.handle();
-    renderPassInfo.framebuffer = m_renderPass.frameBuffer(i);
-    renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = m_swapChain.extent();
-
     VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor;
+
+    VkRenderPassBeginInfo renderPassInfo = {
+        .sType             = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass        = m_renderPass.handle(),
+        .framebuffer       = m_renderPass.frameBuffer(i),
+        .renderArea = {
+            .offset = {0, 0},
+            .extent = m_swapChain.extent(),
+        },
+        .clearValueCount   = 1,
+        .pClearValues      = &clearColor,
+    };
 
     vkCmdBeginRenderPass(m_commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-    vkCmdBindPipeline(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,
-                      m_graphicsPipeline.pipeline());
+    vkCmdBindPipeline(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.pipeline());
 
     VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
-    VkDeviceSize offsets[] = {0};
+    VkDeviceSize offsets[]   = {0};
     vkCmdBindVertexBuffers(m_commandBuffers[i], 0, 1, vertexBuffers, offsets);
 
     vkCmdDraw(m_commandBuffers[i], static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);

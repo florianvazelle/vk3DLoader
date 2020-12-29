@@ -2,14 +2,13 @@
 
 using namespace vkl;
 
-const uint32_t WIDTH = 800;
+const uint32_t WIDTH  = 800;
 const uint32_t HEIGHT = 600;
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::vector<Vertex> triangle = {{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-                                      {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-                                      {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
+const std::vector<Vertex> triangle
+    = {{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}}, {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}}, {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
 
 Application::Application()
     : instance(APP_NAME, ENGINE_NAME, true),
@@ -21,12 +20,7 @@ Application::Application()
       renderPass(device, swapChain),
       graphicsPipeline(device, swapChain, renderPass),
       commandPool(device, 0),
-      commandBuffers(device,
-                     renderPass,
-                     swapChain,
-                     graphicsPipeline,
-                     commandPool,
-                     vertexTriangleBuffer),
+      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexTriangleBuffer),
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */ interface(instance, window, device, swapChain, graphicsPipeline) {}
 
@@ -55,14 +49,12 @@ void Application::mainLoop() {
  */
 
 void Application::drawFrame(bool& framebufferResized) {
-  vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE,
-                  UINT64_MAX);
+  vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE, UINT64_MAX);
 
   // Get image from swap chain
   uint32_t imageIndex;
   VkResult result = vkAcquireNextImageKHR(device.logical(), swapChain.handle(), UINT64_MAX,
-                                          syncObjects.imageAvailable(currentFrame), VK_NULL_HANDLE,
-                                          &imageIndex);
+                                          syncObjects.imageAvailable(currentFrame), VK_NULL_HANDLE, &imageIndex);
   // Create new swap chain if needed
   if (result == VK_ERROR_OUT_OF_DATE_KHR) {
     recreateSwapChain(framebufferResized);
@@ -72,50 +64,46 @@ void Application::drawFrame(bool& framebufferResized) {
   }
 
   if (syncObjects.imageInFlight(imageIndex) != VK_NULL_HANDLE) {
-    vkWaitForFences(device.logical(), 1, &syncObjects.imageInFlight(imageIndex), VK_TRUE,
-                    UINT64_MAX);
+    vkWaitForFences(device.logical(), 1, &syncObjects.imageInFlight(imageIndex), VK_TRUE, UINT64_MAX);
   }
   syncObjects.imageInFlight(imageIndex) = syncObjects.inFlightFence(currentFrame);
 
   // Record UI draw data
   interface.recordCommandBuffers(imageIndex);
 
-  VkSubmitInfo submitInfo{};
-  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-  VkSemaphore waitSemaphores[] = {syncObjects.imageAvailable(currentFrame)};
+  VkSemaphore waitSemaphores[]      = {syncObjects.imageAvailable(currentFrame)};
   VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-  submitInfo.waitSemaphoreCount = 1;
-  submitInfo.pWaitSemaphores = waitSemaphores;
-  submitInfo.pWaitDstStageMask = waitStages;
 
-  VkCommandBuffer cmdBuffers[]
-      = {commandBuffers.command(imageIndex), interface.command(imageIndex)};
-  submitInfo.commandBufferCount = 2;
-  submitInfo.pCommandBuffers = cmdBuffers;
-
+  VkCommandBuffer cmdBuffers[]   = {commandBuffers.command(imageIndex), interface.command(imageIndex)};
   VkSemaphore signalSemaphores[] = {syncObjects.renderFinished(currentFrame)};
-  submitInfo.signalSemaphoreCount = 1;
-  submitInfo.pSignalSemaphores = signalSemaphores;
+
+  VkSubmitInfo submitInfo = {
+      .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+      .waitSemaphoreCount   = 1,
+      .pWaitSemaphores      = waitSemaphores,
+      .pWaitDstStageMask    = waitStages,
+      .commandBufferCount   = 2,
+      .pCommandBuffers      = cmdBuffers,
+      .signalSemaphoreCount = 1,
+      .pSignalSemaphores    = signalSemaphores,
+  };
 
   vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
 
-  if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, syncObjects.inFlightFence(currentFrame))
-      != VK_SUCCESS) {
+  if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, syncObjects.inFlightFence(currentFrame)) != VK_SUCCESS) {
     throw std::runtime_error("failed to submit draw command buffer!");
   }
 
-  VkPresentInfoKHR presentInfo{};
-  presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
-  presentInfo.waitSemaphoreCount = 1;
-  presentInfo.pWaitSemaphores = signalSemaphores;
-
   VkSwapchainKHR swapChains[] = {swapChain.handle()};
-  presentInfo.swapchainCount = 1;
-  presentInfo.pSwapchains = swapChains;
 
-  presentInfo.pImageIndices = &imageIndex;
+  VkPresentInfoKHR presentInfo = {
+      .sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+      .waitSemaphoreCount = 1,
+      .pWaitSemaphores    = signalSemaphores,
+      .swapchainCount     = 1,
+      .pSwapchains        = swapChains,
+      .pImageIndices      = &imageIndex,
+  };
 
   result = vkQueuePresentKHR(device.presentQueue(), &presentInfo);
   if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
@@ -134,7 +122,7 @@ void Application::drawImGui() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  static float f = 0.0f;
+  static float f     = 0.0f;
   static int counter = 0;
 
   ImGui::Begin("Renderer Options");

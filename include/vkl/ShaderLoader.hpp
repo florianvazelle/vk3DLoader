@@ -12,8 +12,7 @@ public:
     std::ifstream file(filePath, std::ios::ate | std::ios::binary);
 
     if (!file.is_open()) {
-      throw std::runtime_error("Unable to open SPIR-V file: " + filePath
-                               + "\nDid you run compile.sh yet?");
+      throw std::runtime_error("Unable to open SPIR-V file: " + filePath + "\nDid you run compile.sh yet?");
     }
 
     size_t fileSize = static_cast<size_t>(file.tellg());

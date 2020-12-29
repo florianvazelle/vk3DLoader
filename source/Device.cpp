@@ -12,9 +12,7 @@
 
 using namespace vkl;
 
-Device::Device(const Instance& instance,
-               const Window& window,
-               const std::vector<const char*>& extensions)
+Device::Device(const Instance& instance, const Window& window, const std::vector<const char*>& extensions)
     : m_physical(VK_NULL_HANDLE),
       m_logical(VK_NULL_HANDLE),
       m_window(window),
@@ -22,42 +20,39 @@ Device::Device(const Instance& instance,
       m_graphicsQueue(VK_NULL_HANDLE),
       m_presentQueue(VK_NULL_HANDLE) {
   m_physical = PickPhysicalDevice(m_instance.handle(), m_window.surface(), extensions);
-  m_indices = QueueFamily::FindQueueFamilies(m_physical, m_window.surface());
+  m_indices  = QueueFamily::FindQueueFamilies(m_physical, m_window.surface());
 
   // Setup queue families for device
-  std::set<uint32_t> uniqueQueueFamilies
-      = {m_indices.graphicsFamily.value(), m_indices.presentFamily.value()};
+  std::set<uint32_t> uniqueQueueFamilies = {m_indices.graphicsFamily.value(), m_indices.presentFamily.value()};
   std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
   float priority = 1.0f;
   for (uint32_t queueFamily : uniqueQueueFamilies) {
-    VkDeviceQueueCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    createInfo.queueFamilyIndex = queueFamily;
-    createInfo.queueCount = 1;
-    createInfo.pQueuePriorities = &priority;
+    VkDeviceQueueCreateInfo createInfo = {
+        .sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+        .queueFamilyIndex = queueFamily,
+        .queueCount       = 1,
+        .pQueuePriorities = &priority,
+    };
     queueCreateInfos.push_back(createInfo);
   }
 
   VkPhysicalDeviceFeatures deviceFeatures = {};
 
   // Setup logical device
-  VkDeviceCreateInfo createInfo = {};
-  createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-
-  createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
-  createInfo.pQueueCreateInfos = queueCreateInfos.data();
-
-  createInfo.pEnabledFeatures = &deviceFeatures;
-
-  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-  createInfo.ppEnabledExtensionNames = extensions.data();
+  VkDeviceCreateInfo createInfo = {
+      .sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+      .queueCreateInfoCount    = static_cast<uint32_t>(queueCreateInfos.size()),
+      .pQueueCreateInfos       = queueCreateInfos.data(),
+      .enabledLayerCount       = 0,
+      .enabledExtensionCount   = static_cast<uint32_t>(extensions.size()),
+      .ppEnabledExtensionNames = extensions.data(),
+      .pEnabledFeatures        = &deviceFeatures,
+  };
 
   if (m_instance.validationLayersEnabled()) {
-    createInfo.enabledLayerCount = static_cast<uint32_t>(Instance::ValidationLayers.size());
+    createInfo.enabledLayerCount   = static_cast<uint32_t>(Instance::ValidationLayers.size());
     createInfo.ppEnabledLayerNames = Instance::ValidationLayers.data();
-  } else {
-    createInfo.enabledLayerCount = 0;
   }
 
   if (vkCreateDevice(m_physical, &createInfo, nullptr, &m_logical) != VK_SUCCESS) {
@@ -71,8 +66,7 @@ Device::Device(const Instance& instance,
 
 Device::~Device() { vkDestroyDevice(m_logical, nullptr); }
 
-bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice& device,
-                                         const std::vector<const char*>& extensions) {
+bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice& device, const std::vector<const char*>& extensions) {
   // Get number of extension supported
   uint32_t extensionCount;
   vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -81,8 +75,7 @@ bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice& device,
 
   // Get supported extensions
   std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-  vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount,
-                                       availableExtensions.data());
+  vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
   // Iterate through available extensions and make sure that all are present
   std::set<std::string> requiredExtensions(extensions.begin(), extensions.end());

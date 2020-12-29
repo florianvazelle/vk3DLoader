@@ -26,9 +26,7 @@ namespace vkl {
      * @param usage Is a flag to describe for what usage the buffer is destinate
      * @param properties Is for find the memory type
      */
-    void createBuffer(VkDeviceSize size,
-                      VkBufferUsageFlags usage,
-                      VkMemoryPropertyFlags properties);
+    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 
   protected:
     VkBuffer m_buffer;

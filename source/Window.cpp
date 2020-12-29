@@ -44,6 +44,6 @@ void Window::GetRequiredExtensions(std::vector<const char*>& out) {
 }
 
 void Window::FramebufferResizeCallback(GLFWwindow* window, int width, int height) {
-  Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+  Window* win               = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
   win->m_framebufferResized = true;
 }

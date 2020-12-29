@@ -15,9 +15,7 @@ namespace vkl {
 
   class GraphicsPipeline : public NonCopyable {
   public:
-    GraphicsPipeline(const Device& device,
-                     const SwapChain& swapChain,
-                     const RenderPass& renderPass);
+    GraphicsPipeline(const Device& device, const SwapChain& swapChain, const RenderPass& renderPass);
     ~GraphicsPipeline();
 
     void recreate();

@@ -1,17 +1,32 @@
----
-  BasedOnStyle: Google
-  AccessModifierOffset: '-2'
-  AlignTrailingComments: 'true'
-  AllowAllParametersOfDeclarationOnNextLine: 'false'
-  AlwaysBreakTemplateDeclarations: 'No'
-  BreakBeforeBraces: Attach
-  ColumnLimit: '100'
-  ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
-  IncludeBlocks: Preserve
-  IndentPPDirectives: AfterHash
-  IndentWidth: '2'
-  NamespaceIndentation: All
-  BreakBeforeBinaryOperators: All
-  BreakBeforeTernaryOperators: 'true'
-  BinPackParameters: 'false'
-...
+AccessModifierOffset: -2
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: true
+AlwaysBreakTemplateDeclarations: No
+BasedOnStyle: Google
+BinPackParameters: false
+BraceWrapping: 
+    AfterFunction : false
+    AfterClass : false
+    AfterControlStatement : false
+    AfterEnum : false
+    AfterNamespace : false
+    AfterStruct : false
+    AfterUnion : false
+    BeforeCatch : false
+    BeforeElse : false
+    IndentBraces : false
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializersBeforeComma: false
+ColumnLimit: 120
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+IncludeBlocks: Preserve
+IndentPPDirectives: AfterHash
+IndentWidth: 2
+NamespaceIndentation: All
+PointerAlignment: Left
+
