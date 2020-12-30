@@ -15,14 +15,22 @@ Application::Application()
       debugMessenger(instance),
       window({WIDTH, HEIGHT}, APP_NAME, instance),
       device(instance, window, Instance::DeviceExtensions),
-      vertexTriangleBuffer(device, triangle),
-      descriptorSetLayout(device),
       swapChain(device, window),
-      uniformBuffers(device, swapChain),
       renderPass(device, swapChain),
+      descriptorSetLayout(device),
       graphicsPipeline(device, swapChain, renderPass, descriptorSetLayout),
       commandPool(device, 0),
-      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexTriangleBuffer),
+      vertexTriangleBuffer(device, triangle),
+      uniformBuffers(device, swapChain),
+      descriptorPool(device, swapChain),
+      descriptorSets(device, swapChain, uniformBuffers, descriptorSetLayout, descriptorPool),
+      commandBuffers(device,
+                     renderPass,
+                     swapChain,
+                     graphicsPipeline,
+                     commandPool,
+                     vertexTriangleBuffer,
+                     descriptorSets),
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */ interface(instance, window, device, swapChain, graphicsPipeline) {}
 
@@ -163,6 +171,8 @@ void Application::recreateSwapChain(bool& framebufferResized) {
   renderPass.recreate();
   graphicsPipeline.recreate();
   uniformBuffers.recreate();
+  descriptorPool.recreate();
+  descriptorSets.recreate();
   commandBuffers.recreate();
 
   interface.recreate();

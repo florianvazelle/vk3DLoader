@@ -22,6 +22,8 @@ namespace vkl {
   public:
     UniformBuffers(const Device& device, const SwapChain& swapChain);
 
+    inline const VkBuffer& buffer(int index) const { return m_uniformBuffers[index].buffer(); }
+
     /**
      * @brief Génére une rotation à chaque frame pour que la géométrie tourne sur elle-même
      * @param currentImage C'est la frame courante

@@ -9,8 +9,11 @@ BasicCommandBuffers::BasicCommandBuffers(const Device& device,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool,
-                                         const VertexBuffer& vertexBuffer)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool), m_vertexBuffer(vertexBuffer) {
+                                         const VertexBuffer& vertexBuffer,
+                                         const DescriptorSets& descriptorSets)
+    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
+      m_vertexBuffer(vertexBuffer),
+      m_descriptorSets(descriptorSets) {
   createCommandBuffers();
 }
 
@@ -59,9 +62,13 @@ void BasicCommandBuffers::createCommandBuffers() {
 
     vkCmdBindPipeline(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.pipeline());
 
-    VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
-    VkDeviceSize offsets[]   = {0};
+    const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
+    const VkDeviceSize offsets[]   = {0};
     vkCmdBindVertexBuffers(m_commandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+    const VkDescriptorSet descriptors[] = {m_descriptorSets.descriptor(i)};
+    vkCmdBindDescriptorSets(m_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.layout(), 0, 1,
+                            descriptors, 0, nullptr);
 
     vkCmdDraw(m_commandBuffers[i], static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
 

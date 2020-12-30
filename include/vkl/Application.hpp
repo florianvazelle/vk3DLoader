@@ -22,7 +22,9 @@
 #include <vkl/Basic/BasicCommandBuffers.hpp>
 #include <vkl/Basic/BasicRenderPass.hpp>
 #include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
+#include <vkl/DescriptorSets.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/GraphicsPipeline.hpp>
 #include <vkl/ImGui/ImGuiApp.hpp>
@@ -55,6 +57,8 @@ namespace vkl {
 
     SwapChain swapChain;
     UniformBuffers uniformBuffers;
+    DescriptorPool descriptorPool;
+    DescriptorSets descriptorSets;
 
     BasicRenderPass renderPass;
     GraphicsPipeline graphicsPipeline;

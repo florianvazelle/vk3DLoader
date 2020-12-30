@@ -115,7 +115,7 @@ void GraphicsPipeline::createPipeline() {
       // Fill fragments
       .polygonMode = VK_POLYGON_MODE_FILL,
       .cullMode    = VK_CULL_MODE_BACK_BIT,
-      .frontFace   = VK_FRONT_FACE_CLOCKWISE,
+      .frontFace   = VK_FRONT_FACE_COUNTER_CLOCKWISE,
       // Bias depth values
       // This is good for shadow mapping, but we're not doing that currently
       // so we'll disable for now
