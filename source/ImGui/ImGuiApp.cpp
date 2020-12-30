@@ -37,8 +37,8 @@ ImGuiApp::ImGuiApp(const Instance& instance,
       .QueueFamily    = indices.graphicsFamily.value(),
       .Queue          = m_device.graphicsQueue(),
       .DescriptorPool = imGuiDescriptorPool,
-      .MinImageCount  = swapChain.numImages(),
-      .ImageCount     = swapChain.numImages(),
+      .MinImageCount  = static_cast<uint32_t>(swapChain.numImages()),
+      .ImageCount     = static_cast<uint32_t>(swapChain.numImages()),
   };
   ImGui_ImplVulkan_Init(&init_info, renderPass.handle());
 
