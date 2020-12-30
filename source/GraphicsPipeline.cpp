@@ -1,6 +1,7 @@
 #include <vkl/GraphicsPipeline.hpp>
 
 #include <iostream>
+#include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/RenderPass.hpp>
 #include <vkl/ShaderLoader.hpp>
@@ -9,14 +10,18 @@
 
 using namespace vkl;
 
-GraphicsPipeline::GraphicsPipeline(const Device& device, const SwapChain& swapChain, const RenderPass& renderPass)
+GraphicsPipeline::GraphicsPipeline(const Device& device,
+                                   const SwapChain& swapChain,
+                                   const RenderPass& renderPass,
+                                   const DescriptorSetLayout& descriptorSetLayout)
     : m_pipeline(VK_NULL_HANDLE),
       m_layout(VK_NULL_HANDLE),
       m_oldLayout(VK_NULL_HANDLE),
 
       m_device(device),
       m_swapChain(swapChain),
-      m_renderPass(renderPass) {
+      m_renderPass(renderPass),
+      m_descriptorSetLayout(descriptorSetLayout) {
   createPipeline();
 }
 
@@ -145,10 +150,11 @@ void GraphicsPipeline::createPipeline() {
       .blendConstants = {0.0f, 0.0f, 0.0f, 0.0f},
   };
 
+  VkDescriptorSetLayout layouts[]               = {m_descriptorSetLayout.handle()};
   VkPipelineLayoutCreateInfo pipelineLayoutInfo = {
-      .sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-      .setLayoutCount         = 0,
-      .pushConstantRangeCount = 0,
+      .sType          = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+      .setLayoutCount = 1,
+      .pSetLayouts    = layouts,
   };
 
   if (vkCreatePipelineLayout(m_device.logical(), &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) {
@@ -188,11 +194,10 @@ VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<char>& cod
   VkShaderModuleCreateInfo createInfo = {
       .sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
       .codeSize = code.size(),
+      // Vector class already ensures that the data is correctly aligned,
+      // so no need to manually do it
+      .pCode = reinterpret_cast<const uint32_t*>(code.data()),
   };
-
-  // Vector class already ensures that the data is correctly aligned,
-  // so no need to manually do it
-  createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
   VkShaderModule module;
   if (vkCreateShaderModule(m_device.logical(), &createInfo, nullptr, &module) != VK_SUCCESS) {

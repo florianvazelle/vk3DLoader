@@ -11,11 +11,15 @@ namespace vkl {
   class Device;
   class SwapChain;
   class RenderPass;
+  class DescriptorSetLayout;
   struct ShaderDetails;
 
   class GraphicsPipeline : public NonCopyable {
   public:
-    GraphicsPipeline(const Device& device, const SwapChain& swapChain, const RenderPass& renderPass);
+    GraphicsPipeline(const Device& device,
+                     const SwapChain& swapChain,
+                     const RenderPass& renderPass,
+                     const DescriptorSetLayout& descriptorSetLayout);
     ~GraphicsPipeline();
 
     void recreate();
@@ -31,6 +35,7 @@ namespace vkl {
     const Device& m_device;
     const SwapChain& m_swapChain;
     const RenderPass& m_renderPass;
+    const DescriptorSetLayout& m_descriptorSetLayout;
 
     void createPipeline();
     VkShaderModule createShaderModule(const std::vector<char>& code);

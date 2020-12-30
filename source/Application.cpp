@@ -16,9 +16,11 @@ Application::Application()
       window({WIDTH, HEIGHT}, APP_NAME, instance),
       device(instance, window, Instance::DeviceExtensions),
       vertexTriangleBuffer(device, triangle),
+      descriptorSetLayout(device),
       swapChain(device, window),
+      uniformBuffers(device, swapChain),
       renderPass(device, swapChain),
-      graphicsPipeline(device, swapChain, renderPass),
+      graphicsPipeline(device, swapChain, renderPass, descriptorSetLayout),
       commandPool(device, 0),
       commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexTriangleBuffer),
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
@@ -70,6 +72,9 @@ void Application::drawFrame(bool& framebufferResized) {
 
   // Record UI draw data
   interface.recordCommandBuffers(imageIndex);
+
+  // Update Uniform Buffers
+  uniformBuffers.update(imageIndex);
 
   VkSemaphore waitSemaphores[]      = {syncObjects.imageAvailable(currentFrame)};
   VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
@@ -157,6 +162,7 @@ void Application::recreateSwapChain(bool& framebufferResized) {
   swapChain.recreate();
   renderPass.recreate();
   graphicsPipeline.recreate();
+  uniformBuffers.recreate();
   commandBuffers.recreate();
 
   interface.recreate();

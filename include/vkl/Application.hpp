@@ -22,6 +22,7 @@
 #include <vkl/Basic/BasicCommandBuffers.hpp>
 #include <vkl/Basic/BasicRenderPass.hpp>
 #include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/GraphicsPipeline.hpp>
 #include <vkl/ImGui/ImGuiApp.hpp>
@@ -30,6 +31,7 @@
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
 #include <vkl/Window.hpp>
+#include <vkl/buffer/UniformBuffers.hpp>
 #include <vkl/buffer/VertexBuffer.hpp>
 
 namespace vkl {
@@ -49,8 +51,11 @@ namespace vkl {
     Device device;
 
     VertexBuffer vertexTriangleBuffer;
+    DescriptorSetLayout descriptorSetLayout;
 
     SwapChain swapChain;
+    UniformBuffers uniformBuffers;
+
     BasicRenderPass renderPass;
     GraphicsPipeline graphicsPipeline;
     CommandPool commandPool;
