@@ -28,7 +28,7 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
 
   float priority = 1.0f;
   for (uint32_t queueFamily : uniqueQueueFamilies) {
-    VkDeviceQueueCreateInfo createInfo = {
+    const VkDeviceQueueCreateInfo createInfo = {
         .sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
         .queueFamilyIndex = queueFamily,
         .queueCount       = 1,
@@ -37,7 +37,7 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
     queueCreateInfos.push_back(createInfo);
   }
 
-  VkPhysicalDeviceFeatures deviceFeatures = {};
+  const VkPhysicalDeviceFeatures deviceFeatures = {};
 
   // Setup logical device
   VkDeviceCreateInfo createInfo = {

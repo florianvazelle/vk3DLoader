@@ -29,15 +29,15 @@ void RenderPass::cleanupOld() {
 }
 
 void RenderPass::createFrameBuffers() {
-  size_t numImages = m_swapChain.numImages();
+  const size_t numImages = m_swapChain.numImages();
 
   m_frameBuffers.resize(numImages);
 
   // Create a framebuffer for each image view
   for (size_t i = 0; i < numImages; ++i) {
-    VkImageView attachments[] = {m_swapChain.imageView(i)};
+    const VkImageView attachments[] = {m_swapChain.imageView(i)};
 
-    VkFramebufferCreateInfo info = {
+    const VkFramebufferCreateInfo info = {
         .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
         .renderPass      = m_renderPass,
         .attachmentCount = 1,

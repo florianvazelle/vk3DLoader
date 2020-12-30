@@ -30,7 +30,7 @@ void CommandBuffers::destroyCommandBuffers() {
 void CommandBuffers::SingleTimeCommands(const Device& device,
                                         const CommandPool& cmdPool,
                                         const std::function<void(const VkCommandBuffer&)>& func) {
-  VkCommandBufferAllocateInfo allocInfo = {
+  const VkCommandBufferAllocateInfo allocInfo = {
       .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
       .commandPool        = cmdPool.handle(),
       .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
@@ -42,7 +42,7 @@ void CommandBuffers::SingleTimeCommands(const Device& device,
     throw std::runtime_error("failed to allocate command buffers!");
   }
 
-  VkCommandBufferBeginInfo beginInfo = {
+  const VkCommandBufferBeginInfo beginInfo = {
       .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
       .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
   };
@@ -57,7 +57,7 @@ void CommandBuffers::SingleTimeCommands(const Device& device,
     throw std::runtime_error("failed to record command buffer!");
   }
 
-  VkSubmitInfo submitInfo = {
+  const VkSubmitInfo submitInfo = {
       .sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO,
       .commandBufferCount = 1,
       .pCommandBuffers    = &commandBuffer,

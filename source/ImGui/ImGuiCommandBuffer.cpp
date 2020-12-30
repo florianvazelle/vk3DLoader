@@ -25,7 +25,7 @@ void ImGuiCommandBuffers::recreate() {
 void ImGuiCommandBuffers::createCommandBuffers() {
   m_commandBuffers.resize(m_renderPass.size());
 
-  VkCommandBufferAllocateInfo allocInfo = {
+  const VkCommandBufferAllocateInfo allocInfo = {
       .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
       .commandPool        = m_commandPool.handle(),
       .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
@@ -38,7 +38,7 @@ void ImGuiCommandBuffers::createCommandBuffers() {
 }
 
 void ImGuiCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
-  VkCommandBufferBeginInfo cmdBufferBegin = {
+  const VkCommandBufferBeginInfo cmdBufferBegin = {
       .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
       .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
   };
@@ -47,8 +47,8 @@ void ImGuiCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
     throw std::runtime_error("Unable to start recording UI command buffer!");
   }
 
-  VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-  VkRenderPassBeginInfo renderPassBeginInfo = {
+  const VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+  const VkRenderPassBeginInfo renderPassBeginInfo = {
       .sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
       .renderPass               = m_renderPass.handle(),
       .framebuffer              = m_renderPass.frameBuffer(bufferIdx),

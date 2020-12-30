@@ -12,7 +12,7 @@ BasicRenderPass::BasicRenderPass(const Device& device, const SwapChain& swapChai
 
 void BasicRenderPass::createRenderPass() {
   // Create a new render pass as a color attachment
-  VkAttachmentDescription colorAttachment = {
+  const VkAttachmentDescription colorAttachment = {
       // Format should match the format of the swap chain
       .format = m_swapChain.imageFormat(),
       // No multisampling
@@ -40,7 +40,7 @@ void BasicRenderPass::createRenderPass() {
   /* Post-rendering subpasses */
 
   // Subpass attachment reference
-  VkAttachmentReference colorRef = {
+  const VkAttachmentReference colorRef = {
       // Index of 0 in color attachments description array (we're only using 1)
       .attachment = 0,
       // Use the optimal layout for color attachments
@@ -48,7 +48,7 @@ void BasicRenderPass::createRenderPass() {
   };
 
   // Subpass description
-  VkSubpassDescription subpass = {
+  const VkSubpassDescription subpass = {
       // Using for graphics computation
       .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
       // Attach the color attachment
@@ -57,7 +57,7 @@ void BasicRenderPass::createRenderPass() {
   };
 
   // Subpass dependencies
-  VkSubpassDependency dependency = {
+  const VkSubpassDependency dependency = {
       // Implicit subpass
       .srcSubpass = VK_SUBPASS_EXTERNAL,
       // Subpass depdency is in index 0
@@ -72,7 +72,7 @@ void BasicRenderPass::createRenderPass() {
   };
 
   // Create the render pass
-  VkRenderPassCreateInfo createInfo = {
+  const VkRenderPassCreateInfo createInfo = {
       .sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
       .attachmentCount = 1,
       .pAttachments    = &colorAttachment,

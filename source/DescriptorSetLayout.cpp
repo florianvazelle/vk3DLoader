@@ -1,5 +1,7 @@
 #include <vkl/DescriptorSetLayout.hpp>
 
+#include <stdexcept>
+
 using namespace vkl;
 
 DescriptorSetLayout::DescriptorSetLayout(const Device& device) : m_device(device) {

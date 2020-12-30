@@ -1,5 +1,7 @@
 #include <vkl/DescriptorPool.hpp>
 
+#include <stdexcept>
+
 using namespace vkl;
 
 DescriptorPool::DescriptorPool(const Device& device, const SwapChain& swapChain)

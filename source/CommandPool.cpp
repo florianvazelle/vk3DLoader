@@ -7,7 +7,7 @@ using namespace vkl;
 
 CommandPool::CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags)
     : m_device(device), m_flags(flags) {
-  VkCommandPoolCreateInfo poolInfo = {
+  const VkCommandPoolCreateInfo poolInfo = {
       .sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
       .flags            = flags,
       .queueFamilyIndex = m_device.queueFamilyIndices().graphicsFamily.value(),

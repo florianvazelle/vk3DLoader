@@ -13,7 +13,7 @@ ImGuiRenderPass::ImGuiRenderPass(const Device& device, const SwapChain& swapChai
 
 void ImGuiRenderPass::createRenderPass() {
   // Create an attachment description for the render pass
-  VkAttachmentDescription attachmentDescription = {
+  const VkAttachmentDescription attachmentDescription = {
       .format         = m_swapChain.imageFormat(),
       .samples        = VK_SAMPLE_COUNT_1_BIT,
       .loadOp         = VK_ATTACHMENT_LOAD_OP_DONT_CARE,  // Need UI to be drawn on top of main
@@ -25,13 +25,13 @@ void ImGuiRenderPass::createRenderPass() {
   };
 
   // Create a color attachment reference
-  VkAttachmentReference attachmentReference = {
+  const VkAttachmentReference attachmentReference = {
       .attachment = 0,
       .layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
   };
 
   // Create a subpass
-  VkSubpassDescription subpass = {
+  const VkSubpassDescription subpass = {
       .pipelineBindPoint    = VK_PIPELINE_BIND_POINT_GRAPHICS,
       .colorAttachmentCount = 1,
       .pColorAttachments    = &attachmentReference,
@@ -40,7 +40,7 @@ void ImGuiRenderPass::createRenderPass() {
   // Create a subpass dependency to synchronize our main and UI render passes
   // We want to render the UI after the geometry has been written to the framebuffer
   // so we need to configure a subpass dependency as such
-  VkSubpassDependency subpassDependency = {
+  const VkSubpassDependency subpassDependency = {
       .srcSubpass    = VK_SUBPASS_EXTERNAL,  // Create external dependency
       .dstSubpass    = 0,                    // The geometry subpass comes first
       .srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
@@ -50,7 +50,7 @@ void ImGuiRenderPass::createRenderPass() {
   };
 
   // Finally create the UI render pass
-  VkRenderPassCreateInfo createInfo = {
+  const VkRenderPassCreateInfo createInfo = {
       .sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
       .attachmentCount = 1,
       .pAttachments    = &attachmentDescription,

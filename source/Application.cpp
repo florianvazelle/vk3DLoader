@@ -84,13 +84,13 @@ void Application::drawFrame(bool& framebufferResized) {
   // Update Uniform Buffers
   uniformBuffers.update(imageIndex);
 
-  VkSemaphore waitSemaphores[]      = {syncObjects.imageAvailable(currentFrame)};
-  VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+  const VkSemaphore waitSemaphores[]      = {syncObjects.imageAvailable(currentFrame)};
+  const VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
-  VkCommandBuffer cmdBuffers[]   = {commandBuffers.command(imageIndex), interface.command(imageIndex)};
-  VkSemaphore signalSemaphores[] = {syncObjects.renderFinished(currentFrame)};
+  const VkCommandBuffer cmdBuffers[]   = {commandBuffers.command(imageIndex), interface.command(imageIndex)};
+  const VkSemaphore signalSemaphores[] = {syncObjects.renderFinished(currentFrame)};
 
-  VkSubmitInfo submitInfo = {
+  const VkSubmitInfo submitInfo = {
       .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
       .waitSemaphoreCount   = 1,
       .pWaitSemaphores      = waitSemaphores,
@@ -107,9 +107,9 @@ void Application::drawFrame(bool& framebufferResized) {
     throw std::runtime_error("failed to submit draw command buffer!");
   }
 
-  VkSwapchainKHR swapChains[] = {swapChain.handle()};
+  const VkSwapchainKHR swapChains[] = {swapChain.handle()};
 
-  VkPresentInfoKHR presentInfo = {
+  const VkPresentInfoKHR presentInfo = {
       .sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
       .waitSemaphoreCount = 1,
       .pWaitSemaphores    = signalSemaphores,

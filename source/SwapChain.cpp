@@ -37,8 +37,8 @@ void SwapChain::createSwapChain() {
   m_supportDetails = QuerySwapChainSupport(m_device.physical(), m_window.surface());
   m_extent         = ChooseSwapExtent(m_supportDetails.capabilities, m_window);
 
-  VkSurfaceFormatKHR surfaceFormat = ChooseSwapSurfaceFormat(m_supportDetails.formats);
-  VkPresentModeKHR presentMode     = ChooseSwapPresentMode(m_supportDetails.presentModes);
+  const VkSurfaceFormatKHR surfaceFormat = ChooseSwapSurfaceFormat(m_supportDetails.formats);
+  const VkPresentModeKHR presentMode     = ChooseSwapPresentMode(m_supportDetails.presentModes);
 
   m_imageFormat = surfaceFormat.format;
 
@@ -138,7 +138,7 @@ void SwapChain::createImageViews() {
   m_imageViews.resize(m_images.size());
 
   for (size_t i = 0; i < m_images.size(); i++) {
-    VkImageViewCreateInfo createInfo = {
+    const VkImageViewCreateInfo createInfo = {
         .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
         .image = m_images[i],
 

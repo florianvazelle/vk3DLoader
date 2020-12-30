@@ -16,7 +16,7 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
   }
 
   // appInfo permet de décrire notre application
-  VkApplicationInfo appInfo = {
+  const VkApplicationInfo appInfo = {
       .sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO,
       .pApplicationName   = appName,
       .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
@@ -49,7 +49,7 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
     createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
   }
 
-  VkResult result = vkCreateInstance(&createInfo, nullptr, &m_instance);
+  const VkResult result = vkCreateInstance(&createInfo, nullptr, &m_instance);
 
   if (result == VK_ERROR_INCOMPATIBLE_DRIVER) {
     exitOnError(

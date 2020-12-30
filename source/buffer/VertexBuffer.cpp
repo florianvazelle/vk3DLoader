@@ -7,7 +7,7 @@ using namespace vkl;
 
 VertexBuffer::VertexBuffer(const Device& device, const std::vector<Vertex>& vertices)
     : Buffer(device), m_vertices(vertices) {
-  VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+  const VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
   // Voir commentaires dans la fonction createBuffer
   createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,

@@ -38,30 +38,30 @@ void GraphicsPipeline::recreate() {
 
 void GraphicsPipeline::createPipeline() {
   // Load our shader modules in from disk
-  auto vertShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
-  auto fragShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
+  const auto vertShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
+  const auto fragShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
 
-  VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
-  VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+  const VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
+  const VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
 
-  VkPipelineShaderStageCreateInfo vertShaderStageInfo = {
+  const VkPipelineShaderStageCreateInfo vertShaderStageInfo = {
       .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
       .stage  = VK_SHADER_STAGE_VERTEX_BIT,
       .module = vertShaderModule,
       .pName  = "main",
   };
 
-  VkPipelineShaderStageCreateInfo fragShaderStageInfo = {
+  const VkPipelineShaderStageCreateInfo fragShaderStageInfo = {
       .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
       .stage  = VK_SHADER_STAGE_FRAGMENT_BIT,
       .module = fragShaderModule,
       .pName  = "main",
   };
 
-  auto bindingDescription    = Vertex::getBindingDescription();
-  auto attributeDescriptions = Vertex::getAttributeDescriptions();
+  const auto bindingDescription    = Vertex::getBindingDescription();
+  const auto attributeDescriptions = Vertex::getAttributeDescriptions();
 
-  VkPipelineVertexInputStateCreateInfo vertexInputInfo = {
+  const VkPipelineVertexInputStateCreateInfo vertexInputInfo = {
       .sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
       .vertexBindingDescriptionCount   = 1,
       .pVertexBindingDescriptions      = &bindingDescription,
@@ -69,18 +69,18 @@ void GraphicsPipeline::createPipeline() {
       .pVertexAttributeDescriptions    = attributeDescriptions.data(),
   };
 
-  VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
+  const VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
   // Create information struct about input assembly
   // We'll be organizing our vertices in triangles and the GPU should treat the data accordingly
-  VkPipelineInputAssemblyStateCreateInfo inputAssembly = {
+  const VkPipelineInputAssemblyStateCreateInfo inputAssembly = {
       .sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
       .topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
       .primitiveRestartEnable = VK_FALSE,
   };
 
   // Pipeline viewport
-  VkViewport viewport = {
+  const VkViewport viewport = {
       .x      = 0.0f,
       .y      = 0.0f,
       .width  = static_cast<float>(m_swapChain.extent().width),
@@ -91,13 +91,13 @@ void GraphicsPipeline::createPipeline() {
   };
 
   // Pixel boundary cutoff
-  VkRect2D scissor = {
+  const VkRect2D scissor = {
       .offset = {0, 0},
       .extent = m_swapChain.extent(),
   };
 
   // Combine viewport(s) and scissor(s) (some graphics cards allow multiple of each)
-  VkPipelineViewportStateCreateInfo viewportState = {
+  const VkPipelineViewportStateCreateInfo viewportState = {
       .sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
       .viewportCount = 1,
       .pViewports    = &viewport,
@@ -106,7 +106,7 @@ void GraphicsPipeline::createPipeline() {
   };
 
   // Rasterizer
-  VkPipelineRasterizationStateCreateInfo rasterizer = {
+  const VkPipelineRasterizationStateCreateInfo rasterizer = {
       .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
       // Clip fragments instead of clipping them to near and far planes
       .depthClampEnable = VK_FALSE,
@@ -124,7 +124,7 @@ void GraphicsPipeline::createPipeline() {
   };
 
   // Multisampling
-  VkPipelineMultisampleStateCreateInfo multisampling = {
+  const VkPipelineMultisampleStateCreateInfo multisampling = {
       .sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
       .rasterizationSamples = VK_SAMPLE_COUNT_1_BIT,
       .sampleShadingEnable  = VK_FALSE,
@@ -132,14 +132,14 @@ void GraphicsPipeline::createPipeline() {
   };
 
   // Color Blending
-  VkPipelineColorBlendAttachmentState colorBlendAttachment = {
+  const VkPipelineColorBlendAttachmentState colorBlendAttachment = {
       // Disable blending
       .blendEnable = VK_FALSE,
       .colorWriteMask
       = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
   };
 
-  VkPipelineColorBlendStateCreateInfo colorBlending = {
+  const VkPipelineColorBlendStateCreateInfo colorBlending = {
       .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
       // Disable bitwise combination blending
       .logicOpEnable   = VK_FALSE,
@@ -150,8 +150,8 @@ void GraphicsPipeline::createPipeline() {
       .blendConstants = {0.0f, 0.0f, 0.0f, 0.0f},
   };
 
-  VkDescriptorSetLayout layouts[]               = {m_descriptorSetLayout.handle()};
-  VkPipelineLayoutCreateInfo pipelineLayoutInfo = {
+  const VkDescriptorSetLayout layouts[]               = {m_descriptorSetLayout.handle()};
+  const VkPipelineLayoutCreateInfo pipelineLayoutInfo = {
       .sType          = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
       .setLayoutCount = 1,
       .pSetLayouts    = layouts,
@@ -161,7 +161,7 @@ void GraphicsPipeline::createPipeline() {
     throw std::runtime_error("Pipeline Layout creation failed");
   }
 
-  VkGraphicsPipelineCreateInfo pipelineInfo = {
+  const VkGraphicsPipelineCreateInfo pipelineInfo = {
       .sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
       .stageCount          = 2,
       .pStages             = shaderStages,
@@ -191,7 +191,7 @@ void GraphicsPipeline::createPipeline() {
 }
 
 VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<char>& code) {
-  VkShaderModuleCreateInfo createInfo = {
+  const VkShaderModuleCreateInfo createInfo = {
       .sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
       .codeSize = code.size(),
       // Vector class already ensures that the data is correctly aligned,

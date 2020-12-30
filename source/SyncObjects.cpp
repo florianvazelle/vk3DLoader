@@ -14,11 +14,11 @@ SyncObjects::SyncObjects(const Device& device, uint32_t numImages, uint32_t maxF
       m_inFlightFences(maxFramesInFlight) {
   m_imagesInFlight.resize(m_numImages);
 
-  VkSemaphoreCreateInfo semaphoreInfo = {
-      semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+  const VkSemaphoreCreateInfo semaphoreInfo = {
+      .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
   };
 
-  VkFenceCreateInfo fenceInfo = {
+  const VkFenceCreateInfo fenceInfo = {
       .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
       // Initialize fence to already signaled so it doesn't
       // hang on first frame

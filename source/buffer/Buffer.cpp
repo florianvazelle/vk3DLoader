@@ -14,7 +14,7 @@ Buffer::~Buffer() {
 
 void Buffer::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
   // Step 1 - Création du m_buffer
-  VkBufferCreateInfo bufferInfo = {
+  const VkBufferCreateInfo bufferInfo = {
       .sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
       .size        = size,
       .usage       = usage,
@@ -31,7 +31,7 @@ void Buffer::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryP
   vkGetBufferMemoryRequirements(m_device.logical(), m_buffer, &memRequirements);
 
   // On rempli la structure VkMemoryAllocateInfo
-  VkMemoryAllocateInfo allocInfo = {
+  const VkMemoryAllocateInfo allocInfo = {
       .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
       .allocationSize  = memRequirements.size,
       .memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties),
