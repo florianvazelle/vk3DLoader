@@ -29,6 +29,7 @@
 #include <vkl/GraphicsPipeline.hpp>
 #include <vkl/ImGui/ImGuiApp.hpp>
 #include <vkl/Instance.hpp>
+#include <vkl/Model.hpp>
 #include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
@@ -40,19 +41,21 @@ namespace vkl {
 
   class Application {
   public:
-    Application();
+    Application(const std::string& modelPath = "", const std::string& assetPath = "");
 
     void run() { mainLoop(); }
 
   private:
     // Note : Order is taken into account
 
+    Model model;
+
     Instance instance;
     DebugUtilsMessenger debugMessenger;
     Window window;
     Device device;
 
-    VertexBuffer vertexTriangleBuffer;
+    VertexBuffer vertexBuffer;
     DescriptorSetLayout descriptorSetLayout;
 
     SwapChain swapChain;

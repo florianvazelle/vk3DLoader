@@ -1,5 +1,7 @@
 #include <vkl/GraphicsPipeline.hpp>
 
+#include <base_frag.h>
+#include <base_vert.h>
 #include <iostream>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
@@ -38,8 +40,8 @@ void GraphicsPipeline::recreate() {
 
 void GraphicsPipeline::createPipeline() {
   // Load our shader modules in from disk
-  const auto vertShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
-  const auto fragShaderCode = ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
+  const auto vertShaderCode = BASE_VERT;  // ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
+  const auto fragShaderCode = BASE_FRAG;  // ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
 
   const VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
   const VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -190,7 +192,7 @@ void GraphicsPipeline::createPipeline() {
   }
 }
 
-VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<char>& code) {
+VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<unsigned char>& code) {
   const VkShaderModuleCreateInfo createInfo = {
       .sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
       .codeSize = code.size(),

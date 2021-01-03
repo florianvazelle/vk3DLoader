@@ -7,10 +7,7 @@ const uint32_t HEIGHT = 600;
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::vector<Vertex> triangle
-    = {{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}}, {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}}, {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
-
-Application::Application()
+Application::Application(const std::string& modelPath, const std::string& assetPath)
     : instance(APP_NAME, ENGINE_NAME, true),
       debugMessenger(instance),
       window({WIDTH, HEIGHT}, APP_NAME, instance),
@@ -20,17 +17,12 @@ Application::Application()
       descriptorSetLayout(device),
       graphicsPipeline(device, swapChain, renderPass, descriptorSetLayout),
       commandPool(device, 0),
-      vertexTriangleBuffer(device, triangle),
+      model(modelPath),
+      vertexBuffer(device, model.vertices()),
       uniformBuffers(device, swapChain),
       descriptorPool(device, swapChain),
       descriptorSets(device, swapChain, uniformBuffers, descriptorSetLayout, descriptorPool),
-      commandBuffers(device,
-                     renderPass,
-                     swapChain,
-                     graphicsPipeline,
-                     commandPool,
-                     vertexTriangleBuffer,
-                     descriptorSets),
+      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexBuffer, descriptorSets),
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */ interface(instance, window, device, swapChain, graphicsPipeline) {}
 

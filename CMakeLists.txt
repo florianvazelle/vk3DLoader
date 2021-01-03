@@ -41,13 +41,9 @@ file(GLOB_RECURSE EXTERNALS "${CMAKE_CURRENT_BINARY_DIR}/external/*")
 
 # ---- Shaders ----
 file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/data/shader/*.vert" "${CMAKE_SOURCE_DIR}/data/shader/*.frag")
-list(APPEND COMPILED_SHADERS "")
-foreach (SHADER ${SHADERS})
-  list(APPEND COMPILED_SHADERS "${SHADER}.spv")
-endforeach()
 
 # ---- Create library ----
-add_library(${LIBRARY_NAME} OBJECT ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${EXTERNALS} ${SHADERS} ${COMPILED_SHADERS})
+add_library(${LIBRARY_NAME} OBJECT ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${EXTERNALS})
 
 # Lib needs its header files, and users of the library must also see these (PUBLIC).
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -78,9 +74,9 @@ set_target_properties(
         CXX_EXTENSIONS NO
 )
 
-add_compile_definitions(DATA_PATH="${PROJECT_SOURCE_DIR}/data")
 add_compile_definitions(ENGINE_NAME="No Engine")
 add_compile_definitions(APP_NAME="${PROJECT_NAME}")
+add_compile_definitions(VK3DLOADER_VERSION="${CMAKE_PROJECT_VERSION}")
 
 # Set up tests (see test/CMakeLists.txt).
 if(ENABLE_TESTING)
@@ -96,11 +92,25 @@ else()
 endif()
 
 foreach(SHADER ${SHADERS})
-  add_custom_command(
-    OUTPUT ${SHADER}.spv
+  # Prepare a header and a global variable for this shader
+  get_filename_component(SHADER_NAME ${SHADER} NAME)
+  string(REPLACE "." "_" HEADER_NAME ${SHADER_NAME})
+  string(TOUPPER ${HEADER_NAME} GLOBAL_SHADER_VAR)
+
+  set(SHADER_HEADER "${PROJECT_SOURCE_DIR}/include/${HEADER_NAME}")
+
+  add_custom_target(
+    ${HEADER_NAME}
     COMMAND ${PROJECT_BINARY_DIR}/bin/${glslCompiler} -V ${SHADER} -o ${SHADER}.spv
+    COMMAND ${CMAKE_COMMAND} -DPATH="${SHADER}.spv" -DHEADER="${SHADER_HEADER}" -DGLOBAL="${GLOBAL_SHADER_VAR}" -P "${CMAKE_SOURCE_DIR}/cmake/scripts/EmbedData.cmake"
     DEPENDS ${SHADER}
-    COMMENT "Rebuilding ${SHADER}.spv"
+    COMMENT "Building ${SHADER}.spv and embedding it into ${SHADER_HEADER}.h"
   )
-  message(STATUS "Generating build commands for ${SHADER}.spv")
+
+  add_dependencies(${LIBRARY_NAME} ${HEADER_NAME})
+
+  message(STATUS "Generating build commands for ${SHADER}")
 endforeach()
+
+# ---- cmake install ----
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)

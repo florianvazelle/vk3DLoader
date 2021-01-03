@@ -1,4 +1,6 @@
 /build*
+/dist*
+/instdir*
 /out*
 
 /.vs
@@ -6,3 +8,4 @@
 .DS_Store
 
 imgui.ini
+**/*.h

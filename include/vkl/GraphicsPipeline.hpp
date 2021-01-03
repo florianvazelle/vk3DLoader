@@ -38,7 +38,7 @@ namespace vkl {
     const DescriptorSetLayout& m_descriptorSetLayout;
 
     void createPipeline();
-    VkShaderModule createShaderModule(const std::vector<char>& code);
+    VkShaderModule createShaderModule(const std::vector<unsigned char>& code);
   };
 }  // namespace vkl
 
