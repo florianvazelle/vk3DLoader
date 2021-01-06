@@ -5,12 +5,12 @@ This is work in progress Vulkan project to load and visualize a 3D model.
 ## Roadmap
 
 - Implement :
-  - Descriptor sets
+  - ~~Descriptor sets~~
   - Dynamic uniform buffers
   - Push constants
 - 🏆 Support obj/fbx/gltf model loading
 
-Bonus: Normal mapping
+Bonus: Shadow mapping
 
 ## Building
 
