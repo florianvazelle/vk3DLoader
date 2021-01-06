@@ -1,4 +1,4 @@
-# vk3DLoader [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-brightgreen?style=flat-square)] [![Actions Status](https://img.shields.io/github/workflow/status/florianvazelle/vk3DLoader/CMake%20Build%20Matrix?style=flat-square&color=brightgreen)](https://github.com/florianvazelle/vk3DLoader/actions) 
+# vk3DLoader ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-brightgreen?style=flat-square) [![Actions Status](https://img.shields.io/github/workflow/status/florianvazelle/vk3DLoader/CMake%20Build%20Matrix?style=flat-square&color=brightgreen)](https://github.com/florianvazelle/vk3DLoader/actions) 
 
 This is work in progress Vulkan project to load and visualize a 3D model.
 
