@@ -10,7 +10,7 @@ namespace vkl {
 
   class DescriptorSetLayout : public NonCopyable {
   public:
-    DescriptorSetLayout(const Device& device);
+    DescriptorSetLayout(const Device& device, const VkDescriptorSetLayoutCreateInfo& layoutInfo);
     ~DescriptorSetLayout();
 
     inline const VkDescriptorSetLayout& handle() const { return m_descriptorSetLayout; }

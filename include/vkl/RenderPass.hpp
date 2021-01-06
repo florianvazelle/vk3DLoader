@@ -37,7 +37,7 @@ namespace vkl {
     const SwapChain& m_swapChain;
 
     virtual void createRenderPass() = 0;
-    void createFrameBuffers();
+    virtual void createFrameBuffers();
 
     void destroyFrameBuffers();
   };

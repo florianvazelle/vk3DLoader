@@ -10,7 +10,7 @@ namespace vkl {
 
   class DescriptorPool : public NonCopyable {
   public:
-    DescriptorPool(const Device& device, const SwapChain& swapChain);
+    DescriptorPool(const Device& device, const VkDescriptorPoolCreateInfo& poolInfo);
     ~DescriptorPool();
 
     inline const VkDescriptorPool& handle() const { return m_pool; };
@@ -22,7 +22,7 @@ namespace vkl {
     VkDescriptorPool m_pool;
 
     const Device& m_device;
-    const SwapChain& m_swapChain;
+    const VkDescriptorPoolCreateInfo& m_poolInfo;
 
     void createDescriptorPool();
   };

@@ -11,6 +11,7 @@ namespace vkl {
   class Device;
   class SwapChain;
   class RenderPass;
+  class DepthRenderPass;
   class DescriptorSetLayout;
   struct ShaderDetails;
 
@@ -19,22 +20,29 @@ namespace vkl {
     GraphicsPipeline(const Device& device,
                      const SwapChain& swapChain,
                      const RenderPass& renderPass,
+                     const DepthRenderPass& depthRenderPass,
                      const DescriptorSetLayout& descriptorSetLayout);
     ~GraphicsPipeline();
 
     void recreate();
 
     inline const VkPipeline& pipeline() const { return m_pipeline; }
+    inline const VkPipeline& depthPipeline() const { return m_depthPipeline; }
     inline const VkPipelineLayout& layout() const { return m_layout; }
 
   private:
+    /**
+     * Note Exposé : les VkPipeline peuvent partagé le meme VkPipelineLayout
+     */
     VkPipeline m_pipeline;
+    VkPipeline m_depthPipeline;
     VkPipelineLayout m_layout;
     VkPipelineLayout m_oldLayout;
 
     const Device& m_device;
     const SwapChain& m_swapChain;
     const RenderPass& m_renderPass;
+    const DepthRenderPass& m_depthRenderPass;
     const DescriptorSetLayout& m_descriptorSetLayout;
 
     void createPipeline();

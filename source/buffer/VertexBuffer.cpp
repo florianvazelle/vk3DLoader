@@ -1,7 +1,6 @@
 #include <vkl/buffer/VertexBuffer.hpp>
 
 #include <cstring>
-#include <vkl/Utils.hpp>
 
 using namespace vkl;
 

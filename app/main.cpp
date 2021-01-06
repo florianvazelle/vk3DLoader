@@ -9,8 +9,10 @@ int main(int argc, char** argv) {
   options.add_options()
     ("h,help", "Show help")
     ("v,version", "Print the current version number")
-    ("m,model", "Path to a model to visualize", cxxopts::value<std::string>()->default_value(""))
-    ("t,texture", "Path to the texture attached to the model", cxxopts::value<std::string>()->default_value(""))
+    ("m,model", "Path to a model to visualize (if not specified draw a triangle)", cxxopts::value<std::string>(), "FILE");
+  options.add_options("Dev")
+    ("d,debug", "Debug level (0: nothing, 1: error, 2: warning)", cxxopts::value<int>(), "LEVEL")
+    ("e,error-exit", "Exit on first error");
   ;
   // clang-format on
 
@@ -31,7 +33,22 @@ int main(int argc, char** argv) {
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
   // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-  vkl::Application app(result["model"].as<std::string>(), result["texture"].as<std::string>());
+  std::string modelPath = "";
+  if (result.count("model")) {
+    modelPath = result["model"].as<std::string>();
+  }
+
+  int debugLevel = 0;
+  if (result.count("debug")) {
+    debugLevel = result["debug"].as<int>();
+  }
+
+  vkl::DebugOption debugOption = {
+      .debugLevel  = debugLevel,
+      .exitOnError = result.count("error-exit") > 0,
+  };
+
+  vkl::Application app(debugOption, modelPath);
 
   try {
     app.run();

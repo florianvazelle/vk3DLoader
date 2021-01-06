@@ -29,7 +29,7 @@ void RenderPass::cleanupOld() {
 }
 
 void RenderPass::createFrameBuffers() {
-  const size_t numImages = m_swapChain.numImages();
+  const size_t numImages = 1;  // m_swapChain.numImages();
 
   m_frameBuffers.resize(numImages);
 
@@ -47,7 +47,7 @@ void RenderPass::createFrameBuffers() {
         .layers          = 1,
     };
 
-    if (vkCreateFramebuffer(m_device.logical(), &info, nullptr, &m_frameBuffers[i]) != VK_SUCCESS) {
+    if (vkCreateFramebuffer(m_device.logical(), &info, nullptr, &m_frameBuffers.at(i)) != VK_SUCCESS) {
       throw std::runtime_error("Framebuffer creation failed");
     }
   }

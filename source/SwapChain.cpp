@@ -140,7 +140,7 @@ void SwapChain::createImageViews() {
   for (size_t i = 0; i < m_images.size(); i++) {
     const VkImageViewCreateInfo createInfo = {
         .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-        .image = m_images[i],
+        .image = m_images.at(i),
 
         // How image should be interpreted
         .viewType = VK_IMAGE_VIEW_TYPE_2D,
@@ -164,7 +164,7 @@ void SwapChain::createImageViews() {
         },
     };
 
-    if (vkCreateImageView(m_device.logical(), &createInfo, nullptr, &m_imageViews[i]) != VK_SUCCESS) {
+    if (vkCreateImageView(m_device.logical(), &createInfo, nullptr, &m_imageViews.at(i)) != VK_SUCCESS) {
       throw std::runtime_error("failed to create image views!");
     }
   }

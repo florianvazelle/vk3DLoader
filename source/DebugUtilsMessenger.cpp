@@ -6,11 +6,13 @@
 
 using namespace vkl;
 
-DebugUtilsMessenger::DebugUtilsMessenger(const Instance& instance)
-    : m_debugMessenger(VK_NULL_HANDLE), m_instance(instance) {
+DebugUtilsMessenger::DebugUtilsMessenger(const Instance& instance, bool exitOnError)
+    : m_debugMessenger(VK_NULL_HANDLE), m_instance(instance), m_exitOnError(exitOnError) {
   if (instance.validationLayersEnabled()) {
     // Setup the debug messenger
-    VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
+    VkDebugUtilsMessengerCreateInfoEXT createInfo = {
+        .pUserData = &m_exitOnError,
+    };
     PopulateDebugMessengerCreateInfo(createInfo);
 
     // Get pointer to extension function
@@ -48,16 +50,35 @@ DebugUtilsMessenger::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messag
                                    VkDebugUtilsMessageTypeFlagsEXT messageType,
                                    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
                                    void* pUserData) {
-  std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+  static const std::string yellow("\033[0;33m");
+  static const std::string red("\033[0;31m");
+  static const std::string reset("\033[0m");
+
+  bool is_error = false;
+
+  if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+    std::cout << yellow << "Warning: ";
+  } else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
+    std::cerr << red << "Error: ";
+    is_error = true;
+  }
+
+  std::cerr << reset << pCallbackData->pMessageIdName << "\n" << pCallbackData->pMessage << "\n" << std::endl;
+
+  bool* userData = (bool*)pUserData;  // cast it to an int
+
+  if (is_error && (*userData)) {
+    exit(1);
+  }
+
   return VK_FALSE;
 }
 
 void DebugUtilsMessenger::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
-  createInfo.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-  createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
-                               | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
-                               | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-  createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
-                           | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+  createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+  createInfo.messageSeverity
+      = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+  createInfo.messageType
+      = VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
   createInfo.pfnUserCallback = DebugCallback;
 }

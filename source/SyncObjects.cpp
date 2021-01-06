@@ -26,9 +26,9 @@ SyncObjects::SyncObjects(const Device& device, uint32_t numImages, uint32_t maxF
   };
 
   for (size_t i = 0; i < m_maxFramesInFlight; ++i) {
-    if (vkCreateSemaphore(m_device.logical(), &semaphoreInfo, nullptr, &m_imageAvailable[i]) != VK_SUCCESS
-        || vkCreateSemaphore(m_device.logical(), &semaphoreInfo, nullptr, &m_renderFinished[i]) != VK_SUCCESS
-        || vkCreateFence(m_device.logical(), &fenceInfo, nullptr, &m_inFlightFences[i]) != VK_SUCCESS) {
+    if (vkCreateSemaphore(m_device.logical(), &semaphoreInfo, nullptr, &m_imageAvailable.at(i)) != VK_SUCCESS
+        || vkCreateSemaphore(m_device.logical(), &semaphoreInfo, nullptr, &m_renderFinished.at(i)) != VK_SUCCESS
+        || vkCreateFence(m_device.logical(), &fenceInfo, nullptr, &m_inFlightFences.at(i)) != VK_SUCCESS) {
       throw std::runtime_error("failed to create synchronization objects for a frame!");
     }
   }
@@ -36,8 +36,8 @@ SyncObjects::SyncObjects(const Device& device, uint32_t numImages, uint32_t maxF
 
 SyncObjects::~SyncObjects() {
   for (size_t i = 0; i < m_maxFramesInFlight; ++i) {
-    vkDestroySemaphore(m_device.logical(), m_renderFinished[i], nullptr);
-    vkDestroySemaphore(m_device.logical(), m_imageAvailable[i], nullptr);
-    vkDestroyFence(m_device.logical(), m_inFlightFences[i], nullptr);
+    vkDestroySemaphore(m_device.logical(), m_renderFinished.at(i), nullptr);
+    vkDestroySemaphore(m_device.logical(), m_imageAvailable.at(i), nullptr);
+    vkDestroyFence(m_device.logical(), m_inFlightFences.at(i), nullptr);
   }
 }

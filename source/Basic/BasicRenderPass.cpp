@@ -11,6 +11,12 @@ BasicRenderPass::BasicRenderPass(const Device& device, const SwapChain& swapChai
 }
 
 void BasicRenderPass::createRenderPass() {
+  /**
+   * Note Exposé : Les renderpasses permettent d'informer Vulkan des attachements des framebuffers utilisés lors du
+   * rendu. Nous devons indiquer combien chaque framebuffer aura de buffers de couleur et de profondeur, combien de
+   * samples il faudra utiliser avec chaque frambuffer et comment les utiliser tout au long des opérations de rendu.
+   */
+
   // Create a new render pass as a color attachment
   const VkAttachmentDescription colorAttachment = {
       // Format should match the format of the swap chain

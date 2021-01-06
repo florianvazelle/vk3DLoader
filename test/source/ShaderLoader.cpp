@@ -1,7 +1,7 @@
 #include <doctest/doctest.h>
 
-#include <base_frag.h>
-#include <vkl/Vertex.hpp>
+#include <shadow_mapping_frag.h>
+#include <vkl/struct/Vertex.hpp>
 
 #include <vulkan/vulkan.h>
 
@@ -10,7 +10,7 @@
 // Obvious test, you can remove
 TEST_CASE("Load Shader") {
   try {
-    auto vertShaderCode = BASE_FRAG;
+    auto vertShaderCode = SHADOW_MAPPING_FRAG;
     CHECK(vertShaderCode.size() > 0);
   } catch (std::exception &e) {
     std::cout << e.what() << std::endl;

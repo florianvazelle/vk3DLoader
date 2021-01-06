@@ -22,6 +22,8 @@
 #include <vkl/Basic/BasicCommandBuffers.hpp>
 #include <vkl/Basic/BasicRenderPass.hpp>
 #include <vkl/DebugUtilsMessenger.hpp>
+#include <vkl/Depth/DepthCommandBuffers.hpp>
+#include <vkl/Depth/DepthRenderPass.hpp>
 #include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/DescriptorSets.hpp>
@@ -34,14 +36,20 @@
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
 #include <vkl/Window.hpp>
+#include <vkl/buffer/MaterialBuffer.hpp>
 #include <vkl/buffer/UniformBuffers.hpp>
 #include <vkl/buffer/VertexBuffer.hpp>
 
 namespace vkl {
 
+  struct DebugOption {
+    int debugLevel;
+    bool exitOnError;
+  };
+
   class Application {
   public:
-    Application(const std::string& modelPath = "", const std::string& assetPath = "");
+    Application(DebugOption debugOption, const std::string& modelPath = "");
 
     void run() { mainLoop(); }
 
@@ -59,14 +67,24 @@ namespace vkl {
     DescriptorSetLayout descriptorSetLayout;
 
     SwapChain swapChain;
-    UniformBuffers uniformBuffers;
+    UniformBuffers<MVP> uniformBuffers;
+    UniformBuffers<Depth> depthUniformBuffer;
+    MaterialBuffer materialUniformBuffer;
+
+    BasicRenderPass renderPass;
+    DepthRenderPass depthRenderPass;
+
+    const std::vector<VkDescriptorPoolSize> poolSizes;
+    VkDescriptorPoolCreateInfo descPoolInfo;
     DescriptorPool descriptorPool;
     DescriptorSets descriptorSets;
 
-    BasicRenderPass renderPass;
     GraphicsPipeline graphicsPipeline;
     CommandPool commandPool;
+
     BasicCommandBuffers commandBuffers;
+    DepthCommandBuffers depthCommandBuffers;
+
     SyncObjects syncObjects;
 
     ImGuiApp interface;

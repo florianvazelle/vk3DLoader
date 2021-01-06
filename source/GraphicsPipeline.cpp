@@ -1,47 +1,56 @@
 #include <vkl/GraphicsPipeline.hpp>
 
-#include <base_frag.h>
-#include <base_vert.h>
+#include <depth_basic_vert.h>
+#include <shadow_mapping_frag.h>
+#include <shadow_mapping_vert.h>
+
 #include <iostream>
+#include <vkl/Depth/DepthRenderPass.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/RenderPass.hpp>
 #include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
-#include <vkl/Vertex.hpp>
+#include <vkl/misc/GraphicsPipeline.hpp>
+#include <vkl/struct/Vertex.hpp>
 
 using namespace vkl;
 
 GraphicsPipeline::GraphicsPipeline(const Device& device,
                                    const SwapChain& swapChain,
                                    const RenderPass& renderPass,
+                                   const DepthRenderPass& depthRenderPass,
                                    const DescriptorSetLayout& descriptorSetLayout)
     : m_pipeline(VK_NULL_HANDLE),
+      m_depthPipeline(VK_NULL_HANDLE),
       m_layout(VK_NULL_HANDLE),
       m_oldLayout(VK_NULL_HANDLE),
 
       m_device(device),
       m_swapChain(swapChain),
       m_renderPass(renderPass),
+      m_depthRenderPass(depthRenderPass),
       m_descriptorSetLayout(descriptorSetLayout) {
   createPipeline();
 }
 
 GraphicsPipeline::~GraphicsPipeline() {
   vkDestroyPipeline(m_device.logical(), m_pipeline, nullptr);
+  vkDestroyPipeline(m_device.logical(), m_depthPipeline, nullptr);
   vkDestroyPipelineLayout(m_device.logical(), m_layout, nullptr);
 }
 
 void GraphicsPipeline::recreate() {
   vkDestroyPipeline(m_device.logical(), m_pipeline, nullptr);
+  vkDestroyPipeline(m_device.logical(), m_depthPipeline, nullptr);
   vkDestroyPipelineLayout(m_device.logical(), m_layout, nullptr);
   createPipeline();
 }
 
 void GraphicsPipeline::createPipeline() {
   // Load our shader modules in from disk
-  const auto vertShaderCode = BASE_VERT;  // ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
-  const auto fragShaderCode = BASE_FRAG;  // ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
+  const auto vertShaderCode = SHADOW_MAPPING_VERT;  // ShaderLoader::load(DATA_PATH "/shader/base.vert.spv");
+  const auto fragShaderCode = SHADOW_MAPPING_FRAG;  // ShaderLoader::load(DATA_PATH "/shader/base.frag.spv");
 
   const VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
   const VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -71,7 +80,7 @@ void GraphicsPipeline::createPipeline() {
       .pVertexAttributeDescriptions    = attributeDescriptions.data(),
   };
 
-  const VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
+  VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
   // Create information struct about input assembly
   // We'll be organizing our vertices in triangles and the GPU should treat the data accordingly
@@ -108,7 +117,7 @@ void GraphicsPipeline::createPipeline() {
   };
 
   // Rasterizer
-  const VkPipelineRasterizationStateCreateInfo rasterizer = {
+  VkPipelineRasterizationStateCreateInfo rasterizer = {
       .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
       // Clip fragments instead of clipping them to near and far planes
       .depthClampEnable = VK_FALSE,
@@ -141,7 +150,7 @@ void GraphicsPipeline::createPipeline() {
       = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
   };
 
-  const VkPipelineColorBlendStateCreateInfo colorBlending = {
+  VkPipelineColorBlendStateCreateInfo colorBlending = {
       .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
       // Disable bitwise combination blending
       .logicOpEnable   = VK_FALSE,
@@ -187,6 +196,66 @@ void GraphicsPipeline::createPipeline() {
     throw std::runtime_error("Graphics Pipeline creation failed");
   }
 
+  /* Offscreen pipeline (vertex shader only) */
+
+  const VkShaderModule vertDepthShaderModule = createShaderModule(DEPTH_BASIC_VERT);
+
+  const VkPipelineShaderStageCreateInfo vertDepthShaderStageInfo = {
+      .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+      .stage  = VK_SHADER_STAGE_VERTEX_BIT,
+      .module = vertDepthShaderModule,
+      .pName  = "main",
+  };
+
+  shaderStages[0] = vertDepthShaderStageInfo;
+
+  // No blend attachment states (no color attachments used)
+  colorBlending.attachmentCount = 0;
+  // Enable depth bias
+  rasterizer.depthBiasEnable = VK_TRUE;
+  // Add depth bias to dynamic state, so we can change it at runtime
+  std::vector<VkDynamicState> dynamicStateEnables = {
+      VK_DYNAMIC_STATE_VIEWPORT,
+      VK_DYNAMIC_STATE_SCISSOR,
+      VK_DYNAMIC_STATE_DEPTH_BIAS,
+  };
+  VkPipelineDynamicStateCreateInfo dynamicState = misc::pipelineDynamicStateCreateInfo(dynamicStateEnables, 0);
+
+  const VkPipelineDepthStencilStateCreateInfo depthStencilState = {
+      .sType            = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+      .depthTestEnable  = VK_TRUE,
+      .depthWriteEnable = VK_TRUE,
+      .depthCompareOp   = VK_COMPARE_OP_LESS_OR_EQUAL,  // Cull front faces
+      .back = {
+          .compareOp   = VK_COMPARE_OP_ALWAYS,
+      },
+  };
+
+  const VkGraphicsPipelineCreateInfo offscreenInfo = {
+      .sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+      .stageCount          = 1,
+      .pStages             = shaderStages,
+      .pVertexInputState   = &vertexInputInfo,
+      .pInputAssemblyState = &inputAssembly,
+      .pViewportState      = &viewportState,
+      .pRasterizationState = &rasterizer,
+      .pMultisampleState   = &multisampling,
+      .pDepthStencilState  = &depthStencilState,
+      .pColorBlendState    = &colorBlending,
+      .pDynamicState       = &dynamicState,
+      .layout              = m_layout,
+      .renderPass          = m_depthRenderPass.handle(),
+      .subpass             = 0,
+      .basePipelineHandle  = VK_NULL_HANDLE,
+      .basePipelineIndex   = -1,
+  };
+
+  if (vkCreateGraphicsPipelines(m_device.logical(), VK_NULL_HANDLE, 1, &offscreenInfo, nullptr, &m_depthPipeline)
+      != VK_SUCCESS) {
+    throw std::runtime_error("Depth Graphics Pipeline creation failed");
+  }
+
+  // Delete shader modules
   for (auto& shader : shaderStages) {
     vkDestroyShaderModule(m_device.logical(), shader.module, nullptr);
   }

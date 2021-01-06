@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <vkl/Vertex.hpp>
+#include <vkl/struct/Material.hpp>
+#include <vkl/struct/Vertex.hpp>
 
 namespace vkl {
 
@@ -12,9 +13,11 @@ namespace vkl {
     Model(const std::string& modelPath);
 
     inline const std::vector<Vertex>& vertices() const { return m_vertices; }
+    inline const std::vector<Material>& materials() const { return m_materials; }
 
   private:
     std::vector<Vertex> m_vertices;
+    std::vector<Material> m_materials;
   };
 
 }  // namespace vkl

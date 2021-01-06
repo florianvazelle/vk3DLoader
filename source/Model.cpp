@@ -36,6 +36,9 @@ Model::Model(const std::string& modelPath) {
       throw std::runtime_error("err: # of shapes are zero.");
     }
 
+    bool hasNormals   = !attrib.normals.empty();
+    bool hasTexCoords = !attrib.texcoords.empty();
+
     for (const auto& shape : shapes) {
       for (const auto& index : shape.mesh.indices) {
         Vertex vertex{};
@@ -46,36 +49,68 @@ Model::Model(const std::string& modelPath) {
             attrib.vertices[3 * index.vertex_index + 2],
         };
 
-        vertex.texCoord = {
-            attrib.texcoords[2 * index.texcoord_index + 0],
-            1.0f - attrib.texcoords[2 * index.texcoord_index + 1],
-        };
+        if (hasNormals) {
+          vertex.normal = {
+              attrib.normals[3 * index.normal_index + 0],
+              attrib.normals[3 * index.normal_index + 1],
+              attrib.normals[3 * index.normal_index + 2],
+          };
+        }
 
         vertex.color = {1.0f, 1.0f, 1.0f};
 
+        if (hasTexCoords) {
+          vertex.texCoord = {
+              attrib.texcoords[2 * index.texcoord_index + 0],
+              1.0f - attrib.texcoords[2 * index.texcoord_index + 1],
+          };
+        }
+
         m_vertices.push_back(vertex);
       }
+    }
+
+    for (const tinyobj::material_t& material : materials) {
+      Material m = {
+          {material.ambient[0], material.ambient[1], material.ambient[2]},
+          {material.diffuse[0], material.diffuse[1], material.diffuse[2]},
+          {material.specular[0], material.specular[1], material.specular[2]},
+          material.shininess,
+      };
+      m_materials.push_back(m);
     }
   } else {
     // By default show a triangle
     const std::vector<Vertex> triangle = {
         {
             {0.0f, -0.5f, 0.0f},
+            {0.0f, 1.0f, 0.0f},
             {1.0f, 0.0f, 0.0f},
             {0.0f, 0.0f},
         },
         {
             {0.5f, 0.5f, 0.0f},
             {0.0f, 1.0f, 0.0f},
+            {0.0f, 1.0f, 0.0f},
             {0.0f, 0.0f},
         },
         {
             {-0.5f, 0.5f, 0.0f},
+            {0.0f, 1.0f, 0.0f},
             {0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f},
         },
     };
 
     m_vertices = triangle;
+
+    m_materials = {
+        {
+            {1.0f, 0.5f, 0.31f},
+            {1.0f, 0.5f, 0.31f},
+            {0.5f, 0.5f, 0.5f},
+            32.0f,
+        },
+    };
   }
 }

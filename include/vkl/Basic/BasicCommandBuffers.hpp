@@ -18,7 +18,8 @@ namespace vkl {
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
                         const VertexBuffer& vertexBuffer,
-                        const DescriptorSets& descriptorSets);
+                        const DescriptorSets& descriptorSets,
+                        const RenderPass& depthRenderPass);
     void recreate();
 
   private:
@@ -26,6 +27,7 @@ namespace vkl {
 
     const VertexBuffer& m_vertexBuffer;
     const DescriptorSets& m_descriptorSets;
+    const RenderPass& m_depthRenderPass;
   };
 
 }  // namespace vkl

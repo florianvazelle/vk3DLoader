@@ -6,8 +6,8 @@
 
 #include <NonCopyable.hpp>
 #include <vkl/Device.hpp>
-#include <vkl/Vertex.hpp>
 #include <vkl/buffer/Buffer.hpp>
+#include <vkl/struct/Vertex.hpp>
 
 namespace vkl {
   class VertexBuffer : public Buffer {

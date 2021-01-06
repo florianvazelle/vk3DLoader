@@ -33,15 +33,6 @@ namespace vkl {
     VkDeviceMemory m_bufferMemory;
 
     const Device& m_device;
-
-    /**
-     * @brief Déterminer un type de mémoire
-     * @param typeFilter Indique les types de mémoire que l'on veut trouver (chaque n-ième
-     * correspond a un type de mémoire)
-     * @param properties Bitmask spécifiant les propriétés d'un type de mémoire
-     * @return Indice de la mémoire
-     */
-    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
   };
 
 }  // namespace vkl

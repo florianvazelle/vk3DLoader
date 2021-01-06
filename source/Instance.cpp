@@ -1,7 +1,6 @@
 #include <vkl/Instance.hpp>
 
 #include <vkl/DebugUtilsMessenger.hpp>
-#include <vkl/Utils.hpp>
 #include <vkl/Window.hpp>
 
 using namespace vkl;
@@ -52,12 +51,12 @@ Instance::Instance(const char* appName, const char* engineName, bool validationL
   const VkResult result = vkCreateInstance(&createInfo, nullptr, &m_instance);
 
   if (result == VK_ERROR_INCOMPATIBLE_DRIVER) {
-    exitOnError(
+    throw std::runtime_error(
         "Cannot find a compatible Vulkan installable client "
         "driver (ICD). Please make sure your driver supports "
         "Vulkan before continuing. The call to vkCreateInstance failed.");
   } else if (result != VK_SUCCESS) {
-    exitOnError(
+    throw std::runtime_error(
         "The call to vkCreateInstance failed. Please make sure "
         "you have a Vulkan installable client driver (ICD) before "
         "continuing.");

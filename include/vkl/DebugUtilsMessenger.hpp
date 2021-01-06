@@ -11,7 +11,7 @@ namespace vkl {
 
   class DebugUtilsMessenger : public NonCopyable {
   public:
-    explicit DebugUtilsMessenger(const Instance& instance);
+    explicit DebugUtilsMessenger(const Instance& instance, bool exitOnError);
     ~DebugUtilsMessenger() noexcept(false);
 
     inline const VkDebugUtilsMessengerEXT& handle() const { return m_debugMessenger; }
@@ -26,6 +26,7 @@ namespace vkl {
   private:
     const Instance& m_instance;
     VkDebugUtilsMessengerEXT m_debugMessenger;
+    bool m_exitOnError;
   };
 
 }  // namespace vkl

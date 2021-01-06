@@ -17,7 +17,7 @@ QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device
   // Iterate through families until one that supports requirements is found
   bool found = false;
   for (int i = 0; !found && i < families.size(); ++i) {
-    const auto& family = families[i];
+    const auto& family = families.at(i);
 
     // Check for graphics support
     if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
