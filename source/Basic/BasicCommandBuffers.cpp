@@ -1,25 +1,21 @@
 #include <vkl/Basic/BasicCommandBuffers.hpp>
 
+#include <iostream>
 #include <stdexcept>
-
-#ifndef SHADOWMAP_DIM
-#  define SHADOWMAP_DIM 2048
-#endif
 
 using namespace vkl;
 
 BasicCommandBuffers::BasicCommandBuffers(const Device& device,
-                                         const RenderPass& renderPass,
+                                         const BasicRenderPass& basicRenderPass,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool,
                                          const VertexBuffer& vertexBuffer,
-                                         const DescriptorSets& descriptorSets,
-                                         const RenderPass& depthRenderPass)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
+                                         const DescriptorSets& descriptorSets)
+    : CommandBuffers(device, basicRenderPass, swapChain, graphicsPipeline, commandPool),
+      m_basicRenderPass(basicRenderPass),
       m_vertexBuffer(vertexBuffer),
-      m_descriptorSets(descriptorSets),
-      m_depthRenderPass(depthRenderPass) {
+      m_descriptorSets(descriptorSets) {
   createCommandBuffers();
 }
 
@@ -51,12 +47,12 @@ void BasicCommandBuffers::createCommandBuffers() {
       throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    {
-      VkClearValue clearValues[2];
-      clearValues[0].color        = {0.0f, 0.0f, 0.0f, 1.0f};
-      clearValues[1].depthStencil = {1.0f, 0};
+    VkClearValue clearValues[3];
+    clearValues[0].color        = {{0.0f, 0.0f, 0.2f, 0.0f}};
+    clearValues[1].color        = {{0.0f, 0.0f, 0.2f, 0.0f}};
+    clearValues[2].depthStencil = {1.0f, 0};
 
-      const VkRenderPassBeginInfo renderPassInfo = {
+    const VkRenderPassBeginInfo renderPassBeginInfo = {
           .sType             = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
           .renderPass        = m_renderPass.handle(),
           .framebuffer       = m_renderPass.frameBuffer(i),
@@ -64,26 +60,62 @@ void BasicCommandBuffers::createCommandBuffers() {
               .offset = {0, 0},
               .extent = m_swapChain.extent(),
           },
-          .clearValueCount   = 2,
+          .clearValueCount   = 3,
           .pClearValues      = clearValues,
       };
 
-      vkCmdBeginRenderPass(m_commandBuffers.at(i), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass(m_commandBuffers.at(i), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-      vkCmdBindPipeline(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.pipeline());
+    VkViewport viewport = {
+        .width    = m_swapChain.extent().width,
+        .height   = m_swapChain.extent().height,
+        .minDepth = 0.0f,
+        .maxDepth = 1.0f,
+    };
+    vkCmdSetViewport(m_commandBuffers.at(i), 0, 1, &viewport);
 
-      const VkDescriptorSet descriptors[] = {m_descriptorSets.descriptor(i)};
+    VkRect2D scissor = {
+          .offset = {
+              .x = 0,
+              .y = 0,
+          },
+          .extent = {
+              .width  = m_swapChain.extent().width,
+              .height = m_swapChain.extent().height,
+          },
+      };
+    vkCmdSetScissor(m_commandBuffers.at(i), 0, 1, &scissor);
+
+    {
+      // Set depth bias (aka "Polygon offset")
+      // Required to avoid shadow mapping artifacts
+      vkCmdSetDepthBias(m_commandBuffers.at(i), 1.25f, 0.0f, 1.75f);
+
+      vkCmdBindPipeline(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.depthPipeline());
       vkCmdBindDescriptorSets(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.layout(), 0,
-                              1, descriptors, 0, nullptr);
+                              1, &(m_descriptorSets.depthDescriptor(i)), 0, nullptr);
 
       const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
       const VkDeviceSize offsets[]   = {0};
       vkCmdBindVertexBuffers(m_commandBuffers.at(i), 0, 1, vertexBuffers, offsets);
-
       vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
-
-      vkCmdEndRenderPass(m_commandBuffers.at(i));
     }
+
+    // Très important pour passer a la prochain subpass
+    vkCmdNextSubpass(m_commandBuffers.at(i), VK_SUBPASS_CONTENTS_INLINE);
+
+    {
+      vkCmdBindPipeline(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.pipeline());
+      vkCmdBindDescriptorSets(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.layout(), 0,
+                              1, &(m_descriptorSets.descriptor(i)), 0, nullptr);
+
+      const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
+      const VkDeviceSize offsets[]   = {0};
+      vkCmdBindVertexBuffers(m_commandBuffers.at(i), 0, 1, vertexBuffers, offsets);
+      vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
+    }
+
+    vkCmdEndRenderPass(m_commandBuffers.at(i));
 
     if (vkEndCommandBuffer(m_commandBuffers.at(i)) != VK_SUCCESS) {
       throw std::runtime_error("failed to record command buffer!");

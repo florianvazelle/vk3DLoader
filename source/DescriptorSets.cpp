@@ -7,20 +7,20 @@ using namespace vkl;
 
 DescriptorSets::DescriptorSets(const Device& device,
                                const SwapChain& swapChain,
+                               const BasicRenderPass& renderPass,
                                const UniformBuffers<MVP>& uniformBuffers,
                                const MaterialBuffer& materialUniformBuffer,
                                const UniformBuffers<Depth>& depthUniformBuffer,
                                const DescriptorSetLayout& descriptorSetLayout,
-                               const DescriptorPool& descriptorPool,
-                               const DepthRenderPass& depthRenderPass)
+                               const DescriptorPool& descriptorPool)
     : m_device(device),
       m_swapChain(swapChain),
+      m_renderPass(renderPass),
       m_uniformBuffers(uniformBuffers),
       m_materialUniformBuffer(materialUniformBuffer),
       m_depthUniformBuffer(depthUniformBuffer),
       m_descriptorSetLayout(descriptorSetLayout),
-      m_descriptorPool(descriptorPool),
-      m_depthRenderPass(depthRenderPass) {
+      m_descriptorPool(descriptorPool) {
   createDescriptorSets();
 }
 
@@ -32,13 +32,6 @@ void DescriptorSets::recreate() { createDescriptorSets(); }
  * 2. Update avec un Buffer
  */
 void DescriptorSets::createDescriptorSets() {
-  // Image descriptor for the shadow map attachment
-  VkDescriptorImageInfo shadowMapDescriptor = {
-      .sampler     = m_depthRenderPass.sample(),
-      .imageView   = m_depthRenderPass.view(),
-      .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
-  };
-
   /* Allocate */
 
   const size_t size = 1;  // m_swapChain.numImages();
@@ -56,53 +49,63 @@ void DescriptorSets::createDescriptorSets() {
 
   std::vector<VkWriteDescriptorSet> writeDescriptorSets;
 
-  const VkDescriptorBufferInfo materialBufferInfo = {
-      .buffer = m_materialUniformBuffer.buffer(),
-      .offset = 0,
-      .range  = sizeof(Material),
-  };
-
-  // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
-  for (size_t i = 0; i < size; i++) {
-    const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = m_uniformBuffers.buffer(i),
+  {
+    const VkDescriptorBufferInfo materialBufferInfo = {
+        .buffer = m_materialUniformBuffer.buffer(),
         .offset = 0,
-        .range  = sizeof(MVP),
+        .range  = sizeof(Material),
     };
 
-    writeDescriptorSets = {
-        // Binding 0 : Vertex shader uniform buffer
-        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
-        // Binding 1 : Fragment shader shadow sampler
-        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1,
-                                 &shadowMapDescriptor),
-        // Binding 2 : Fragment shader uniform buffer
-        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &materialBufferInfo),
-    };
+    // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
+    for (size_t i = 0; i < size; i++) {
+      const VkDescriptorBufferInfo bufferInfo = {
+          .buffer = m_uniformBuffers.buffer(i),
+          .offset = 0,
+          .range  = sizeof(MVP),
+      };
 
-    vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
+      // Image descriptor for the shadow map attachment
+      const VkDescriptorImageInfo depthDescriptor = {
+          .sampler     = VK_NULL_HANDLE,  // le shader va lire les valeurs écrits a cette position, juste avant
+          .imageView   = m_renderPass.depthAttachment(i).view(),
+          .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+      };
+
+      writeDescriptorSets = {
+          // Binding 0 : Vertex shader uniform buffer
+          misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
+          // Binding 1 : Fragment shader Depth input attachment
+          misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, &depthDescriptor),
+          // Binding 2 : Fragment shader uniform buffer
+          misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &materialBufferInfo),
+      };
+
+      vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
+    }
   }
 
-  /* Depth Descriptor Set */
-  // TODO : Separate this in a new Descriprot set
+  {
+    /* Depth Descriptor Set */
+    // TODO : Separate this in a new Descriprot set
 
-  // Offscreen shadow map generation
-  m_dethDescriptorSet.resize(size);
-  if (vkAllocateDescriptorSets(m_device.logical(), &allocInfo, m_dethDescriptorSet.data()) != VK_SUCCESS) {
-    throw std::runtime_error("echec de l'allocation d'un set de descripteurs!");
-  }
+    // Offscreen shadow map generation
+    m_dethDescriptorSet.resize(size);
+    if (vkAllocateDescriptorSets(m_device.logical(), &allocInfo, m_dethDescriptorSet.data()) != VK_SUCCESS) {
+      throw std::runtime_error("echec de l'allocation d'un set de descripteurs!");
+    }
 
-  for (size_t i = 0; i < size; i++) {
-    const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = m_depthUniformBuffer.buffer(i),
-        .offset = 0,
-        .range  = sizeof(Depth),
-    };
+    for (size_t i = 0; i < size; i++) {
+      const VkDescriptorBufferInfo bufferInfo = {
+          .buffer = m_depthUniformBuffer.buffer(i),
+          .offset = 0,
+          .range  = sizeof(Depth),
+      };
 
-    writeDescriptorSets = {
-        misc::writeDescriptorSet(m_dethDescriptorSet.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
-    };
+      writeDescriptorSets = {
+          misc::writeDescriptorSet(m_dethDescriptorSet.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
+      };
 
-    vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
+      vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
+    }
   }
 }

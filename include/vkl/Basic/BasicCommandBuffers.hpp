@@ -13,21 +13,20 @@ namespace vkl {
   class BasicCommandBuffers : public CommandBuffers {
   public:
     BasicCommandBuffers(const Device& device,
-                        const RenderPass& renderpass,
+                        const BasicRenderPass& m_basicRenderPass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
                         const VertexBuffer& vertexBuffer,
-                        const DescriptorSets& descriptorSets,
-                        const RenderPass& depthRenderPass);
+                        const DescriptorSets& descriptorSets);
     void recreate();
 
   private:
     void createCommandBuffers();
 
+    const BasicRenderPass& m_basicRenderPass;
     const VertexBuffer& m_vertexBuffer;
     const DescriptorSets& m_descriptorSets;
-    const RenderPass& m_depthRenderPass;
   };
 
 }  // namespace vkl

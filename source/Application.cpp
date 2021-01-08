@@ -14,6 +14,8 @@ bool isRotate = true;
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
+bool enabledShadowMap = true;
+
 // TODO : remove depth renderpass and commendbuffer no need to depend of swapchain
 
 Application::Application(DebugOption debugOption, const std::string& modelPath)
@@ -25,8 +27,8 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       // Swap Chain
       swapChain(device, window),
 
+      // Render Pass
       renderPass(device, swapChain),
-      depthRenderPass(device, swapChain),
 
       // Descriptor Set Layout
       descriptorSetLayout(
@@ -34,15 +36,13 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
           misc::descriptorSetLayoutCreateInfo({
               // Binding 0 : Vertex shader uniform buffer
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
-              // Binding 1 : Fragment shader image sampler (shadow map)
-              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                               VK_SHADER_STAGE_FRAGMENT_BIT,
-                                               1),
+              // Binding 1 : Fragment shader input attachment (shadow map)
+              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, VK_SHADER_STAGE_FRAGMENT_BIT, 1),
               // Binding 2 : Fragment shader uniform buffer (Material)
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
           })),
 
-      graphicsPipeline(device, swapChain, renderPass, depthRenderPass, descriptorSetLayout),
+      graphicsPipeline(device, swapChain, renderPass, descriptorSetLayout),
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       model(modelPath),
 
@@ -53,43 +53,26 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       depthUniformBuffer(device, swapChain),
 
       // Descriptor Pool
-      // un descripteur par frame
+      // ~~un descripteur par frame~~
       poolSizes({
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                   3 /*static_cast<uint32_t>(swapChain.numImages())*/),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                   3 /*static_cast<uint32_t>(swapChain.numImages())*/),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                   3 /*static_cast<uint32_t>(swapChain.numImages())*/),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2 + 1),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() + 1),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, swapChain.numImages() + 1),
       }),
-      descPoolInfo(misc::descriptorPoolCreateInfo(poolSizes, 3 /*static_cast<uint32_t>(swapChain.numImages())*/)),
+      descPoolInfo(misc::descriptorPoolCreateInfo(poolSizes, swapChain.numImages() + 1)),
       descriptorPool(device, descPoolInfo),
 
       // Descriptor Set
       descriptorSets(device,
                      swapChain,
+                     renderPass,
                      uniformBuffers,
                      materialUniformBuffer,
                      depthUniformBuffer,
                      descriptorSetLayout,
-                     descriptorPool,
-                     depthRenderPass),
+                     descriptorPool),
 
-      commandBuffers(device,
-                     renderPass,
-                     swapChain,
-                     graphicsPipeline,
-                     commandPool,
-                     vertexBuffer,
-                     descriptorSets,
-                     depthRenderPass),
-      depthCommandBuffers(device,
-                          depthRenderPass,
-                          swapChain,
-                          graphicsPipeline,
-                          commandPool,
-                          vertexBuffer,
-                          descriptorSets),
+      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexBuffer, descriptorSets),
 
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */
@@ -141,7 +124,6 @@ void Application::drawFrame(bool& framebufferResized) {
 
   // Record UI draw data
   interface.recordCommandBuffers(imageIndex);
-  depthCommandBuffers.recordCommandBuffers(imageIndex);
 
   /* Update Uniform Buffers */
 
@@ -159,11 +141,11 @@ void Application::drawFrame(bool& framebufferResized) {
   const VkSemaphore waitSemaphores[]      = {syncObjects.imageAvailable(currentFrame)};
   const VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
-  const VkCommandBuffer cmdBuffers[] = {
-      depthCommandBuffers.command(imageIndex),
+  std::vector<VkCommandBuffer> cmdBuffers = {
       commandBuffers.command(imageIndex),
       interface.command(imageIndex),
   };
+
   const VkSemaphore signalSemaphores[] = {syncObjects.renderFinished(currentFrame)};
 
   const VkSubmitInfo submitInfo = {
@@ -171,8 +153,8 @@ void Application::drawFrame(bool& framebufferResized) {
       .waitSemaphoreCount   = 1,
       .pWaitSemaphores      = waitSemaphores,
       .pWaitDstStageMask    = waitStages,
-      .commandBufferCount   = 3,
-      .pCommandBuffers      = cmdBuffers,
+      .commandBufferCount   = static_cast<uint32_t>(cmdBuffers.size()),
+      .pCommandBuffers      = cmdBuffers.data(),
       .signalSemaphoreCount = 1,
       .pSignalSemaphores    = signalSemaphores,
   };
@@ -211,23 +193,27 @@ void Application::drawImGui() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  static float f     = 0.0f;
-  static int counter = 0;
+  static int frame      = 0;
+  static auto startTime = std::chrono::high_resolution_clock::now();
 
-  ImGui::Begin("Renderer Options");
-  ImGui::Text("This is some useful text.");
+  auto currentTime = std::chrono::high_resolution_clock::now();
+  float time       = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-  ImGui::SliderFloat("depthBiasConstant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);
-  ImGui::SliderFloat("depthBiasSlope", &depthCommandBuffers.depthBiasSlope(), 0.0f, 5.0f);
+  // Display ImGui components
+  ImGui::Begin("Config");
 
-  if (ImGui::Button("Button")) {
-    counter++;
+  {
+    ImGui::Text("frame: %d", ++frame);
+    ImGui::Text("time: %.2f", time);
+    ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
+    ImGui::Separator();
+    ImGui::Checkbox("Shadow Mapping", &enabledShadowMap);
+    ImGui::Separator();
+    // ImGui::Text("Depth Setting");
+    // ImGui::SliderFloat("constant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);
+    // ImGui::SliderFloat("slope", &depthCommandBuffers.depthBiasSlope(), 0.0f, 5.0f);
   }
-  ImGui::SameLine();
-  ImGui::Text("counter = %d", counter);
 
-  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-              ImGui::GetIO().Framerate);
   ImGui::End();
   ImGui::Render();
 }

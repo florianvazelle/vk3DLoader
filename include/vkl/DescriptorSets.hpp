@@ -4,7 +4,7 @@
 #include <vulkan/vulkan.h>
 
 #include <NonCopyable.hpp>
-#include <vkl/Depth/DepthRenderPass.hpp>
+#include <vkl/Basic/BasicRenderPass.hpp>
 #include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
@@ -19,12 +19,12 @@ namespace vkl {
   public:
     DescriptorSets(const Device& device,
                    const SwapChain& swapChain,
+                   const BasicRenderPass& renderPass,
                    const UniformBuffers<MVP>& uniformBuffers,
                    const MaterialBuffer& materialUniformBuffer,
                    const UniformBuffers<Depth>& depthUniformBuffer,
                    const DescriptorSetLayout& descriptorSetLayout,
-                   const DescriptorPool& descriptorPool,
-                   const DepthRenderPass& depthRenderPass);
+                   const DescriptorPool& descriptorPool);
     // ~DescriptorSets(); no need destructor because VkDescriptorSet is deleted when pool is deleted
 
     inline const VkDescriptorSet& descriptor(int index) const { return m_descriptorSets.at(index); }
@@ -38,12 +38,12 @@ namespace vkl {
 
     const Device& m_device;
     const SwapChain& m_swapChain;
+    const BasicRenderPass& m_renderPass;
     const UniformBuffers<MVP>& m_uniformBuffers;
     const MaterialBuffer& m_materialUniformBuffer;
     const UniformBuffers<Depth>& m_depthUniformBuffer;
     const DescriptorSetLayout& m_descriptorSetLayout;
     const DescriptorPool& m_descriptorPool;
-    const DepthRenderPass& m_depthRenderPass;
 
     void createDescriptorSets();
   };

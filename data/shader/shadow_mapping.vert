@@ -33,4 +33,9 @@ void main(void) {
   fragShadowCoord = ubo.depthBiasMVP * vec4(mp, 1);
   fragLightPos    = ubo.lightPos;
   fragTexCoords   = texCoords;
+
+  // debub
+  // vec2 outUV      = vec2((gl_VertexIndex << 1) & 2, gl_VertexIndex & 2);
+  // fragShadowCoord = vec4(outUV, 0, 0);
+  // gl_Position     = vec4(outUV * 2.0f - 1.0f, 0.0f, 1.0f);
 }
