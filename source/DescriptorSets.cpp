@@ -7,7 +7,7 @@ using namespace vkl;
 
 DescriptorSets::DescriptorSets(const Device& device,
                                const SwapChain& swapChain,
-                               const BasicRenderPass& renderPass,
+                               const DepthRenderPass& renderPass,
                                const UniformBuffers<MVP>& uniformBuffers,
                                const MaterialBuffer& materialUniformBuffer,
                                const UniformBuffers<Depth>& depthUniformBuffer,
@@ -66,16 +66,18 @@ void DescriptorSets::createDescriptorSets() {
 
       // Image descriptor for the shadow map attachment
       const VkDescriptorImageInfo depthDescriptor = {
-          .sampler     = VK_NULL_HANDLE,  // le shader va lire les valeurs écrits a cette position, juste avant
+          // le shader va lire les valeurs écrits a cette position, juste avant
+          .sampler     = m_renderPass.depthAttachment(i).sample(),
           .imageView   = m_renderPass.depthAttachment(i).view(),
-          .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+          .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
       };
 
       writeDescriptorSets = {
           // Binding 0 : Vertex shader uniform buffer
           misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
           // Binding 1 : Fragment shader Depth input attachment
-          misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, &depthDescriptor),
+          misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1,
+                                   &depthDescriptor),
           // Binding 2 : Fragment shader uniform buffer
           misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &materialBufferInfo),
       };

@@ -29,6 +29,7 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
 
       // Render Pass
       renderPass(device, swapChain),
+      depthRenderPass(device, swapChain),
 
       // Descriptor Set Layout
       descriptorSetLayout(
@@ -37,12 +38,14 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
               // Binding 0 : Vertex shader uniform buffer
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
               // Binding 1 : Fragment shader input attachment (shadow map)
-              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, VK_SHADER_STAGE_FRAGMENT_BIT, 1),
+              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                               VK_SHADER_STAGE_FRAGMENT_BIT,
+                                               1),
               // Binding 2 : Fragment shader uniform buffer (Material)
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
           })),
 
-      graphicsPipeline(device, swapChain, renderPass, descriptorSetLayout),
+      graphicsPipeline(device, swapChain, renderPass, depthRenderPass, descriptorSetLayout),
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       model(modelPath),
 
@@ -57,7 +60,6 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       poolSizes({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2 + 1),
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() + 1),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, swapChain.numImages() + 1),
       }),
       descPoolInfo(misc::descriptorPoolCreateInfo(poolSizes, swapChain.numImages() + 1)),
       descriptorPool(device, descPoolInfo),
@@ -65,7 +67,7 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       // Descriptor Set
       descriptorSets(device,
                      swapChain,
-                     renderPass,
+                     depthRenderPass,
                      uniformBuffers,
                      materialUniformBuffer,
                      depthUniformBuffer,
@@ -73,6 +75,13 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
                      descriptorPool),
 
       commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexBuffer, descriptorSets),
+      depthCommandBuffers(device,
+                          depthRenderPass,
+                          swapChain,
+                          graphicsPipeline,
+                          commandPool,
+                          vertexBuffer,
+                          descriptorSets),
 
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */
@@ -124,6 +133,7 @@ void Application::drawFrame(bool& framebufferResized) {
 
   // Record UI draw data
   interface.recordCommandBuffers(imageIndex);
+  depthCommandBuffers.recordCommandBuffers(imageIndex);
 
   /* Update Uniform Buffers */
 
@@ -142,6 +152,7 @@ void Application::drawFrame(bool& framebufferResized) {
   const VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
   std::vector<VkCommandBuffer> cmdBuffers = {
+      depthCommandBuffers.command(imageIndex),
       commandBuffers.command(imageIndex),
       interface.command(imageIndex),
   };
@@ -207,11 +218,9 @@ void Application::drawImGui() {
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
     ImGui::Separator();
-    ImGui::Checkbox("Shadow Mapping", &enabledShadowMap);
-    ImGui::Separator();
-    // ImGui::Text("Depth Setting");
-    // ImGui::SliderFloat("constant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);
-    // ImGui::SliderFloat("slope", &depthCommandBuffers.depthBiasSlope(), 0.0f, 5.0f);
+    ImGui::Text("Depth Setting");
+    ImGui::SliderFloat("constant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);
+    ImGui::SliderFloat("slope", &depthCommandBuffers.depthBiasSlope(), 0.0f, 5.0f);
   }
 
   ImGui::End();

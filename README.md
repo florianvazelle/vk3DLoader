@@ -8,9 +8,9 @@ This is work in progress Vulkan project to load and visualize a 3D model.
   - ~~Descriptor sets~~
   - Dynamic uniform buffers
   - Push constants
-- 🏆 Support obj/fbx/gltf model loading
+- 🏆 Support ~~obj~~/fbx/gltf model loading
 
-Bonus: Shadow mapping
+~~Bonus: Shadow mapping~~
 
 ## Building
 
@@ -48,3 +48,7 @@ cmake --build build
 - [Vulkan Shader Resource-Binding](https://developer.nvidia.com/vulkan-shader-resource-binding)
 - [Vulkan Input Attachments and Sub Passes](https://www.saschawillems.de/blog/2018/07/19/vulkan-input-attachments-and-sub-passes/)
 - [Yet Another Blog Explaining Vulkan Synchronization](https://themaister.net/blog/2019/08/14/yet-another-blog-explaining-vulkan-synchronization/)
+
+## Quote to save many hours
+
+> Input attachments of course are not "textures"; they're attachments.

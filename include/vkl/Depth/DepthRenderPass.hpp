@@ -2,6 +2,7 @@
 #define DEPTHRENDERPASS_HPP
 
 #include <vulkan/vulkan.h>
+#include <memory>
 #include <stdexcept>
 #include <vkl/FrameBufferAttachment.hpp>
 #include <vkl/RenderPass.hpp>
@@ -17,14 +18,12 @@ namespace vkl {
   public:
     DepthRenderPass(const Device& device, const SwapChain& swapChain);
 
-    inline const VkImageView& view() const { return m_depthFrameBuffer.view(); }
-    inline VkImageView& view() { return m_depthFrameBuffer.view(); }
-
-    inline const VkSampler& sample() const { return m_depthFrameBuffer.sample(); }
-    inline VkSampler& sample() { return m_depthFrameBuffer.sample(); }
+    inline const FrameBufferAttachment& depthAttachment(int i) const { return *(m_depthAttachments.at(i).get()); };
 
   private:
-    FrameBufferAttachment m_depthFrameBuffer;
+    std::vector<std::unique_ptr<FrameBufferAttachment>>
+        m_depthAttachments;  // TODO : transfomer ca en vector d'Attachment ou Attachment
+                             // serait composer de plusieur FrameBufferAttachment (color, depth ...)
 
     void createRenderPass();
     void createFrameBuffers();

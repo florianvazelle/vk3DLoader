@@ -19,6 +19,7 @@ namespace vkl {
     GraphicsPipeline(const Device& device,
                      const SwapChain& swapChain,
                      const RenderPass& renderPass,
+                     const RenderPass& depthRenderPass,
                      const DescriptorSetLayout& descriptorSetLayout);
     ~GraphicsPipeline();
 
@@ -42,6 +43,7 @@ namespace vkl {
     const Device& m_device;
     const SwapChain& m_swapChain;
     const RenderPass& m_renderPass;
+    const RenderPass& m_depthRenderPass;
     const DescriptorSetLayout& m_descriptorSetLayout;
 
     void createPipeline();

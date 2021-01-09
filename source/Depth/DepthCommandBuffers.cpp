@@ -9,13 +9,14 @@
 using namespace vkl;
 
 DepthCommandBuffers::DepthCommandBuffers(const Device& device,
-                                         const RenderPass& renderPass,
+                                         const DepthRenderPass& depthRenderpass,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool,
                                          const VertexBuffer& vertexBuffer,
                                          const DescriptorSets& descriptorSets)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
+    : CommandBuffers(device, depthRenderpass, swapChain, graphicsPipeline, commandPool),
+      m_depthRenderpass(depthRenderpass),
       m_vertexBuffer(vertexBuffer),
       m_descriptorSets(descriptorSets) {
   createCommandBuffers();
@@ -60,36 +61,13 @@ void DepthCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
           .framebuffer       = m_renderPass.frameBuffer(bufferIdx),
           .renderArea = {
               .offset = {0, 0},
-              .extent = {
-                 .width = SHADOWMAP_DIM,
-                 .height = SHADOWMAP_DIM,
-              },
+              .extent = m_swapChain.extent(),
           },
           .clearValueCount   = 1,
           .pClearValues      = clearValues,
       };
 
     vkCmdBeginRenderPass(m_commandBuffers.at(bufferIdx), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-    VkViewport viewport = {
-        .width    = SHADOWMAP_DIM,
-        .height   = SHADOWMAP_DIM,
-        .minDepth = 0.0f,
-        .maxDepth = 1.0f,
-    };
-    vkCmdSetViewport(m_commandBuffers.at(bufferIdx), 0, 1, &viewport);
-
-    VkRect2D scissor = {
-          .offset = {
-              .x = 0,
-              .y = 0,
-          },
-          .extent = {
-             .width  = SHADOWMAP_DIM,
-             .height = SHADOWMAP_DIM,
-          },
-      };
-    vkCmdSetScissor(m_commandBuffers.at(bufferIdx), 0, 1, &scissor);
 
     // Set depth bias (aka "Polygon offset")
     // Required to avoid shadow mapping artifacts

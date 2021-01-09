@@ -5,6 +5,7 @@
 
 #include <NonCopyable.hpp>
 #include <vkl/Basic/BasicRenderPass.hpp>
+#include <vkl/Depth/DepthRenderPass.hpp>
 #include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
@@ -19,7 +20,7 @@ namespace vkl {
   public:
     DescriptorSets(const Device& device,
                    const SwapChain& swapChain,
-                   const BasicRenderPass& renderPass,
+                   const DepthRenderPass& renderPass,
                    const UniformBuffers<MVP>& uniformBuffers,
                    const MaterialBuffer& materialUniformBuffer,
                    const UniformBuffers<Depth>& depthUniformBuffer,
@@ -38,7 +39,7 @@ namespace vkl {
 
     const Device& m_device;
     const SwapChain& m_swapChain;
-    const BasicRenderPass& m_renderPass;
+    const DepthRenderPass& m_renderPass;
     const UniformBuffers<MVP>& m_uniformBuffers;
     const MaterialBuffer& m_materialUniformBuffer;
     const UniformBuffers<Depth>& m_depthUniformBuffer;

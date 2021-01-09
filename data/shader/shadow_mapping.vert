@@ -24,13 +24,15 @@ layout(location = 4) out vec2 fragTexCoords;
 
 out gl_PerVertex { vec4 gl_Position; };
 
+const mat4 biasMat = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5, 0.0, 1.0);
+
 void main(void) {
   vec3 mp      = vec3(ubo.model * vec4(positions, 1.0));
   fragPosition = transpose(inverse(mat3(ubo.model))) * normals;
   fragModPos   = mp.xyz;
   gl_Position  = ubo.proj * ubo.view * vec4(mp, 1);
 
-  fragShadowCoord = ubo.depthBiasMVP * vec4(mp, 1);
+  fragShadowCoord = (biasMat * ubo.depthBiasMVP) * vec4(mp, 1);
   fragLightPos    = ubo.lightPos;
   fragTexCoords   = texCoords;
 

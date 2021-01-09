@@ -40,7 +40,7 @@ FrameBufferAttachment::FrameBufferAttachment(const Device& device,
       .samples       = VK_SAMPLE_COUNT_1_BIT,
       .tiling        = VK_IMAGE_TILING_OPTIMAL,
       // VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT flag is required for input attachments,
-      .usage         = usage | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
+      .usage         = usage, // | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
       .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
   };
 

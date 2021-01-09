@@ -40,7 +40,7 @@ template <> void UniformBuffers<vkl::Depth>::update(float time, uint32_t current
   // Keep depth range as small as possible
   // for better shadow map precision
   float zNear = 0.1f;
-  float zFar  = 100.0f;
+  float zFar  = 10.0f;
 
   float lightFOV = 45.0f;
 

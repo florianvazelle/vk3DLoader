@@ -72,6 +72,7 @@ namespace vkl {
     MaterialBuffer materialUniformBuffer;
 
     BasicRenderPass renderPass;
+    DepthRenderPass depthRenderPass;
 
     const std::vector<VkDescriptorPoolSize> poolSizes;
     VkDescriptorPoolCreateInfo descPoolInfo;
@@ -82,6 +83,7 @@ namespace vkl {
     CommandPool commandPool;
 
     BasicCommandBuffers commandBuffers;
+    DepthCommandBuffers depthCommandBuffers;
 
     SyncObjects syncObjects;
 

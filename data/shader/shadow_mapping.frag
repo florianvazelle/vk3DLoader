@@ -9,11 +9,11 @@ layout(location = 4) in vec2 fragTexCoords;
 
 // layout(constant_id = 0) const bool enabledShadowMap = true;
 
-// layout(binding = 1) uniform sampler2D shadowMap;
+layout(binding = 1) uniform sampler2D shadowMap;
 
 // peut etre input_attachment_index = index in pInputAttachments
 // layout(input_attachment_index = 0, binding = 1) uniform subpassInput inputColor;
-layout(input_attachment_index = 0, binding = 1) uniform subpassInput inputDepth;
+// layout(input_attachment_index = 0, binding = 1) uniform subpassInput inputDepth;
 
 struct Material {
   vec3 AmbientColor;
@@ -47,9 +47,37 @@ vec3 specular(vec3 N, vec3 L) {
 
 float LinearizeDepth(float depth) {
   float n = 0.1;    // camera z near
-  float f = 128.0;  // camera z far
+  float f = 100.0;  // camera z far
   float z = depth;
   return (2.0 * n) / (f + n - z * (f - n));
+}
+
+float textureProj(vec4 shadowCoord, vec2 off) {
+  float shadow = 1.0;
+  if (shadowCoord.z > -1.0 && shadowCoord.z < 1.0) {
+    float dist = texture(shadowMap, shadowCoord.st + off).r;
+    if (shadowCoord.w > 0.0 && dist < shadowCoord.z) {
+      shadow = 0.1;
+    }
+  }
+  return shadow;
+}
+
+// Percentage Close Filter
+float filterPCF(vec4 sc) {
+  ivec2 texDim = textureSize(shadowMap, 0);
+  float scale  = 1.5;
+  float dx     = scale * 1.0 / float(texDim.x);
+  float dy     = scale * 1.0 / float(texDim.y);
+
+  float shadowFactor = 0.0;
+
+  for (int x = -1; x <= 1; x++) {
+    for (int y = -1; y <= 1; y++) {
+      shadowFactor += textureProj(sc, vec2(dx * x, dy * y));
+    }
+  }
+  return shadowFactor / 9;
 }
 
 void main() {
@@ -64,19 +92,7 @@ void main() {
   //   visibility = 0.5;
   // }
 
-  // Percentage Close Filter
-  float visibility = 0.0;
-  // vec2 texelSize   = 1.0 / textureSize(shadowMap, 0);
-  for (int x = -1; x <= 1; ++x) {
-    for (int y = -1; y <= 1; ++y) {
-      // float depth = texture(shadowMap, fragShadowCoord.xy + vec2(x, y) * texelSize).z; // pcfDepth
-      float depth = subpassLoad(inputDepth).r;
-      visibility += fragShadowCoord.z > depth ? 0.5 : 0.0;
-    }
-  }
-  visibility /= 9.0;
-
-  visibility = 1.0 - visibility;
+  float visibility = filterPCF(fragShadowCoord / fragShadowCoord.w);
 
   float distance = length(L);
   distance       = distance * distance;
@@ -92,4 +108,11 @@ void main() {
   // debug
   // float depth = subpassLoad(inputDepth).r;
   // outColor    = vec4(vec3(1.0 - LinearizeDepth(depth)), 1.0);
+  // float tmp = LinearizeDepth(texture(shadowMap, fragShadowCoord.xy).r);
+  // outColor  = vec4(vec3(tmp), 1.0);
+
+  // vec3 R       = normalize(-reflect(L, N));
+  // vec3 diffuse = max(dot(N, L), 0.1) * colorLinear;
+
+  // outColor = vec4(diffuse * visibility, 1.0);
 }
