@@ -83,7 +83,7 @@ void DepthCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
     const VkDeviceSize offsets[]   = {0};
     vkCmdBindVertexBuffers(m_commandBuffers.at(bufferIdx), 0, 1, vertexBuffers, offsets);
 
-    vkCmdDraw(m_commandBuffers.at(bufferIdx), static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
+    vkCmdDraw(m_commandBuffers.at(bufferIdx), static_cast<uint32_t>(m_vertexBuffer.data().size()), 1, 0, 0);
 
     vkCmdEndRenderPass(m_commandBuffers.at(bufferIdx));
   }

@@ -143,7 +143,7 @@ void Application::drawFrame(bool& framebufferResized) {
   float time       = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
   depthUniformBuffer.update(time, imageIndex);
-  uniformBuffers.ubo().depthBiasMVP = depthUniformBuffer.ubo().depthMVP;
+  uniformBuffers.data(imageIndex).depthBiasMVP = depthUniformBuffer.data(imageIndex).depthMVP;
   uniformBuffers.update(time, imageIndex);
 
   /* Submit */
@@ -242,14 +242,17 @@ void Application::recreateSwapChain(bool& framebufferResized) {
 
   swapChain.recreate();
   renderPass.recreate();
+  depthRenderPass.recreate();
   graphicsPipeline.recreate();
   uniformBuffers.recreate();
   descriptorPool.recreate();
   descriptorSets.recreate();
   commandBuffers.recreate();
+  depthCommandBuffers.recreate();
 
   interface.recreate();
 
   renderPass.cleanupOld();
+  depthRenderPass.cleanupOld();
   swapChain.cleanupOld();
 }

@@ -20,7 +20,7 @@
 
 namespace vkl {
   /**
-   * @brief Liste de buffer uniform
+   * @brief A templating class to define a list of buffer
    *
    * Note Exposé : Comme des frames peuvent être "in flight" pendant que nous essayons de modifier
    * le contenu du buffer, nous allons avoir besoin de plusieurs buffers. Nous pouvons soit en avoir
@@ -31,6 +31,9 @@ namespace vkl {
     UniformBuffers(const Device& device, const SwapChain& swapChain) : m_device(device), m_swapChain(swapChain) {
       createUniformBuffers();
     }
+
+    inline T& data(int i) { return m_uniformBuffers.at(i).data(); }
+    inline const T& data(int i) const { return m_uniformBuffers.at(i).data(); }
 
     inline const VkBuffer& buffer(int index) const { return m_uniformBuffers[index].buffer(); }
 
@@ -48,12 +51,8 @@ namespace vkl {
       createUniformBuffers();
     }
 
-    inline T& ubo() { return m_ubo; }
-    inline const T& ubo() const { return m_ubo; }
-
   protected:
-    T m_ubo;
-    std::deque<Buffer> m_uniformBuffers;
+    std::deque<Buffer<T>> m_uniformBuffers;
 
     const Device& m_device;
     const SwapChain& m_swapChain;
@@ -66,17 +65,16 @@ namespace vkl {
 
       m_uniformBuffers.clear();
 
-      // m_uniformBuffers.reserve(m_swapChain.numImages());
       for (size_t i = 0; i < m_swapChain.numImages(); i++) {
-        m_uniformBuffers.emplace_back(m_device);
-      }
-
-      for (size_t i = 0; i < m_swapChain.numImages(); i++) {
-        m_uniformBuffers.at(i).createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        m_uniformBuffers.emplace_back(m_device, T(), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
       }
     }
-  };  // namespace vkl
+  };
+
+  /*
+   * Specification
+   */
 
   static glm::vec3 lightPos = glm::vec3(2.0f, 2.0f, 2.0f);
 
@@ -85,26 +83,28 @@ namespace vkl {
     MVPUniformBuffers(const Device& device, const SwapChain& swapChain) : UniformBuffers(device, swapChain) {}
 
     void update(float time, uint32_t currentImage) {
-      m_ubo.model = glm::mat4(1.0f);
-      m_ubo.view  = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+      MVP& ubo = m_uniformBuffers.at(currentImage).data();
+
+      ubo.model = glm::mat4(1.0f);
+      ubo.view  = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
       const float aspect = m_swapChain.extent().width / (float)m_swapChain.extent().height;
-      m_ubo.proj         = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 10.0f);
+      ubo.proj           = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 10.0f);
 
       // m_ubo.model = glm::mat4(1.0f);
       // m_ubo.view  = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0, 1, 0));
       // m_ubo.proj  = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 10.0f);
 
-      m_ubo.proj[1][1] *= -1;
+      ubo.proj[1][1] *= -1;
 
       lightPos = glm::vec3(glm::vec4(1)
                            * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-      m_ubo.lightPos = lightPos;
+      ubo.lightPos = lightPos;
 
       void* data;
-      vkMapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory(), 0, sizeof(m_ubo), 0, &data);
-      memcpy(data, &m_ubo, sizeof(m_ubo));
+      vkMapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
+      memcpy(data, &ubo, sizeof(ubo));
       vkUnmapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory());
     }
   };
@@ -114,6 +114,8 @@ namespace vkl {
     DepthUniformBuffers(const Device& device, const SwapChain& swapChain) : UniformBuffers(device, swapChain) {}
 
     void update(float time, uint32_t currentImage) {
+      Depth& ubo = m_uniformBuffers.at(currentImage).data();
+
       // Keep depth range as small as possible
       // for better shadow map precision
       float zNear = 0.1f;
@@ -128,11 +130,11 @@ namespace vkl {
 
       depthProj[1][1] *= -1;
 
-      m_ubo.depthMVP = depthProj * depthView * depthModel;
+      ubo.depthMVP = depthProj * depthView * depthModel;
 
       void* data;
-      vkMapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory(), 0, sizeof(m_ubo), 0, &data);
-      memcpy(data, &m_ubo, sizeof(m_ubo));
+      vkMapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
+      memcpy(data, &ubo, sizeof(ubo));
       vkUnmapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory());
     }
   };

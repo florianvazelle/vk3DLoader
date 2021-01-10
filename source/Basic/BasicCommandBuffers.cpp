@@ -77,7 +77,7 @@ void BasicCommandBuffers::createCommandBuffers() {
     //   const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
     //   const VkDeviceSize offsets[]   = {0};
     //   vkCmdBindVertexBuffers(m_commandBuffers.at(i), 0, 1, vertexBuffers, offsets);
-    //   vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
+    //   vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.data().size()), 1, 0, 0);
     // }
 
     // // Très important pour passer a la prochain subpass
@@ -91,7 +91,7 @@ void BasicCommandBuffers::createCommandBuffers() {
       const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
       const VkDeviceSize offsets[]   = {0};
       vkCmdBindVertexBuffers(m_commandBuffers.at(i), 0, 1, vertexBuffers, offsets);
-      vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.size()), 1, 0, 0);
+      vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.data().size()), 1, 0, 0);
     }
 
     vkCmdEndRenderPass(m_commandBuffers.at(i));
