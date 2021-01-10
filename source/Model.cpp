@@ -79,38 +79,5 @@ Model::Model(const std::string& modelPath) {
       };
       m_materials.push_back(m);
     }
-  } else {
-    // By default show a triangle
-    const std::vector<Vertex> triangle = {
-        {
-            {0.0f, -0.5f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-            {1.0f, 0.0f, 0.0f},
-            {0.0f, 0.0f},
-        },
-        {
-            {0.5f, 0.5f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-            {0.0f, 0.0f},
-        },
-        {
-            {-0.5f, 0.5f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-            {0.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f},
-        },
-    };
-
-    m_vertices = triangle;
-
-    m_materials = {
-        {
-            {1.0f, 0.5f, 0.31f},
-            {1.0f, 0.5f, 0.31f},
-            {0.5f, 0.5f, 0.5f},
-            32.0f,
-        },
-    };
   }
 }

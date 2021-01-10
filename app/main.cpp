@@ -4,6 +4,7 @@
 
 int main(int argc, char** argv) {
   cxxopts::Options options(argv[0], "A program to load and visualize a 3D model !");
+  options.positional_help("FILE").show_positional_help();
 
   // clang-format off
   options.add_options()
@@ -16,10 +17,12 @@ int main(int argc, char** argv) {
   ;
   // clang-format on
 
+  options.parse_positional({"model"});
+
   auto result = options.parse(argc, argv);
 
   if (result["help"].as<bool>()) {
-    std::cout << options.help() << std::endl;
+    std::cout << options.help();
     return 0;
   } else if (result["version"].as<bool>()) {
     std::cout << "vk3DLoader, version " << VK3DLOADER_VERSION << std::endl;
@@ -36,6 +39,10 @@ int main(int argc, char** argv) {
   std::string modelPath = "";
   if (result.count("model")) {
     modelPath = result["model"].as<std::string>();
+  } else {
+    std::cout << "You must specify a model to load.\n"
+              << "Use « vk3DLoader --help » for more information.\n";
+    return 0;
   }
 
   int debugLevel = 0;
