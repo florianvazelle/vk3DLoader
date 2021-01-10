@@ -5,11 +5,11 @@
 
 namespace vkl {
 
-  struct alignas(16) Material {
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
+  struct Material {
+    alignas(16) glm::vec3 ambient;
+    alignas(16) glm::vec3 diffuse;
+    alignas(16) glm::vec3 specular;
+    alignas(4) float shininess;  // need to specify alignas(4)
   };
 
 }  // namespace vkl

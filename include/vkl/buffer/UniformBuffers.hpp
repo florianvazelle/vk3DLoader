@@ -76,7 +76,14 @@ namespace vkl {
    * Specification
    */
 
-  static glm::vec3 lightPos = glm::vec3(2.0f, 2.0f, 2.0f);
+  struct Light {
+    glm::vec3 position;
+    glm::vec3 axis;
+  };
+
+  static Light light = {
+      .axis = glm::vec3(1.f, 1.5f, 1.f),
+  };
 
   class MVPUniformBuffers : public UniformBuffers<vkl::MVP> {
   public:
@@ -86,21 +93,22 @@ namespace vkl {
       MVP& ubo = m_uniformBuffers.at(currentImage).data();
 
       ubo.model = glm::mat4(1.0f);
-      ubo.view  = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+      ubo.view  = glm::lookAt(glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
       const float aspect = m_swapChain.extent().width / (float)m_swapChain.extent().height;
-      ubo.proj           = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 10.0f);
+      ubo.proj           = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
-      // m_ubo.model = glm::mat4(1.0f);
-      // m_ubo.view  = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0, 1, 0));
-      // m_ubo.proj  = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 10.0f);
+      // ubo.model = glm::mat4(1.0f);
+      // ubo.view  = glm::lookAt(light.position, glm::vec3(0.0f), glm::vec3(0, 1, 0));
+      // ubo.proj  = glm::perspective(glm::radians(80.0f), 1.0f, 0.1f, 100.0f);
 
       ubo.proj[1][1] *= -1;
 
-      lightPos = glm::vec3(glm::vec4(1)
-                           * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+      light.position
+          = glm::vec3(glm::vec4(light.axis, 1)
+                      * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-      ubo.lightPos = lightPos;
+      ubo.lightPos = light.position;
 
       void* data;
       vkMapMemory(m_device.logical(), m_uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
@@ -125,7 +133,7 @@ namespace vkl {
 
       // Matrix from light's point of view
       glm::mat4 depthModel = glm::mat4(1.0f);
-      glm::mat4 depthView  = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0, 1, 0));
+      glm::mat4 depthView  = glm::lookAt(light.position, glm::vec3(0.0f), glm::vec3(0, 1, 0));
       glm::mat4 depthProj  = glm::perspective(glm::radians(lightFOV), 1.0f, zNear, zFar);
 
       depthProj[1][1] *= -1;

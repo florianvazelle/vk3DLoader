@@ -5,6 +5,9 @@
 
 #include <chrono>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 using namespace vkl;
 
 const uint32_t WIDTH  = 800;
@@ -34,10 +37,11 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       // Descriptor Set Layout
       descriptorSetLayout(
           device,
+          // ce que le shader attend en entré
           misc::descriptorSetLayoutCreateInfo({
               // Binding 0 : Vertex shader uniform buffer
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
-              // Binding 1 : Fragment shader input attachment (shadow map)
+              // Binding 1 : Fragment shader sampler (shadow map)
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                VK_SHADER_STAGE_FRAGMENT_BIT,
                                                1),
@@ -145,6 +149,7 @@ void Application::drawFrame(bool& framebufferResized) {
   depthUniformBuffer.update(time, imageIndex);
   uniformBuffers.data(imageIndex).depthBiasMVP = depthUniformBuffer.data(imageIndex).depthMVP;
   uniformBuffers.update(time, imageIndex);
+  materialUniformBuffer.update(time, imageIndex);
 
   /* Submit */
 
@@ -217,6 +222,15 @@ void Application::drawImGui() {
     ImGui::Text("frame: %d", ++frame);
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
+    ImGui::Separator();
+    ImGui::Text("Light Setting");
+    ImGui::SliderFloat3("Axis", glm::value_ptr(light.axis), 1.0f, 5.0f);
+    ImGui::Separator();
+    ImGui::Text("Material Setting");
+    ImGui::ColorEdit3("diffuse", glm::value_ptr(materialUniformBuffer.data().diffuse));
+    ImGui::ColorEdit3("specular", glm::value_ptr(materialUniformBuffer.data().specular));
+    ImGui::ColorEdit3("ambient", glm::value_ptr(materialUniformBuffer.data().ambient));
+    ImGui::SliderFloat("shininess", &(materialUniformBuffer.data().shininess), 0.5f, 256.0f);
     ImGui::Separator();
     ImGui::Text("Depth Setting");
     ImGui::SliderFloat("constant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);

@@ -21,10 +21,10 @@ namespace vkl {
     Buffer(const Device& device, T bufferData) : m_device(device), m_bufferData(bufferData) {}
     Buffer(const Device& device, T bufferData, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
         : Buffer(device, bufferData) {
-      const VkDeviceSize bufferSize = sizeof(bufferData);
+      m_bufferSize = sizeof(bufferData);
 
       // Voir commentaires dans la fonction createBuffer
-      createBuffer(bufferSize, usage, properties);
+      createBuffer(m_bufferSize, usage, properties);
 
       // Step 3 - Remplissage du vertex buffer
       void* data;
@@ -36,8 +36,8 @@ namespace vkl {
        * Vulkan. Il est impératif de le laisser à 0. "is reserved for future use"
        * Le dernier paramètre permet de fournir un pointeur vers la mémoire mappée.
        */
-      vkMapMemory(m_device.logical(), m_bufferMemory, 0, bufferSize, 0, &data);
-      memcpy(data, &m_bufferData, (size_t)bufferSize);
+      vkMapMemory(m_device.logical(), m_bufferMemory, 0, m_bufferSize, 0, &data);
+      memcpy(data, &m_bufferData, (size_t)m_bufferSize);
       vkUnmapMemory(m_device.logical(), m_bufferMemory);
     }
 
@@ -96,11 +96,22 @@ namespace vkl {
       // memRequirements.alignement
     }
 
+    /**
+     * @brief Just update the buffer, for example if in imgui with change the value of bufferData
+     */
+    void update(float time, uint32_t currentImage) {
+      void* data;
+      vkMapMemory(m_device.logical(), m_bufferMemory, 0, m_bufferSize, 0, &data);
+      memcpy(data, &m_bufferData, m_bufferSize);
+      vkUnmapMemory(m_device.logical(), m_bufferMemory);
+    }
+
   protected:
     T m_bufferData;  // normaly is struct type like Depth, MVP, Vertex, Material ...
 
     VkBuffer m_buffer;
     VkDeviceMemory m_bufferMemory;
+    VkDeviceSize m_bufferSize;
 
     const Device& m_device;
   };
@@ -112,14 +123,14 @@ namespace vkl {
   class VertexBuffer : public Buffer<std::vector<Vertex>> {
   public:
     VertexBuffer(const Device& device, std::vector<Vertex> vertices) : Buffer(device, vertices) {
-      const VkDeviceSize bufferSize = sizeof(Vertex) * m_bufferData.size();
+      m_bufferSize = sizeof(Vertex) * m_bufferData.size();
 
-      createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+      createBuffer(m_bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
       void* data;
-      vkMapMemory(m_device.logical(), m_bufferMemory, 0, bufferSize, 0, &data);
-      memcpy(data, m_bufferData.data(), (size_t)bufferSize);
+      vkMapMemory(m_device.logical(), m_bufferMemory, 0, m_bufferSize, 0, &data);
+      memcpy(data, m_bufferData.data(), (size_t)m_bufferSize);
       vkUnmapMemory(m_device.logical(), m_bufferMemory);
     }
   };

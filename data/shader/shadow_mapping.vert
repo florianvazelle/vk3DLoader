@@ -16,28 +16,30 @@ struct UniformBufferObject {
 
 layout(binding = 0) uniform UBO { UniformBufferObject ubo; };
 
-layout(location = 0) out vec3 fragPosition;
-layout(location = 1) out vec3 fragModPos;
-layout(location = 2) out vec4 fragShadowCoord;
-layout(location = 3) out vec3 fragLightPos;
-layout(location = 4) out vec2 fragTexCoords;
+layout(location = 0) out vec3 outPosition;
+layout(location = 1) out vec3 outNormal;
+layout(location = 2) out vec4 outShadowCoord;
+layout(location = 3) out vec3 outLightPos;
+layout(location = 4) out vec3 outLightVec;
+layout(location = 5) out vec3 outViewVec;
 
 out gl_PerVertex { vec4 gl_Position; };
 
 const mat4 biasMat = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5, 0.0, 1.0);
 
 void main(void) {
-  vec3 mp      = vec3(ubo.model * vec4(positions, 1.0));
-  fragPosition = transpose(inverse(mat3(ubo.model))) * normals;
-  fragModPos   = mp.xyz;
-  gl_Position  = ubo.proj * ubo.view * vec4(mp, 1);
+  const vec3 cameraPos = vec3(2);
 
-  fragShadowCoord = (biasMat * ubo.depthBiasMVP) * vec4(mp, 1);
-  fragLightPos    = ubo.lightPos;
-  fragTexCoords   = texCoords;
+  vec3 ModPos = vec3(ubo.model * vec4(positions, 1.0));
 
-  // debub
-  // vec2 outUV      = vec2((gl_VertexIndex << 1) & 2, gl_VertexIndex & 2);
-  // fragShadowCoord = vec4(outUV, 0, 0);
-  // gl_Position     = vec4(outUV * 2.0f - 1.0f, 0.0f, 1.0f);
+  outPosition = ModPos;
+  outNormal   = vec3(transpose(inverse(ubo.model)) * vec4(normals, 0.0));
+  gl_Position = ubo.proj * ubo.view * vec4(ModPos, 1);
+
+  outShadowCoord = (biasMat * ubo.depthBiasMVP) * vec4(ModPos, 1);
+  outLightPos    = ubo.lightPos;
+
+  vec3 lPos   = mat3(ubo.model) * ubo.lightPos;
+  outLightVec = lPos - ModPos;
+  outViewVec  = cameraPos - ModPos;
 }

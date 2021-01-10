@@ -1,19 +1,28 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 
-layout(location = 0) in vec3 fragPosition;
-layout(location = 1) in vec3 fragModPos;
-layout(location = 2) in vec4 fragShadowCoord;
-layout(location = 3) in vec3 fragLightPos;
-layout(location = 4) in vec2 fragTexCoords;
+/**
+ * in
+ */
+
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec4 inShadowCoord;
+layout(location = 3) in vec3 inLightPos;
+layout(location = 4) in vec3 inLightVec;
+layout(location = 5) in vec3 inViewVec;
 
 // layout(constant_id = 0) const bool enabledShadowMap = true;
-
-layout(binding = 1) uniform sampler2D shadowMap;
 
 // peut etre input_attachment_index = index in pInputAttachments
 // layout(input_attachment_index = 0, binding = 1) uniform subpassInput inputColor;
 // layout(input_attachment_index = 0, binding = 1) uniform subpassInput inputDepth;
+
+/**
+ * uniform
+ */
+
+layout(binding = 1) uniform sampler2D shadowMap;
 
 struct Material {
   vec3 AmbientColor;
@@ -24,32 +33,25 @@ struct Material {
 
 layout(binding = 2) uniform M { Material u_Material; };
 
+/**
+ * out
+ */
+
 layout(location = 0) out vec4 outColor;
 
-const vec3 lightColor   = vec3(1.0, 1.0, 1.0);
-const float lightPower  = 40.0;
-const float screenGamma = 2.2;
+/**
+ * Functions
+ */
 
-vec3 diffuse(vec3 N, vec3 L) {
-  vec3 nDir = normalize(N);
-  vec3 lDir = normalize(L);
+// calcul du facteur diffus, suivant la loi du cosinus de Lambert
+float Lambert(vec3 N, vec3 L) { return max(0.0, dot(N, L)); }
 
-  return vec3(1.0, 0.0, 1.0) * u_Material.DiffuseColor * max(0.0, dot(nDir, lDir));
-}
-
-vec3 specular(vec3 N, vec3 L) {
-  vec3 V = normalize(-fragModPos);
-
-  // blinn-phong
-  vec3 H = normalize(L + V);
-  return vec3(1.0, 0.2, 0.3) * u_Material.SpecularColor * max(pow(dot(N, H), u_Material.Shininess), 0.0);
-}
-
-float LinearizeDepth(float depth) {
-  float n = 0.1;    // camera z near
-  float f = 100.0;  // camera z far
-  float z = depth;
-  return (2.0 * n) / (f + n - z * (f - n));
+// calcul du facteur speculaire, methode de Phong
+float Phong(vec3 N, vec3 L, vec3 V, float shininess) {
+  // reflexion du vecteur incident I (I = -L)
+  // suivant la loi de ibn Sahl / Snell / Descartes
+  vec3 R = reflect(-L, N);
+  return pow(max(0.0, dot(R, V)), shininess);
 }
 
 float textureProj(vec4 shadowCoord, vec2 off) {
@@ -80,39 +82,34 @@ float filterPCF(vec4 sc) {
   return shadowFactor / 9;
 }
 
+/**
+ * Main
+ */
+
 void main() {
-  vec3 N = normalize(fragPosition);
-  vec3 L = fragLightPos - fragModPos;
+  const vec3 lightColor = vec3(0.2, 0.8, 0.5);
 
-  float bias = 0.005 * tan(acos(dot(N, L)));
-  bias       = clamp(bias, 0, 0.01);
+  vec3 V = normalize(inViewVec);
+  vec3 N = normalize(inNormal);
+  vec3 L = normalize(inLightVec);
 
-  // float visibility = 1.0;
-  // if (texture(shadowMap, fragShadowCoord.xy).z < fragShadowCoord.z - bias) {
-  //   visibility = 0.5;
-  // }
+  float dist        = length(inLightVec);
+  dist              = dist * dist;
+  float attenuation = 1.0 / dist;
 
-  float visibility = filterPCF(fragShadowCoord / fragShadowCoord.w);
+  vec3 diffuseColor  = u_Material.DiffuseColor * Lambert(N, L);
+  vec3 specularColor = u_Material.SpecularColor * Phong(N, L, V, u_Material.Shininess);
+  vec3 directColor   = (diffuseColor + specularColor) * lightColor * attenuation;
 
-  float distance = length(L);
-  distance       = distance * distance;
-  L              = normalize(L);
+  vec3 indirectColor = u_Material.AmbientColor;
+  vec3 color         = directColor + indirectColor;
 
-  vec3 colorLinear = u_Material.AmbientColor + (diffuse(N, L) * lightColor * lightPower / distance);
-  // if (m_enabledShadowMap) {
-  colorLinear *= visibility;
-  // }
-  vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
-  outColor                 = vec4(colorGammaCorrected, 1.0);
+  // Apply shadow mapping
+  float visibility = filterPCF(inShadowCoord / inShadowCoord.w);
+  color *= visibility;
 
-  // debug
-  // float depth = subpassLoad(inputDepth).r;
-  // outColor    = vec4(vec3(1.0 - LinearizeDepth(depth)), 1.0);
-  // float tmp = LinearizeDepth(texture(shadowMap, fragShadowCoord.xy).r);
-  // outColor  = vec4(vec3(tmp), 1.0);
+  // correction gamma
+  color = pow(color, vec3(1.0 / 2.2));
 
-  // vec3 R       = normalize(-reflect(L, N));
-  // vec3 diffuse = max(dot(N, L), 0.1) * colorLinear;
-
-  // outColor = vec4(diffuse * visibility, 1.0);
+  outColor = vec4(color, 1.0);
 }

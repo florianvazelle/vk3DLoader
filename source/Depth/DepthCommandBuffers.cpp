@@ -51,11 +51,10 @@ void DepthCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
     throw std::runtime_error("failed to begin recording command buffer!");
   }
 
-  {
-    VkClearValue clearValues[2];
-    clearValues[0].depthStencil = {1.0f, 0};
+  VkClearValue clearValues[2];
+  clearValues[0].depthStencil = {1.0f, 0};
 
-    const VkRenderPassBeginInfo renderPassBeginInfo = {
+  const VkRenderPassBeginInfo renderPassBeginInfo = {
           .sType             = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
           .renderPass        = m_renderPass.handle(),
           .framebuffer       = m_renderPass.frameBuffer(bufferIdx),
@@ -67,8 +66,9 @@ void DepthCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
           .pClearValues      = clearValues,
       };
 
-    vkCmdBeginRenderPass(m_commandBuffers.at(bufferIdx), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+  vkCmdBeginRenderPass(m_commandBuffers.at(bufferIdx), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+  {
     // Set depth bias (aka "Polygon offset")
     // Required to avoid shadow mapping artifacts
     vkCmdSetDepthBias(m_commandBuffers.at(bufferIdx), m_depthBiasConstant, 0.0f, m_depthBiasSlope);
