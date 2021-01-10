@@ -67,8 +67,8 @@ namespace vkl {
     DescriptorSetLayout descriptorSetLayout;
 
     SwapChain swapChain;
-    UniformBuffers<MVP> uniformBuffers;
-    UniformBuffers<Depth> depthUniformBuffer;
+    MVPUniformBuffers uniformBuffers;
+    DepthUniformBuffers depthUniformBuffer;
     MaterialBuffer materialUniformBuffer;
 
     BasicRenderPass renderPass;
