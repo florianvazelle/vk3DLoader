@@ -36,9 +36,8 @@
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
 #include <vkl/Window.hpp>
-#include <vkl/buffer/MaterialBuffer.hpp>
+#include <vkl/buffer/Buffer.hpp>
 #include <vkl/buffer/UniformBuffers.hpp>
-#include <vkl/buffer/VertexBuffer.hpp>
 
 namespace vkl {
 

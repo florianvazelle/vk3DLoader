@@ -7,7 +7,7 @@
 #include <vkl/CommandBuffers.hpp>
 #include <vkl/Depth/DepthRenderPass.hpp>
 #include <vkl/DescriptorSets.hpp>
-#include <vkl/buffer/VertexBuffer.hpp>
+#include <vkl/buffer/Buffer.hpp>
 
 namespace vkl {
 

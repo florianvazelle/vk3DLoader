@@ -9,7 +9,7 @@
 #include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
-#include <vkl/buffer/MaterialBuffer.hpp>
+#include <vkl/buffer/Buffer.hpp>
 #include <vkl/buffer/UniformBuffers.hpp>
 #include <vkl/struct/Depth.hpp>
 #include <vkl/struct/MVP.hpp>
