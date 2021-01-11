@@ -61,8 +61,6 @@ namespace vkl {
      * @brief Create uniform buffers according to the swapchain's image count
      */
     void createUniformBuffers() {
-      const VkDeviceSize bufferSize = sizeof(T);
-
       m_uniformBuffers.clear();
 
       for (size_t i = 0; i < m_swapChain.numImages(); i++) {

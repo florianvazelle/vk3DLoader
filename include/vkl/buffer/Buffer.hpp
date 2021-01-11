@@ -18,8 +18,8 @@ namespace vkl {
    */
   template <typename T> class Buffer : public NonCopyable {
   public:
-    Buffer(const Device& device, T bufferData) : m_device(device), m_bufferData(bufferData) {}
-    Buffer(const Device& device, T bufferData, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
+    Buffer(const Device& device, const T& bufferData) : m_device(device), m_bufferData(bufferData) {}
+    Buffer(const Device& device, const T& bufferData, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
         : Buffer(device, bufferData) {
       m_bufferSize = sizeof(bufferData);
 
@@ -122,7 +122,7 @@ namespace vkl {
 
   class VertexBuffer : public Buffer<std::vector<Vertex>> {
   public:
-    VertexBuffer(const Device& device, std::vector<Vertex> vertices) : Buffer(device, vertices) {
+    VertexBuffer(const Device& device, const std::vector<Vertex>& vertices) : Buffer(device, vertices) {
       m_bufferSize = sizeof(Vertex) * m_bufferData.size();
 
       createBuffer(m_bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
@@ -137,7 +137,7 @@ namespace vkl {
 
   class MaterialBuffer : public Buffer<Material> {
   public:
-    MaterialBuffer(const Device& device, Material material)
+    MaterialBuffer(const Device& device, const Material& material)
         : Buffer(device,
                  material,
                  VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,

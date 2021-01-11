@@ -1,4 +1,9 @@
-# vk3DLoader ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-success?style=flat-square) [![Actions Status](https://img.shields.io/github/workflow/status/florianvazelle/vk3DLoader/CMake%20Build%20Matrix?style=flat-square)](https://github.com/florianvazelle/vk3DLoader/actions) 
+[![Actions Status](https://github.com/florianvazelle/vk3DLoader/workflows/CMake%20Build%20Matrix/badge.svg)](https://github.com/florianvazelle/vk3DLoader/actions)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/fdf05c587b994f008692d4e6fd1f0acd)](https://www.codacy.com/gh/florianvazelle/vk3DLoader/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=florianvazelle/vk3DLoader&amp;utm_campaign=Badge_Grade)
+![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-blue) 
+[![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://github.com/bsamseth/cpp-project/blob/master/LICENSE)
+[![Lines of Code](https://tokei.rs/b1/github/florianvazelle/vk3DLoader?category=code)](https://tokei.rs)
+# vk3DLoader
 
 This is work in progress Vulkan project to load and visualize a 3D model.
 
@@ -37,8 +42,8 @@ cmake --build build
 ## Dependencies
 
 - C++20 compiler :
-    - Visual Studio 2019
-    - GCC 9+ or Clang 10+
+  - Visual Studio 2019
+  - GCC 9+ or Clang 10+
 - [CMake](https://cmake.org/) for build system creation (>= 3.8)
 - [Conan](https://conan.io/) for install packages (>= 1.0)
 

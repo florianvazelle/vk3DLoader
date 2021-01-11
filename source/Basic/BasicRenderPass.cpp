@@ -20,8 +20,8 @@ void BasicRenderPass::createRenderPass() {
    * samples il faudra utiliser avec chaque frambuffer et comment les utiliser tout au long des opérations de rendu.
    */
 
-  const VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
-  const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
+  // const VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
+  // const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
 
   /* STEP 1 : Description des attachments */
 
