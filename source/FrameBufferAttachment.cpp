@@ -91,7 +91,8 @@ FrameBufferAttachment::FrameBufferAttachment(const Device& device,
 void FrameBufferAttachment::createSample() {
   // Create sampler to sample from to depth attachment
   // Used to sample in the fragment shader for shadowed rendering
-  const VkFilter filter = misc::formatIsFilterable(m_device.physical(), m_format, VK_IMAGE_TILING_OPTIMAL)
+  const VkFilter filter = misc::formatIsFilterable(m_device.physical(), m_format, VK_IMAGE_TILING_OPTIMAL,
+                                                   VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
                               ? VK_FILTER_LINEAR
                               : VK_FILTER_NEAREST;
 

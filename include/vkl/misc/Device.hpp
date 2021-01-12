@@ -41,15 +41,15 @@ namespace vkl {
     }
 
     // Returns if a given format support LINEAR filtering
-    inline VkBool32 formatIsFilterable(VkPhysicalDevice physicalDevice, VkFormat format, VkImageTiling tiling) {
+    inline VkBool32 formatIsFilterable(VkPhysicalDevice physicalDevice,
+                                       VkFormat format,
+                                       VkImageTiling tiling,
+                                       VkFormatFeatureFlags features) {
       VkFormatProperties formatProps;
       vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
 
-      if (tiling == VK_IMAGE_TILING_OPTIMAL)
-        return formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
-
-      if (tiling == VK_IMAGE_TILING_LINEAR)
-        return formatProps.linearTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+      if (tiling == VK_IMAGE_TILING_OPTIMAL) return formatProps.optimalTilingFeatures & features;
+      if (tiling == VK_IMAGE_TILING_LINEAR) return formatProps.linearTilingFeatures & features;
 
       return false;
     }
@@ -62,7 +62,7 @@ namespace vkl {
         VkFormatProperties formatProps;
         vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
 
-        if (formatIsFilterable(physicalDevice, format, tiling)) {
+        if (formatIsFilterable(physicalDevice, format, tiling, features)) {
           return format;
         }
       }
@@ -73,9 +73,11 @@ namespace vkl {
     inline VkFormat findDepthFormat(VkPhysicalDevice physicalDevice) {
       return findSupportedFormat(physicalDevice,
                                  {
-                                     VK_FORMAT_D32_SFLOAT,
                                      VK_FORMAT_D32_SFLOAT_S8_UINT,
+                                     VK_FORMAT_D32_SFLOAT,
                                      VK_FORMAT_D24_UNORM_S8_UINT,
+                                     VK_FORMAT_D16_UNORM_S8_UINT,
+                                     VK_FORMAT_D16_UNORM,
                                  },
                                  VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
     }

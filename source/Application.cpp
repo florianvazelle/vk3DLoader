@@ -38,8 +38,6 @@ bool enabledShadowMap = true;
  * cb  is for CommandBuffers
  */
 
-// TODO : remove depth renderpass and commendbuffer no need to depend of swapchain
-
 Application::Application(DebugOption debugOption, const std::string& modelPath)
     : instance(APP_NAME, ENGINE_NAME, (debugOption.debugLevel > 0)),
       debugMessenger(instance, debugOption.exitOnError),

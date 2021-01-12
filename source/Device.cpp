@@ -3,6 +3,7 @@
 #include <vkl/Instance.hpp>
 #include <vkl/Window.hpp>
 
+#include <iostream>
 #include <map>
 #include <set>
 #include <vector>
@@ -90,6 +91,8 @@ bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice& device, const s
 VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
                                             const VkSurfaceKHR& surface,
                                             const std::vector<const char*>& requiredExtensions) {
+  std::cout << "Device list:\n";
+
   // Check for devices with vulkan support
   uint32_t deviceCount = 0;
   vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -102,19 +105,22 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
   std::vector<VkPhysicalDevice> devices(deviceCount);
   vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
-  VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+  for (const auto& device : devices) {
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    std::cout << "- " << deviceProperties.deviceName << '\n';
+  }
+
   for (const auto& device : devices) {
     if (IsDeviceSuitable(device, surface)) {
-      physicalDevice = device;
-      break;
+      VkPhysicalDeviceProperties deviceProperties;
+      vkGetPhysicalDeviceProperties(device, &deviceProperties);
+      std::cout << "Pick: " << deviceProperties.deviceName << '\n';
+      return device;
     }
   }
 
-  if (physicalDevice == VK_NULL_HANDLE) {
-    throw std::runtime_error("failed to find a suitable GPU!");
-  }
-
-  return physicalDevice;
+  throw std::runtime_error("failed to find a suitable GPU!");
 }
 
 bool Device::IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface) {
