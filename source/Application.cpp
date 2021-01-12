@@ -19,6 +19,25 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 
 bool enabledShadowMap = true;
 
+/**
+ * Basic is for SwapChain render (default)
+ * Depth is for Depth render (shadow map)
+ *
+ * rp  is for RenderPass
+ *
+ * dsl  is for DescriptorSetLayout
+ *
+ * gp  is for GraphicPipeline
+ *
+ * ps  is for PoolSize
+ * dpi is for DescriptorPoolInfo
+ * dp  is for DescriptorPool
+ *
+ * ds  is for DescriptorSets
+ *
+ * cb  is for CommandBuffers
+ */
+
 // TODO : remove depth renderpass and commendbuffer no need to depend of swapchain
 
 Application::Application(DebugOption debugOption, const std::string& modelPath)
@@ -30,26 +49,6 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       // Swap Chain
       swapChain(device, window),
 
-      // Render Pass
-      renderPass(device, swapChain),
-      depthRenderPass(device, swapChain),
-
-      // Descriptor Set Layout
-      descriptorSetLayout(
-          device,
-          // ce que le shader attend en entré
-          misc::descriptorSetLayoutCreateInfo({
-              // Binding 0 : Vertex shader uniform buffer
-              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
-              // Binding 1 : Fragment shader sampler (shadow map)
-              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                               VK_SHADER_STAGE_FRAGMENT_BIT,
-                                               1),
-              // Binding 2 : Fragment shader uniform buffer (Material)
-              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
-          })),
-
-      graphicsPipeline(device, swapChain, renderPass, depthRenderPass, descriptorSetLayout),
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       model(modelPath),
 
@@ -59,37 +58,75 @@ Application::Application(DebugOption debugOption, const std::string& modelPath)
       materialUniformBuffer(device, model.materials().at(0)),
       depthUniformBuffer(device, swapChain),
 
-      // Descriptor Pool
-      // ~~un descripteur par frame~~
-      poolSizes({
+      /**
+       * Depth
+       */
+      // 1. Render Pass
+      rpDepth(device, swapChain),
+
+      // 2. Descriptor Set Layout
+      dslDepth(device,
+               misc::descriptorSetLayoutCreateInfo({
+                   // Binding 0 : Vertex shader uniform buffer
+                   misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
+               })),
+
+      // 3. Graphic Pipeline
+      gpDepth(device, swapChain, rpDepth, dslDepth),
+
+      // 4. Descriptor Pool
+      psDepth({
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() + 1),
+      }),
+      dpiDepth(misc::descriptorPoolCreateInfo(psDepth, (swapChain.numImages() + 1))),
+      dpDepth(device, dpiDepth),
+
+      // 5. Descriptor Sets
+      dsDepth(device, swapChain, rpDepth, uniformBuffers, materialUniformBuffer, depthUniformBuffer, dslDepth, dpDepth),
+
+      // 6. Command Buffers
+      cbDepth(device, rpDepth, swapChain, gpDepth, commandPool, vertexBuffer, dsDepth),
+
+      /**
+       * Basic
+       */
+      // 1. Render Pass
+      rpBasic(device, swapChain),
+
+      // 2. Descriptor Set Layout
+      dslBasic(device,
+               // ce que le shader attend en entré
+               misc::descriptorSetLayoutCreateInfo({
+                   // Binding 0 : Vertex shader uniform buffer
+                   misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
+                   // Binding 1 : Fragment shader sampler (shadow map)
+                   misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                    VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                    1),
+                   // Binding 2 : Fragment shader uniform buffer (Material)
+                   misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
+               })),
+
+      // 3. Graphic Pipeline
+      gpBasic(device, swapChain, rpBasic, dslBasic),
+
+      // 4. Descriptor Pool
+      psBasic({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2 + 1),
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() + 1),
       }),
-      descPoolInfo(misc::descriptorPoolCreateInfo(poolSizes, swapChain.numImages() + 1)),
-      descriptorPool(device, descPoolInfo),
+      dpiBasic(misc::descriptorPoolCreateInfo(psBasic, (swapChain.numImages() * 2 + 1) + (swapChain.numImages() + 1))),
+      dpBasic(device, dpiBasic),
 
-      // Descriptor Set
-      descriptorSets(device,
-                     swapChain,
-                     depthRenderPass,
-                     uniformBuffers,
-                     materialUniformBuffer,
-                     depthUniformBuffer,
-                     descriptorSetLayout,
-                     descriptorPool),
+      // 5. Descriptor Sets
+      dsBasic(device, swapChain, rpDepth, uniformBuffers, materialUniformBuffer, depthUniformBuffer, dslBasic, dpBasic),
 
-      commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, vertexBuffer, descriptorSets),
-      depthCommandBuffers(device,
-                          depthRenderPass,
-                          swapChain,
-                          graphicsPipeline,
-                          commandPool,
-                          vertexBuffer,
-                          descriptorSets),
+      // 6. Command Buffers
+      cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, vertexBuffer, dsBasic),
 
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */
-      interface(instance, window, device, swapChain, graphicsPipeline) {}
+      interface(instance, window, device, swapChain, gpBasic) {}
 
 void Application::mainLoop() {
   window.setDrawFrameFunc([this](bool& framebufferResized) {
@@ -137,7 +174,7 @@ void Application::drawFrame(bool& framebufferResized) {
 
   // Record UI draw data
   interface.recordCommandBuffers(imageIndex);
-  depthCommandBuffers.recordCommandBuffers(imageIndex);
+  cbDepth.recordCommandBuffers(imageIndex);
 
   /* Update Uniform Buffers */
 
@@ -157,8 +194,8 @@ void Application::drawFrame(bool& framebufferResized) {
   const VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
   std::vector<VkCommandBuffer> cmdBuffers = {
-      depthCommandBuffers.command(imageIndex),
-      commandBuffers.command(imageIndex),
+      cbDepth.command(imageIndex),
+      cbBasic.command(imageIndex),
       interface.command(imageIndex),
   };
 
@@ -233,8 +270,8 @@ void Application::drawImGui() {
     ImGui::SliderFloat("shininess", &(materialUniformBuffer.data().shininess), 0.5f, 256.0f);
     ImGui::Separator();
     ImGui::Text("Depth Setting");
-    ImGui::SliderFloat("constant", &depthCommandBuffers.depthBiasConstant(), 0.0f, 5.0f);
-    ImGui::SliderFloat("slope", &depthCommandBuffers.depthBiasSlope(), 0.0f, 5.0f);
+    ImGui::SliderFloat("constant", &cbDepth.depthBiasConstant(), 0.0f, 5.0f);
+    ImGui::SliderFloat("slope", &cbDepth.depthBiasSlope(), 0.0f, 5.0f);
   }
 
   ImGui::End();
@@ -255,18 +292,29 @@ void Application::recreateSwapChain(bool& framebufferResized) {
   vkDeviceWaitIdle(device.logical());
 
   swapChain.recreate();
-  renderPass.recreate();
-  depthRenderPass.recreate();
-  graphicsPipeline.recreate();
   uniformBuffers.recreate();
-  descriptorPool.recreate();
-  descriptorSets.recreate();
-  commandBuffers.recreate();
-  depthCommandBuffers.recreate();
+
+  /**
+   * Depth
+   */
+  rpDepth.recreate();
+  gpDepth.recreate();
+  dpDepth.recreate();
+  dsDepth.recreate();
+  cbDepth.recreate();
+
+  /**
+   * Basic
+   */
+  rpBasic.recreate();
+  gpBasic.recreate();
+  dpBasic.recreate();
+  dsBasic.recreate();
+  cbBasic.recreate();
 
   interface.recreate();
 
-  renderPass.cleanupOld();
-  depthRenderPass.cleanupOld();
+  rpBasic.cleanupOld();
+  rpDepth.cleanupOld();
   swapChain.cleanupOld();
 }

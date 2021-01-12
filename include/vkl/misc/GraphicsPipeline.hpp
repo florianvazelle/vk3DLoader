@@ -2,10 +2,21 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <vkl/GraphicsPipeline.hpp>
 
 namespace vkl {
 
   namespace misc {
+
+    inline VkPipelineShaderStageCreateInfo pipelineShaderStageCreateInfo(const VkShaderModule& shaderModule,
+                                                                         VkShaderStageFlagBits stage) {
+      return {
+          .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+          .stage  = stage,
+          .module = shaderModule,
+          .pName  = "main",
+      };
+    }
 
     inline VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo(
         const std::vector<VkDynamicState>& pDynamicStates,

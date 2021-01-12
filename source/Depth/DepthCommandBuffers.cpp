@@ -73,11 +73,9 @@ void DepthCommandBuffers::recordCommandBuffers(uint32_t bufferIdx) {
     // Required to avoid shadow mapping artifacts
     vkCmdSetDepthBias(m_commandBuffers.at(bufferIdx), m_depthBiasConstant, 0.0f, m_depthBiasSlope);
 
-    vkCmdBindPipeline(m_commandBuffers.at(bufferIdx), VK_PIPELINE_BIND_POINT_GRAPHICS,
-                      m_graphicsPipeline.depthPipeline());
+    vkCmdBindPipeline(m_commandBuffers.at(bufferIdx), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.pipeline());
     vkCmdBindDescriptorSets(m_commandBuffers.at(bufferIdx), VK_PIPELINE_BIND_POINT_GRAPHICS,
-                            m_graphicsPipeline.layout(), 0, 1, &(m_descriptorSets.depthDescriptor(bufferIdx)), 0,
-                            nullptr);
+                            m_graphicsPipeline.layout(), 0, 1, &(m_descriptorSets.descriptor(bufferIdx)), 0, nullptr);
 
     const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
     const VkDeviceSize offsets[]   = {0};

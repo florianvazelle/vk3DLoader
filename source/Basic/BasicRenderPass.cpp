@@ -146,7 +146,7 @@ void BasicRenderPass::createRenderPass() {
 }
 
 void BasicRenderPass::createFrameBuffers() {
-  const size_t numImages = 1;  // m_swapChain.numImages();
+  const size_t numImages = m_swapChain.numImages();
   // const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
 
   // Fill attachments for one depth attachment by frame

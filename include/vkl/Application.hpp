@@ -20,9 +20,13 @@
 #include <imgui_impl_vulkan.h>
 
 #include <vkl/Basic/BasicCommandBuffers.hpp>
+#include <vkl/Basic/BasicDescriptorSets.hpp>
+#include <vkl/Basic/BasicGraphicsPipeline.hpp>
 #include <vkl/Basic/BasicRenderPass.hpp>
 #include <vkl/DebugUtilsMessenger.hpp>
 #include <vkl/Depth/DepthCommandBuffers.hpp>
+#include <vkl/Depth/DepthDescriptorSets.hpp>
+#include <vkl/Depth/DepthGraphicsPipeline.hpp>
 #include <vkl/Depth/DepthRenderPass.hpp>
 #include <vkl/DescriptorPool.hpp>
 #include <vkl/DescriptorSetLayout.hpp>
@@ -62,27 +66,39 @@ namespace vkl {
     Window window;
     Device device;
 
-    VertexBuffer vertexBuffer;
-    DescriptorSetLayout descriptorSetLayout;
-
     SwapChain swapChain;
+    CommandPool commandPool;
+
+    VertexBuffer vertexBuffer;
     MVPUniformBuffers uniformBuffers;
     DepthUniformBuffers depthUniformBuffer;
     MaterialBuffer materialUniformBuffer;
 
-    BasicRenderPass renderPass;
-    DepthRenderPass depthRenderPass;
+    /**
+     * Depth
+     */
+    DepthRenderPass rpDepth;
+    DescriptorSetLayout dslDepth;
+    DepthGraphicsPipeline gpDepth;
 
-    const std::vector<VkDescriptorPoolSize> poolSizes;
-    VkDescriptorPoolCreateInfo descPoolInfo;
-    DescriptorPool descriptorPool;
-    DescriptorSets descriptorSets;
+    const std::vector<VkDescriptorPoolSize> psDepth;
+    VkDescriptorPoolCreateInfo dpiDepth;
+    DescriptorPool dpDepth;
+    DepthDescriptorSets dsDepth;
+    DepthCommandBuffers cbDepth;
 
-    GraphicsPipeline graphicsPipeline;
-    CommandPool commandPool;
+    /**
+     * Basic
+     */
+    BasicRenderPass rpBasic;
+    DescriptorSetLayout dslBasic;
+    BasicGraphicsPipeline gpBasic;
 
-    BasicCommandBuffers commandBuffers;
-    DepthCommandBuffers depthCommandBuffers;
+    const std::vector<VkDescriptorPoolSize> psBasic;
+    VkDescriptorPoolCreateInfo dpiBasic;
+    DescriptorPool dpBasic;
+    BasicDescriptorSets dsBasic;
+    BasicCommandBuffers cbBasic;
 
     SyncObjects syncObjects;
 

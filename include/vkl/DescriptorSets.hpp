@@ -29,13 +29,11 @@ namespace vkl {
     // ~DescriptorSets(); no need destructor because VkDescriptorSet is deleted when pool is deleted
 
     inline const VkDescriptorSet& descriptor(int index) const { return m_descriptorSets.at(index); }
-    inline const VkDescriptorSet& depthDescriptor(int index) const { return m_dethDescriptorSet.at(index); }
 
     void recreate();
 
-  private:
+  protected:
     std::vector<VkDescriptorSet> m_descriptorSets;
-    std::vector<VkDescriptorSet> m_dethDescriptorSet;
 
     const Device& m_device;
     const SwapChain& m_swapChain;
@@ -46,7 +44,8 @@ namespace vkl {
     const DescriptorSetLayout& m_descriptorSetLayout;
     const DescriptorPool& m_descriptorPool;
 
-    void createDescriptorSets();
+    void allocateDescriptorSets();
+    virtual void createDescriptorSets() = 0;
   };
 }  // namespace vkl
 

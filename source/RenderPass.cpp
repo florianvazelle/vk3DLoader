@@ -29,7 +29,7 @@ void RenderPass::cleanupOld() {
 }
 
 void RenderPass::createFrameBuffers() {
-  const size_t numImages = 1;  // m_swapChain.numImages();
+  const size_t numImages = m_swapChain.numImages();
 
   m_frameBuffers.resize(numImages);
 
