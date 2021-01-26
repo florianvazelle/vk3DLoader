@@ -12,7 +12,7 @@ FrameBufferAttachment::FrameBufferAttachment(const Device& device,
                                              const SwapChain& swapChain,
                                              VkFormat format,
                                              VkImageUsageFlags usage)
-    : m_device(device), m_swapChain(swapChain), m_format(format) {
+    : m_device(device), m_swapChain(swapChain), m_format(format), m_sampler(VK_NULL_HANDLE) {
   VkImageAspectFlags aspectMask = 0;
   VkImageLayout imageLayout;
 
@@ -119,4 +119,6 @@ void FrameBufferAttachment::createSample() {
 FrameBufferAttachment ::~FrameBufferAttachment() {
   vkDestroyImage(m_device.logical(), m_image, nullptr);
   vkDestroyImageView(m_device.logical(), m_imageView, nullptr);
+
+  if (m_sampler != VK_NULL_HANDLE) vkDestroySampler(m_device.logical(), m_sampler, nullptr);
 }

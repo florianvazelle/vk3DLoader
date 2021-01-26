@@ -112,3 +112,11 @@ void DepthRenderPass::createFrameBuffers() {
     }
   }
 }
+
+void DepthRenderPass::destroyFrameBuffers() {
+  for (VkFramebuffer& fb : m_frameBuffers) {
+    vkDestroyFramebuffer(m_device.logical(), fb, nullptr);
+  }
+
+  m_depthAttachments.clear();
+}

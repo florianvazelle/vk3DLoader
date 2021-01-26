@@ -278,8 +278,6 @@ void Application::drawImGui() {
 
 // for resize window
 void Application::recreateSwapChain(bool& framebufferResized) {
-  framebufferResized = true;
-
   glm::ivec2 size;
   window.framebufferSize(size);
   while (size[0] == 0 || size[1] == 0) {

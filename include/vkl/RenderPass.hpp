@@ -39,7 +39,7 @@ namespace vkl {
     virtual void createRenderPass() = 0;
     virtual void createFrameBuffers();
 
-    void destroyFrameBuffers();
+    virtual void destroyFrameBuffers();
   };
 }  // namespace vkl
 

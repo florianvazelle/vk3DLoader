@@ -27,6 +27,8 @@ namespace vkl {
 
     void createRenderPass();
     void createFrameBuffers();
+
+    void destroyFrameBuffers();
   };
 }  // namespace vkl
 
