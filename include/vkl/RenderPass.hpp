@@ -25,11 +25,9 @@ namespace vkl {
     inline size_t size() const { return m_frameBuffers.size(); }
 
     void recreate();
-    void cleanupOld();
 
   protected:
     VkRenderPass m_renderPass;
-    VkRenderPass m_oldRenderPass;
 
     std::vector<VkFramebuffer> m_frameBuffers;
 

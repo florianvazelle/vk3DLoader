@@ -59,9 +59,6 @@ namespace vkl {
                                         VkImageTiling tiling,
                                         VkFormatFeatureFlags features) {
       for (VkFormat format : candidates) {
-        VkFormatProperties formatProps;
-        vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
-
         if (formatIsFilterable(physicalDevice, format, tiling, features)) {
           return format;
         }

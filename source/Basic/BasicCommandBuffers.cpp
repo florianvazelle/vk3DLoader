@@ -31,7 +31,7 @@ void BasicCommandBuffers::createCommandBuffers() {
       .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
       .commandPool        = m_commandPool.handle(),
       .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-      .commandBufferCount = (uint32_t)m_commandBuffers.size(),
+      .commandBufferCount = static_cast<uint32_t>(m_commandBuffers.size()),
   };
 
   if (vkAllocateCommandBuffers(m_device.logical(), &allocInfo, m_commandBuffers.data()) != VK_SUCCESS) {

@@ -310,7 +310,5 @@ void Application::recreateSwapChain(bool& framebufferResized) {
 
   interface.recreate();
 
-  rpBasic.cleanupOld();
-  rpDepth.cleanupOld();
   swapChain.cleanupOld();
 }

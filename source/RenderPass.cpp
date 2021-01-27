@@ -7,7 +7,7 @@
 using namespace vkl;
 
 RenderPass::RenderPass(const Device& device, const SwapChain& swapChain)
-    : m_renderPass(VK_NULL_HANDLE), m_oldRenderPass(VK_NULL_HANDLE), m_device(device), m_swapChain(swapChain) {}
+    : m_renderPass(VK_NULL_HANDLE), m_device(device), m_swapChain(swapChain) {}
 
 RenderPass::~RenderPass() {
   destroyFrameBuffers();
@@ -16,16 +16,10 @@ RenderPass::~RenderPass() {
 
 void RenderPass::recreate() {
   destroyFrameBuffers();
-  m_oldRenderPass = m_renderPass;
+  vkDestroyRenderPass(m_device.logical(), m_renderPass, nullptr);
+
   createRenderPass();
   createFrameBuffers();
-}
-
-void RenderPass::cleanupOld() {
-  if (m_oldRenderPass != VK_NULL_HANDLE) {
-    vkDestroyRenderPass(m_device.logical(), m_oldRenderPass, nullptr);
-    m_oldRenderPass = VK_NULL_HANDLE;
-  }
 }
 
 void RenderPass::createFrameBuffers() {

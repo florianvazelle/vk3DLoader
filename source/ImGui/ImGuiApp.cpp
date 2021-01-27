@@ -60,8 +60,6 @@ ImGuiApp::~ImGuiApp() {
 void ImGuiApp::recreate() {
   renderPass.recreate();
   commandBuffers.recreate();
-
-  renderPass.cleanupOld();
 };
 
 void ImGuiApp::createImGuiDescriptorPool() {
