@@ -21,7 +21,7 @@ void BasicRenderPass::createRenderPass() {
    */
 
   // const VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
-  // const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
+  const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
 
   /* STEP 1 : Description des attachments */
 
@@ -44,17 +44,17 @@ void BasicRenderPass::createRenderPass() {
   };
 
   // Create a new render pass as a depth attachment
-  // const VkAttachmentDescription depthAttachment = {
-  //     .format         = depthFormat,
-  //     .samples        = VK_SAMPLE_COUNT_1_BIT,
-  //     .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR,
-  //     .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
-  //     .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-  //     .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
-  //     .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
-  //     .finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,  // Attachment will be transitioned to
-  //                                                                          // shader read at render pass end,
-  // };
+  const VkAttachmentDescription depthAttachment = {
+      .format         = depthFormat,
+      .samples        = VK_SAMPLE_COUNT_1_BIT,
+      .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR,
+      .storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE,
+      .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+      .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
+      .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
+      .finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,  // Attachment will be transitioned to
+                                                                           // shader read at render pass end,
+  };
 
   /**
    * Note Exposé : Les subpasses sont des opérations de rendu dépendant du contenu présent dans le
@@ -67,11 +67,11 @@ void BasicRenderPass::createRenderPass() {
   /* STEP 2 : les references des attachments (utilisé pour décrire les subpass) */
 
   // Depth for the depth_basic shader (fisrt subpass)
-  // const VkAttachmentReference depthRef = {
-  //     .attachment = 1,
-  //     // Use the optimal layout for depth attachments
-  //     .layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-  // };
+  const VkAttachmentReference depthRef = {
+      .attachment = 1,
+      // Use the optimal layout for depth attachments
+      .layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+  };
 
   // Swapchain's color for the shadow_mapping shader (second subpass)
   const VkAttachmentReference colorRef = {
@@ -106,8 +106,9 @@ void BasicRenderPass::createRenderPass() {
       // Use the attachments filled in the first pass as input attachments
       // .inputAttachmentCount = 1,
       // .pInputAttachments    = &inputRef,
-      .colorAttachmentCount = 1,
-      .pColorAttachments    = &colorRef,
+      .colorAttachmentCount    = 1,
+      .pColorAttachments       = &colorRef,
+      .pDepthStencilAttachment = &depthRef,
   };
 
   /* STEP 4 : Les dependances des subpass */
@@ -125,7 +126,7 @@ void BasicRenderPass::createRenderPass() {
 
   /* STEP 5 : Création de la render pass */
 
-  const std::vector<VkAttachmentDescription> attachments = {colorAttachment /*, depthAttachment*/};
+  const std::vector<VkAttachmentDescription> attachments = {colorAttachment, depthAttachment};
   const std::vector<VkSubpassDescription> subpass        = {/*depthSubpass, */ colorSubpass};
   // const std::vector<VkSubpassDependency> dependencies = {defaultDependency, depthDependencies[0],
   // depthDependencies[1]};
@@ -146,24 +147,24 @@ void BasicRenderPass::createRenderPass() {
 }
 
 void BasicRenderPass::createFrameBuffers() {
-  const size_t numImages = m_swapChain.numImages();
-  // const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
+  const size_t numImages     = m_swapChain.numImages();
+  const VkFormat depthFormat = misc::findDepthFormat(m_device.physical());
 
   // Fill attachments for one depth attachment by frame
-  // m_depthAttachments.resize(numImages);
-  // for (auto i = 0; i < numImages; i++) {
-  //   m_depthAttachments[i] = std::make_unique<FrameBufferAttachment>(m_device, m_swapChain, depthFormat,
-  //                                                                   VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-  // }
+  m_depthAttachments.resize(numImages);
+  for (auto i = 0; i < numImages; i++) {
+    m_depthAttachments[i]
+        = std::make_unique<FrameBufferAttachment>(m_device, m_swapChain, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+  }
 
   m_frameBuffers.resize(numImages);
 
   // Initialize default framebuffer creation info
-  VkImageView attachments[1];
+  VkImageView attachments[2];
   const VkFramebufferCreateInfo info = {
       .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
       .renderPass      = m_renderPass,
-      .attachmentCount = 1,
+      .attachmentCount = 2,
       .pAttachments    = attachments,
       .width           = m_swapChain.extent().width,
       .height          = m_swapChain.extent().height,
@@ -173,7 +174,7 @@ void BasicRenderPass::createFrameBuffers() {
   // Create a framebuffer for each image view
   for (size_t i = 0; i < numImages; ++i) {
     attachments[0] = m_swapChain.imageView(i);
-    // attachments[1] = m_depthAttachments[i]->view();
+    attachments[1] = m_depthAttachments[i]->view();
 
     if (vkCreateFramebuffer(m_device.logical(), &info, nullptr, &m_frameBuffers.at(i)) != VK_SUCCESS) {
       throw std::runtime_error("Framebuffer creation failed");
