@@ -85,6 +85,7 @@ jobs:
             ${{ env.CONAN_USER_HOME }}
             ${{ env.PIP_CACHE_DIR }}
             ${{ env.CHOCO_CACHE_DIR }}
+            ${{ env.CPM_SOURCE_CACHE }}
           key: ${{ matrix.config.os }}-${{ hashFiles('conanfile.txt') }} }}
 
       ###### Windows ######
@@ -214,15 +215,12 @@ jobs:
 
 
   docs:
-    name: Build and publish documentation
+    name: Publish documentation
     runs-on: macos-latest
+    needs: build
+
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: "**/cpm_modules"
-          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
       - uses: actions/download-artifact@master
         with:
