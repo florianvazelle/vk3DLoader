@@ -15,6 +15,9 @@ namespace vkl {
 
   class Instance;
 
+  /**
+   * @brief A class which allows to manage a surface, with GLFW.
+   */
   class Window : public NonCopyable {
   public:
     // using DrawFrameFunc = void(*)(bool& framebufferResized);
@@ -22,6 +25,13 @@ namespace vkl {
     Window(const glm::ivec2& dimensions, const std::string& title, const vkl::Instance& instance);
     Window() = delete;
     ~Window();
+
+    /**
+     * @brief Event management loop
+     * A classic of any program using GLFW, which will allow us to run our application until an error or other event
+     * interrupts it.
+     * We call the method to draw a frame here.
+     */
     void mainLoop();
 
     inline const glm::ivec2& dimensions() const { return m_dimensions; }

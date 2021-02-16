@@ -13,11 +13,9 @@
 namespace vkl {
 
   /**
-   * Note Exposé : Un VkInstance est un objet qui contient toutes les informations dont notre
-   * application Vulkan a besoin pour fonctionner. Contrairement à OpenGL, Vulkan n'a pas d'état
-   * global. Pour cette raison, nous devons à la place stocker nos états dans cet objet.
+   * @brief A class that allows you to manage the instance.
+   * A VkInstance is an object that contains all of the information our Vulkan application needs to function.
    */
-
   class Instance : public NonCopyable {
   public:
     Instance(const char* appName, const char* engineName, bool validationLayers);
@@ -34,6 +32,9 @@ namespace vkl {
     VkInstance m_instance;
     bool m_enableValidationLayers;
 
+    /**
+     * @brief Checks that the validation layers specified in Instance :: ValidationLayers are well supported.
+     */
     static bool CheckValidationLayerSupport();
     static void GetRequiredExtensions(std::vector<const char*>& extensions, bool validationLayers);
   };

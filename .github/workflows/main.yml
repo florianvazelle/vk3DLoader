@@ -213,7 +213,6 @@ jobs:
           path: ${{ runner.workspace }}/instdir
           name: ${{ matrix.config.artifact }}
 
-
   docs:
     name: Publish documentation
     runs-on: macos-latest

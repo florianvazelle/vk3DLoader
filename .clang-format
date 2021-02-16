@@ -29,4 +29,3 @@ IndentPPDirectives: AfterHash
 IndentWidth: 2
 NamespaceIndentation: All
 PointerAlignment: Left
-

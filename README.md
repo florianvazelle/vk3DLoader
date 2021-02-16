@@ -3,19 +3,10 @@
 ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-blue) 
 [![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://github.com/bsamseth/cpp-project/blob/master/LICENSE)
 [![Lines of Code](https://tokei.rs/b1/github/florianvazelle/vk3DLoader?category=code)](https://tokei.rs)
+
 # vk3DLoader
 
 This is work in progress Vulkan project to load and visualize a 3D model.
-
-## Roadmap
-
-- Implement :
-  - ~~Descriptor sets~~
-  - Dynamic uniform buffers
-  - Push constants
-- 🏆 Support ~~obj~~/fbx/gltf model loading
-
-~~Bonus: Shadow mapping~~
 
 ## Building
 
@@ -46,6 +37,7 @@ cmake --build build
   - GCC 9+ or Clang 10+
 - [CMake](https://cmake.org/) for build system creation (>= 3.8)
 - [Conan](https://conan.io/) for install packages (>= 1.0)
+- [Doxygen](https://doxygen.org/) for generate documentation (>= 1.8, optional)
 
 ## References
 
