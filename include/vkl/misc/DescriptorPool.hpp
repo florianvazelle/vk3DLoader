@@ -5,6 +5,9 @@
 
 namespace vkl {
 
+  /**
+   * @brief Minimal instruction set computer, define minimal inline functions to simplify creation of vulkan structure.
+   */
   namespace misc {
 
     inline VkDescriptorPoolSize descriptorPoolSize(VkDescriptorType type, uint32_t descriptorCount) {

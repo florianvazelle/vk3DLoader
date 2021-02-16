@@ -19,9 +19,9 @@ option(ENABLE_TESTING "Whether to generate unit test program and test" ON)
 option(ENABLE_DOCUMENTATION "Whether to generate documentation" OFF)
 
 # ---- Add source files ----
-file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_SOURCE_DIR}/source/*.cpp")
+file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE PROJECT_HEADERS "${CMAKE_SOURCE_DIR}/include/*.hpp")
-file(GLOB_RECURSE PROJECT_ALL_FILES "include/*.hpp" "source/*.cpp" "app/*.cpp" "test/*.cpp")
+file(GLOB_RECURSE PROJECT_ALL_FILES "include/*.hpp" "src/*.cpp" "app/*.cpp" "test/*.cpp")
 
 # ---- Tool ----
 file(GLOB_RECURSE PROJECT_MODULES "${CMAKE_SOURCE_DIR}/cmake/*.cmake")
@@ -41,7 +41,7 @@ endif()
 file(GLOB_RECURSE EXTERNALS "${CMAKE_CURRENT_BINARY_DIR}/external/*")
 
 # ---- Shaders ----
-file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/data/shader/*.vert" "${CMAKE_SOURCE_DIR}/data/shader/*.frag")
+file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/assets/shader/*.vert" "${CMAKE_SOURCE_DIR}/assets/shader/*.frag")
 
 # ---- Create library ----
 add_library(${LIBRARY_NAME} OBJECT ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${EXTERNALS})
@@ -87,7 +87,7 @@ endif()
 
 # ---- cmake auto-generated docs ----
 if(ENABLE_DOCUMENTATION)
-  add_subdirectory("${CMAKE_SOURCE_DIR}/documentation")
+  add_subdirectory("${CMAKE_SOURCE_DIR}/docs")
 endif()
 
 # ---- Compile shader into SPIR-V ----

@@ -43,6 +43,9 @@
 #include <vkl/buffer/Buffer.hpp>
 #include <vkl/buffer/UniformBuffers.hpp>
 
+/**
+ * @brief vk3DLoader, encapsulates the entire library.
+ */
 namespace vkl {
 
   struct DebugOption {
