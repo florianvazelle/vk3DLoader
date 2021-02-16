@@ -22,6 +22,7 @@ env:
   # Cache
   PIP_CACHE_DIR: "${{ github.workspace }}/pip-cache"
   CHOCO_CACHE_DIR: "${{ github.workspace }}/choco-cache"
+  CPM_SOURCE_CACHE: "${{ github.workspace }}/cpm_modules"
 
 jobs:
   build:
@@ -36,6 +37,7 @@ jobs:
             os: windows-latest,
             artifact: "windows_msvc",
             build_type: "Release",
+            enabled_doc: "OFF",
             cc: "cl",
             cxx: "cl",
             generators: "Visual Studio 16 2019"
@@ -54,6 +56,7 @@ jobs:
             os: ubuntu-20.04,
             artifact: "ubuntu_gcc",
             build_type: "Release",
+            enabled_doc: "OFF",
             cc: "gcc",
             cxx: "g++",
             generators: "Ninja"
@@ -63,6 +66,7 @@ jobs:
             os: ubuntu-20.04,
             artifact: "ubuntu_clang",
             build_type: "Release",
+            enabled_doc: "ON",
             cc: "clang",
             cxx: "clang++",
             generators: "Ninja"
@@ -121,7 +125,7 @@ jobs:
         if: startsWith(matrix.config.os, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install ninja-build cmake
+          sudo apt-get install ninja-build cmake doxygen
           ninja --version
           cmake --version
           gcc --version
@@ -172,6 +176,7 @@ jobs:
             -DCMAKE_BUILD_TYPE="${{ matrix.config.build_type }}" \
             -G "${{ matrix.config.generators }}" \
             -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
+            -DENABLE_DOCUMENTATION=${{ matrix.config.enabled_doc }}
         env:
           VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
           CC: ${{ matrix.config.cc }}
@@ -200,9 +205,32 @@ jobs:
         run: cmake --install . --strip
         env:
           VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
-
+    
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
           path: ${{ runner.workspace }}/instdir
           name: ${{ matrix.config.artifact }}
+
+
+  docs:
+    name: Build and publish documentation
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - uses: actions/download-artifact@master
+        with:
+          name: ubuntu_clang
+          path: ${{ runner.workspace }}/instdir
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ runner.workspace }}/instdir/documentation/doxygen/html

@@ -119,4 +119,4 @@ foreach(SHADER ${SHADERS})
 endforeach()
 
 # ---- cmake install ----
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin documentation)
