@@ -16,6 +16,7 @@ endif()
 option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines.
                                  Set this to OFF if you want to provide your own warning parameters." OFF)
 option(ENABLE_TESTING "Whether to generate unit test program and test" ON)
+option(ENABLE_DOCUMENTATION "Whether to generate documentation" OFF)
 
 # ---- Add source files ----
 file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_SOURCE_DIR}/source/*.cpp")
@@ -81,7 +82,12 @@ add_compile_definitions(VK3DLOADER_VERSION="${CMAKE_PROJECT_VERSION}")
 # Set up tests (see test/CMakeLists.txt).
 if(ENABLE_TESTING)
   enable_testing()
-  add_subdirectory(test)
+  add_subdirectory("${CMAKE_SOURCE_DIR}/test")
+endif()
+
+# ---- cmake auto-generated docs ----
+if(ENABLE_DOCUMENTATION)
+  add_subdirectory("${CMAKE_SOURCE_DIR}/documentation")
 endif()
 
 # ---- Compile shader into SPIR-V ----
