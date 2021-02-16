@@ -176,7 +176,7 @@ jobs:
             $GITHUB_WORKSPACE \
             -DCMAKE_BUILD_TYPE="${{ matrix.config.build_type }}" \
             -G "${{ matrix.config.generators }}" \
-            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
+            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir" \
             -DENABLE_DOCUMENTATION=${{ matrix.config.enabled_doc }}
         env:
           VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
