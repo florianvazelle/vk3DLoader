@@ -30,3 +30,5 @@ add_custom_target(
 )
 
 add_dependencies(${LIBRARY_NAME} GenerateDocs)
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} DESTINATION .)
