@@ -119,10 +119,10 @@ foreach(SHADER ${SHADERS})
 endforeach()
 
 # ---- cmake install ----
-set(DIRS_TO_INSTALL bin)
+set(DIRS_TO_INSTALL "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 if(ENABLE_DOCUMENTATION)
-  set(DIRS_TO_INSTALL ${DIRS_TO_INSTALL} documentation)
+  set(DIRS_TO_INSTALL ${DIRS_TO_INSTALL} "${CMAKE_CURRENT_BINARY_DIR}/documentation")
 endif()
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${DIRS_TO_INSTALL})
