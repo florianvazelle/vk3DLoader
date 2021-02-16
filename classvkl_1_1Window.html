@@ -52,7 +52,7 @@
           <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Window <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Window_8hpp.html">&lt;vkl/Window.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>A class which allows to manage a surface, with GLFW.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -73,7 +73,7 @@
             <dt>
               class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A class to prohibit copying. The class which inherits from it will have no constructor per copy and no equal operator. We prefer to pass an object by reference, which avoids the duplication of data members of the class.</dd>
           </dl>
         </section>
         <section id="pub-static-methods">
@@ -110,7 +110,7 @@
             <dt id="a3d13edd732182e2fdddc5c681f70514c">
               <span class="m-doc-wrap-bumper">void <a href="#a3d13edd732182e2fdddc5c681f70514c" class="m-doc-self">mainLoop</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Event management loop A classic of any program using GLFW, which will allow us to run our application until an error or other event interrupts it. We call the method to draw a frame here.</dd>
             <dt id="af4d656a7eb6f528a2374fab98578ee56">
               <span class="m-doc-wrap-bumper">auto <a href="#af4d656a7eb6f528a2374fab98578ee56" class="m-doc-self">dimensions</a>(</span><span class="m-doc-wrap">) const -&gt; const glm::ivec2&amp;</span>
             </dt>

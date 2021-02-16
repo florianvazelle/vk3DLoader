@@ -52,6 +52,7 @@
           <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Instance <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Instance_8hpp.html">&lt;vkl/Instance.hpp&gt;</a></div>
         </h1>
+        <p>A class that allows you to manage the instance. A VkInstance is an object that contains all of the information our Vulkan application needs to function.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -66,14 +67,13 @@
             </li>
           </ul>
         </div>
-<p>Note Exposé : Un VkInstance est un objet qui contient toutes les informations dont notre application Vulkan a besoin pour fonctionner. Contrairement à OpenGL, Vulkan n&#x27;a pas d&#x27;état global. Pour cette raison, nous devons à la place stocker nos états dans cet objet.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
               class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A class to prohibit copying. The class which inherits from it will have no constructor per copy and no equal operator. We prefer to pass an object by reference, which avoids the duplication of data members of the class.</dd>
           </dl>
         </section>
         <section id="pub-static-attribs">
