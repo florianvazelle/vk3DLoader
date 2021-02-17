@@ -1,3 +1,9 @@
+/**
+ * @file Buffer.hpp
+ * @brief Define Buffer template class
+ * @todo Refactor so as not to have to define a class each time we want to change the update method
+ */
+
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
 

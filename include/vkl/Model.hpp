@@ -1,7 +1,7 @@
 /**
  * @file Model.hpp
  * @brief Define Model class
- * @bug Need to refactor it, to support texture, multiple Material ...
+ * @todo Need to refactor it, to support texture, multiple Material ...
  */
 
 #ifndef MODEL_HPP
