@@ -6,7 +6,8 @@
 namespace vkl {
 
   /**
-   * @brief Minimal instruction set computer, define minimal inline functions to simplify creation of vulkan structure.
+   * @brief Minimal instruction set computer, encapsulates minimal inline functions to simplify creation of vulkan
+   * structure.
    */
   namespace misc {
 
