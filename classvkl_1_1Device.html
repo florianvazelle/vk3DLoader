@@ -52,6 +52,7 @@
           <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Device <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Device_8hpp.html">&lt;vkl/Device.hpp&gt;</a></div>
         </h1>
+        <p>A class which allows to manage devices.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -65,14 +66,14 @@
             </li>
           </ul>
         </div>
-<p>Note Exposé : Les devices permettent d&#x27;interagir avec notre application Vulkan. Il y a deux types de device : physiques et logiques. Un device physique est un composant unique du système. Il peut également s&#x27;agir de plusieurs composants fonctionnant conjointement pour fonctionner comme un seul appareil. Un périphérique logique est notre interface avec le périphérique physique.</p><p>Un VkPhysicalDevice est un type de données qui représentee chaque élément matériel.</p>
+<p>The devices allow you to interact with our Vulkan application. There are two types of device: physical and logical. A physical device is a single component of the system. It can also be several components working together to function as a single device. A logical device is our interface to the physical device.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
               class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
             </dt>
-            <dd>A class to prohibit copying. The class which inherits from it will have no constructor per copy and no equal operator. We prefer to pass an object by reference, which avoids the duplication of data members of the class.</dd>
+            <dd>A class to prohibit copying.</dd>
           </dl>
         </section>
         <section id="typeless-methods">
