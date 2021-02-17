@@ -1,3 +1,8 @@
+/**
+ * @file Instance.hpp
+ * @brief Define Instance class
+ */
+
 #ifndef INSTANCE_HPP
 #define INSTANCE_HPP
 
@@ -34,6 +39,7 @@ namespace vkl {
 
     /**
      * @brief Checks that the validation layers specified in Instance :: ValidationLayers are well supported.
+     * @return
      */
     static bool CheckValidationLayerSupport();
     static void GetRequiredExtensions(std::vector<const char*>& extensions, bool validationLayers);

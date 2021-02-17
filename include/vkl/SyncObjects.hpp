@@ -1,3 +1,8 @@
+/**
+ * @file SyncObjects.hpp
+ * @brief Define SyncObjects class
+ */
+
 #ifndef SYNCOBJECTS_HPP
 #define SYNCOBJECTS_HPP
 

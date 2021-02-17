@@ -1,3 +1,8 @@
+/**
+ * @file CommandBuffers.hpp
+ * @brief Define CommandBuffers base class
+ */
+
 #ifndef COMMANDBUFFERS_HPP
 #define COMMANDBUFFERS_HPP
 

@@ -1,3 +1,7 @@
+/**
+ * @file GraphicsPipeline.hpp
+ * @brief Define GraphicsPipeline base class
+ */
 
 #ifndef GRAPHICSPIPELINE_HPP
 #define GRAPHICSPIPELINE_HPP

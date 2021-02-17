@@ -1,3 +1,8 @@
+/**
+ * @file DebugUtilsMessenger.hpp
+ * @brief Define DebugUtilsMessenger class
+ */
+
 #ifndef DEBUGUTILSMESSENGER_HPP
 #define DEBUGUTILSMESSENGER_HPP
 

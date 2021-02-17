@@ -1,3 +1,8 @@
+/**
+ * @file CommandPool.hpp
+ * @brief Define CommandPool class
+ */
+
 #ifndef COMMANDPOOL_HPP
 #define COMMANDPOOL_HPP
 

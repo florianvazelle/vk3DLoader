@@ -1,3 +1,8 @@
+/**
+ * @file RenderPass.hpp
+ * @brief Define RenderPass base class
+ */
+
 #ifndef RENDERPASS_HPP
 #define RENDERPASS_HPP
 

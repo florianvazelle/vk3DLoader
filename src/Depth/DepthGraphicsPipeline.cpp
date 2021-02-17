@@ -6,7 +6,6 @@
 #include <vkl/DescriptorSetLayout.hpp>
 #include <vkl/Device.hpp>
 #include <vkl/RenderPass.hpp>
-#include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
 #include <vkl/misc/GraphicsPipeline.hpp>
 #include <vkl/struct/Vertex.hpp>

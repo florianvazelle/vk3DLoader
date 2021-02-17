@@ -1,3 +1,8 @@
+/**
+ * @file Device.hpp
+ * @brief Define Device class
+ */
+
 #ifndef DEVICE_HPP
 #define DEVICE_HPP
 
@@ -13,15 +18,12 @@ namespace vkl {
   class Window;
 
   /**
-   * Note Exposé : Les devices permettent d'interagir avec notre application Vulkan.
-   * Il y a deux types de device : physiques et logiques.
-   * Un device physique est un composant unique du système. Il peut également s'agir de
-   * plusieurs composants fonctionnant conjointement pour fonctionner comme un seul appareil. Un
-   * périphérique logique est notre interface avec le périphérique physique.
+   * @brief  A class which allows to manage devices.
    *
-   * Un VkPhysicalDevice est un type de données qui représentee chaque élément matériel.
+   * The devices allow you to interact with our Vulkan application. There are two types of device: physical and logical.
+   * A physical device is a single component of the system. It can also be several components working together to
+   * function as a single device. A logical device is our interface to the physical device.
    */
-
   class Device : public NonCopyable {
   public:
     Device(const Instance& instance, const Window& window, const std::vector<const char*>& extensions);

@@ -1,3 +1,10 @@
+/**
+ * @file Application.hpp
+ * @brief Define Application class
+ *
+ * This is our Vulkan App, call by the main and run the main loop.
+ */
+
 #pragma once
 
 #include <algorithm>
@@ -36,7 +43,6 @@
 #include <vkl/ImGui/ImGuiApp.hpp>
 #include <vkl/Instance.hpp>
 #include <vkl/Model.hpp>
-#include <vkl/ShaderLoader.hpp>
 #include <vkl/SwapChain.hpp>
 #include <vkl/SyncObjects.hpp>
 #include <vkl/Window.hpp>
@@ -44,7 +50,9 @@
 #include <vkl/buffer/UniformBuffers.hpp>
 
 /**
- * @brief vk3DLoader, encapsulates the entire library.
+ * @brief Vulkan Loader
+ *
+ * Encapsulates the entire vk3DLoader library.
  */
 namespace vkl {
 

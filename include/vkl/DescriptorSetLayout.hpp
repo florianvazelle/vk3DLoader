@@ -1,3 +1,8 @@
+/**
+ * @file DescriptorSetLayout.hpp
+ * @brief Define DescriptorSetLayout class
+ */
+
 #ifndef DESCRIPTORSETLAYOUT_HPP
 #define DESCRIPTORSETLAYOUT_HPP
 

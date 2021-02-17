@@ -1,3 +1,8 @@
+/**
+ * @file DescriptorSets.hpp
+ * @brief Define DescriptorSets base class
+ */
+
 #ifndef DESCRIPTORSETS_HPP
 #define DESCRIPTORSETS_HPP
 

@@ -1,3 +1,8 @@
+/**
+ * @file SwapChain.hpp
+ * @brief Define SwapChain class and SwapChainSupportDetails struct
+ */
+
 #ifndef SWAPCHAIN_HPP
 #define SWAPCHAIN_HPP
 

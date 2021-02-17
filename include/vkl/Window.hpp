@@ -1,3 +1,8 @@
+/**
+ * @file Window.hpp
+ * @brief Define Window class
+ */
+
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 

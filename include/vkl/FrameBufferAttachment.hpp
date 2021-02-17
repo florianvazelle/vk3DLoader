@@ -1,3 +1,8 @@
+/**
+ * @file FrameBufferAttachment.hpp
+ * @brief Define FrameBufferAttachment class
+ */
+
 #ifndef FRAMEBUFFERATTACHMENT_HPP
 #define FRAMEBUFFERATTACHMENT_HPP
 

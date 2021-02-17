@@ -1,3 +1,8 @@
+/**
+ * @file DescriptorPool.hpp
+ * @brief Define DescriptorPool class
+ */
+
 #ifndef DESCRIPTORPOOL_HPP
 #define DESCRIPTORPOOL_HPP
 
