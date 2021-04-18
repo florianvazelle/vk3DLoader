@@ -1,6 +1,6 @@
 # Blender v2.91.0 OBJ File: 'untitled.blend'
 # www.blender.org
-mtllib ./data/model/human.mtl
+mtllib ./assets/model/human.mtl
 o Cube_Mesh.003
 v 0.134883 0.017335 -0.020881
 v 0.124151 0.046410 -0.028503
