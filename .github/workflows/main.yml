@@ -227,10 +227,6 @@ jobs:
 
       - name: Display structure of downloaded files
         working-directory: ${{ runner.workspace }}
-        run: unzip ubuntu-g++.zip
-
-      - name: Display structure of downloaded files
-        working-directory: ${{ runner.workspace }}
         run: ls -R
 
       - name: Publish
