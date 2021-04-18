@@ -154,7 +154,7 @@ void BasicRenderPass::createFrameBuffers() {
   m_depthAttachments.resize(numImages);
   for (auto i = 0; i < numImages; i++) {
     m_depthAttachments[i]
-        = std::make_unique<FrameBufferAttachment>(m_device, m_swapChain, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+        = std::make_unique<FrameBufferAttachment>(m_device, m_swapChain, depthFormat, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
   }
 
   m_frameBuffers.resize(numImages);
