@@ -94,8 +94,8 @@ jobs:
         run: |
           cmake \
             $GITHUB_WORKSPACE \
-            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir" \
-            -DENABLE_DOCUMENTATION=ON
+            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON \
+            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
 
       - name: Build
         working-directory: ${{ runner.workspace }}/build
@@ -182,8 +182,8 @@ jobs:
         run: |
           cmake \
             $GITHUB_WORKSPACE \
-            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir" \
-            -DENABLE_DOCUMENTATION=OFF
+            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON \
+            -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
 
       - name: Build
         working-directory: ${{ runner.workspace }}/build
