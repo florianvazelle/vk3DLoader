@@ -1,9 +1,11 @@
-// #include <particle/ParticleSystem.hpp>
+#include <particle/ParticleSystem.hpp>
 
 #include <cxxopts.hpp>
 
+#include <iostream>
+
 int main(int argc, char** argv) {
-  cxxopts::Options options(argv[0], "A program to load and visualize a 3D model !");
+  cxxopts::Options options(argv[0], "A program to simulate a lava flow !");
 
   // clang-format off
   options.add_options()
@@ -16,32 +18,34 @@ int main(int argc, char** argv) {
   auto result = options.parse(argc, argv);
 
   // need to init glfw first, to get the suitable glfw extension for the vkinstance
-  // glfwInit();
+  glfwInit();
 
-  // // Disable OpenGL
-  // glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  // // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+  // Disable OpenGL
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+  // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-  // int debugLevel = 0;
-  // if (result.count("debug")) {
-  //   debugLevel = result["debug"].as<int>();
-  // }
+  int debugLevel = 0;
+  if (result.count("debug")) {
+    debugLevel = result["debug"].as<int>();
+  }
 
-  // vkl::DebugOption debugOption = {
-  //     .debugLevel  = debugLevel,
-  //     .exitOnError = result.count("error-exit") > 0,
-  // };
+  vkl::DebugOption debugOption = {
+      .debugLevel  = debugLevel,
+      .exitOnError = result.count("error-exit") > 0,
+  };
 
-  // vkl::ParticleSystem app(debugOption);
+  vkl::ParticleSystem app("vkLavaMpm", debugOption);
 
-  // try {
-  //   app.run();
-  // } catch (std::exception& e) {
-  //   std::cout << e.what() << std::endl;
-  //   return EXIT_FAILURE;
-  // }
+  try {
+    app.run([](){
+      std::cout << "hello lava!\n";
+    });
+  } catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
 
-  // glfwTerminate();
+  glfwTerminate();
 
   return EXIT_SUCCESS;
 }

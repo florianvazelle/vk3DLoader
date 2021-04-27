@@ -14,6 +14,13 @@
 #include <common/SyncObjects.hpp>
 #include <common/Window.hpp>
 
+#define MAX_FRAMES_IN_FLIGHT 2
+
+#define WIDTH 800
+#define HEIGHT 600
+
+#define ENGINE_NAME "No Engine"
+
 /**
  * @brief Vulkan Loader
  *

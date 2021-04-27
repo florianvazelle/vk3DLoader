@@ -10,15 +10,6 @@
 
 using namespace vkl;
 
-const uint32_t WIDTH  = 800;
-const uint32_t HEIGHT = 600;
-
-bool isRotate = true;
-
-const int MAX_FRAMES_IN_FLIGHT = 2;
-
-bool enabledShadowMap = true;
-
 /**
  * Basic is for SwapChain render (default)
  * Depth is for Depth render (shadow map)
@@ -38,9 +29,6 @@ bool enabledShadowMap = true;
  * cb  is for CommandBuffers
  */
 
-const std::string ENGINE_NAME = "No Engine";
-
-// TODO : create a Context
 ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debugOption, const std::string& modelPath)
     : Application(appName, debugOption),
 
