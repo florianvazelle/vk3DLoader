@@ -60,12 +60,6 @@
 //   private:
 //     // Note : Order is taken into account
 
-//     Instance instance;
-//     DebugUtilsMessenger debugMessenger;
-//     Window window;
-//     Device device;
-
-//     SwapChain swapChain;
 //     CommandPool commandPool;
 
 //     MVPUniformBuffers uniformBuffers;
@@ -82,8 +76,6 @@
 //     DescriptorPool dpBasic;
 //     BasicDescriptorSets dsBasic;
 //     BasicCommandBuffers cbBasic;
-
-//     SyncObjects syncObjects;
 
 //     ImGuiApp interface;
 

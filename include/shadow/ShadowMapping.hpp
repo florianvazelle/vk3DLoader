@@ -26,18 +26,13 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
 
-#include <common/DebugUtilsMessenger.hpp>
+#include <common/Application.hpp>
 #include <common/DescriptorPool.hpp>
 #include <common/DescriptorSetLayout.hpp>
 #include <common/DescriptorSets.hpp>
-#include <common/Device.hpp>
 #include <common/GraphicsPipeline.hpp>
 #include <common/ImGui/ImGuiApp.hpp>
-#include <common/Instance.hpp>
 #include <common/Model.hpp>
-#include <common/SwapChain.hpp>
-#include <common/SyncObjects.hpp>
-#include <common/Window.hpp>
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/UniformBuffers.hpp>
 #include <shadow/Basic/BasicCommandBuffers.hpp>
@@ -49,21 +44,11 @@
 #include <shadow/Depth/DepthGraphicsPipeline.hpp>
 #include <shadow/Depth/DepthRenderPass.hpp>
 
-/**
- * @brief Vulkan Loader
- *
- * Encapsulates the entire vk3DLoader library.
- */
 namespace vkl {
 
-  struct DebugOption {
-    int debugLevel;
-    bool exitOnError;
-  };
-
-  class ShadowMapping {
+  class ShadowMapping : public Application {
   public:
-    ShadowMapping(const std::string& appName, DebugOption debugOption, const std::string& modelPath = "");
+    ShadowMapping(const std::string& appName, const DebugOption& debugOption, const std::string& modelPath = "");
 
     void run() { mainLoop(); }
 
@@ -72,12 +57,6 @@ namespace vkl {
 
     Model model;
 
-    Instance instance;
-    DebugUtilsMessenger debugMessenger;
-    Window window;
-    Device device;
-
-    SwapChain swapChain;
     CommandPool commandPool;
 
     VertexBuffer vertexBuffer;
@@ -110,8 +89,6 @@ namespace vkl {
     DescriptorPool dpBasic;
     BasicDescriptorSets dsBasic;
     BasicCommandBuffers cbBasic;
-
-    SyncObjects syncObjects;
 
     ImGuiApp interface;
 

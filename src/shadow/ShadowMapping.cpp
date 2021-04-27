@@ -41,14 +41,8 @@ bool enabledShadowMap = true;
 const std::string ENGINE_NAME = "No Engine";
 
 // TODO : create a Context
-ShadowMapping::ShadowMapping(const std::string& appName, DebugOption debugOption, const std::string& modelPath)
-    : instance(appName, ENGINE_NAME, (debugOption.debugLevel > 0)),
-      debugMessenger(instance, debugOption.exitOnError),
-      window({WIDTH, HEIGHT}, appName, instance),
-      device(instance, window, Instance::DeviceExtensions),
-
-      // Swap Chain
-      swapChain(device, window),
+ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debugOption, const std::string& modelPath)
+    : Application(appName, debugOption),
 
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       model(modelPath),
@@ -125,7 +119,6 @@ ShadowMapping::ShadowMapping(const std::string& appName, DebugOption debugOption
       // 6. Command Buffers
       cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, vertexBuffer, dsBasic),
 
-      syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT),
       /* ImGui */
       interface(instance, window, device, swapChain, gpBasic) {}
 
