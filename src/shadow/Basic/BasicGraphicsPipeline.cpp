@@ -1,15 +1,18 @@
+// clang-format off
 #include <shadow/Basic/BasicGraphicsPipeline.hpp>
-
-#include <shadow_mapping_frag.h>
-#include <shadow_mapping_vert.h>
-
-#include <common/DescriptorSetLayout.hpp>
-#include <common/Device.hpp>
-#include <common/RenderPass.hpp>
-#include <common/SwapChain.hpp>
-#include <common/misc/GraphicsPipeline.hpp>
-#include <common/struct/Vertex.hpp>
-#include <iostream>
+#include <shadow_mapping_frag.h>             // for SHADOW_MAPPING_FRAG
+#include <shadow_mapping_vert.h>             // for SHADOW_MAPPING_VERT
+#include <vulkan/vulkan_core.h>              // for VkPipelineShaderStageCre...
+#include <common/DescriptorSetLayout.hpp>    // for DescriptorSetLayout
+#include <common/Device.hpp>                 // for Device
+#include <common/RenderPass.hpp>             // for RenderPass
+#include <common/SwapChain.hpp>              // for vkl
+#include <common/misc/GraphicsPipeline.hpp>  // for pipelineShaderStageCreat...
+#include <common/struct/Vertex.hpp>          // for Vertex
+#include <stdexcept>                         // for runtime_error
+#include <vector>                            // for vector
+#include <common/GraphicsPipeline.hpp>       // for GraphicsPipeline
+// clang-format on
 
 using namespace vkl;
 
@@ -45,8 +48,8 @@ void BasicGraphicsPipeline::createPipeline() {
   VkPipelineColorBlendStateCreateInfo colorBlending;
   VkPipelineDepthStencilStateCreateInfo depthStencil;
 
-  initDefaultPipeline(vertexInputInfo, inputAssembly, viewportState, rasterizer, multisampling, colorBlending,
-                      depthStencil);
+  initDefaultPipeline<Vertex>(vertexInputInfo, inputAssembly, viewportState, rasterizer, multisampling, colorBlending,
+                              depthStencil);
 
   {
     const VkShaderModule vertShaderModule = createShaderModule(SHADOW_MAPPING_VERT);

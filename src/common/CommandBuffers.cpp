@@ -10,15 +10,19 @@
 using namespace vkl;
 
 CommandBuffers::CommandBuffers(const Device& device,
-                               const RenderPass& renderPass,
+                               const IRenderPass& renderPass,
                                const SwapChain& swapChain,
                                const GraphicsPipeline& graphicsPipeline,
-                               const CommandPool& commandPool)
+                               const CommandPool& commandPool,
+                               const DescriptorSets& descriptorSets,
+                               const std::vector<const IBuffer*>& buffers)
     : m_device(device),
       m_renderPass(renderPass),
       m_swapChain(swapChain),
       m_graphicsPipeline(graphicsPipeline),
-      m_commandPool(commandPool) {}
+      m_commandPool(commandPool),
+      m_descriptorSets(descriptorSets),
+      m_buffers(buffers) {}
 
 CommandBuffers::~CommandBuffers() { destroyCommandBuffers(); }
 

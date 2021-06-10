@@ -1,9 +1,14 @@
+// clang-format off
 #include <common/SwapChain.hpp>
-
-#include <common/Device.hpp>
-#include <common/Window.hpp>
-
-#include <iostream>
+#include <algorithm>                 // for max, min
+#include <common/Device.hpp>         // for Device
+#include <common/Window.hpp>         // for Window
+#include <optional>                  // for operator!=, optional
+#include <stdexcept>                 // for runtime_error
+#include <common/QueueFamily.hpp>    // for QueueFamilyIndices
+#include <glm/detail/type_vec2.hpp>  // for vec<>::(anonymous)
+#include <glm/ext/vector_int2.hpp>   // for ivec2
+// clang-format on
 
 using namespace vkl;
 

@@ -1,7 +1,12 @@
+// clang-format off
 #include <common/FrameBufferAttachment.hpp>
-
-#include <common/misc/Device.hpp>
-#include <iostream>
+#include <stdint.h>                // for uint32_t
+#include <common/misc/Device.hpp>  // for findMemoryType, formatIsFilterable
+#include <stdexcept>               // for runtime_error
+#include <common/Device.hpp>       // for Device
+#include <common/QueueFamily.hpp>  // for vkl
+#include <common/SwapChain.hpp>    // for SwapChain
+// clang-format on
 
 using namespace vkl;
 

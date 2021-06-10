@@ -1,6 +1,9 @@
+// clang-format off
 #include <common/DescriptorSetLayout.hpp>
-
-#include <stdexcept>
+#include <stdexcept>               // for runtime_error
+#include <common/Device.hpp>       // for Device
+#include <common/QueueFamily.hpp>  // for vkl
+// clang-format on
 
 using namespace vkl;
 

@@ -1,8 +1,12 @@
-
-#include <common/Device.hpp>
+// clang-format off
 #include <common/ImGui/ImGuiRenderPass.hpp>
-#include <common/SwapChain.hpp>
-#include <iostream>
+#include <vulkan/vulkan_core.h>    // for vkCreateRenderPass, VK_ACCESS_COLO...
+#include <common/Device.hpp>       // for Device
+#include <common/SwapChain.hpp>    // for SwapChain
+#include <stdexcept>               // for runtime_error
+#include "common/QueueFamily.hpp"  // for vkl
+#include "common/RenderPass.hpp"   // for RenderPass
+// clang-format on
 
 using namespace vkl;
 

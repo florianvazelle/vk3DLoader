@@ -1,10 +1,19 @@
+// clang-format off
 #include <shadow/Depth/DepthRenderPass.hpp>
-
-#include <array>
-#include <common/Device.hpp>
-#include <common/SwapChain.hpp>
-#include <common/misc/Device.hpp>
-#include <iostream>
+#include <stddef.h>                          // for size_t
+#include <stdint.h>                          // for uint32_t
+#include <vulkan/vulkan_core.h>              // for VkSubpassDependency, VkF...
+#include <array>                             // for array
+#include <common/Device.hpp>                 // for Device
+#include <common/SwapChain.hpp>              // for SwapChain
+#include <common/misc/Device.hpp>            // for findDepthFormat
+#include <memory>                            // for unique_ptr, make_unique
+#include <stdexcept>                         // for runtime_error
+#include <vector>                            // for vector
+#include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
+#include <common/QueueFamily.hpp>            // for vkl
+#include <common/RenderPass.hpp>             // for RenderPass
+// clang-format on
 
 using namespace vkl;
 

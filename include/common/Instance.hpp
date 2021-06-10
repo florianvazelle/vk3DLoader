@@ -6,14 +6,15 @@
 #ifndef INSTANCE_HPP
 #define INSTANCE_HPP
 
+// clang-format off
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include <cstring>
-#include <stdexcept>
-#include <vector>
-
-#include <NonCopyable.hpp>
+#include <vulkan/vulkan_core.h>  // for VkInstance, VkInstance_T
+#include <NonCopyable.hpp>       // for NonCopyable
+#include <string>                // for string
+#include <vector>                // for vector
+// clang-format on
 
 namespace vkl {
 

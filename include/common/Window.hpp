@@ -6,15 +6,18 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+// clang-format off
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include <functional>
-#include <glm/glm.hpp>
-#include <string>
-#include <vector>
-
-#include <NonCopyable.hpp>
+#include <vulkan/vulkan_core.h>      // for VkSurfaceKHR, VkSurfaceKHR_T
+#include <NonCopyable.hpp>           // for NonCopyable
+#include <functional>                // for function
+#include <string>                    // for string
+#include <vector>                    // for vector
+#include <glm/glm.hpp>               // for ivec2, vec<>::operator[]
+namespace vkl { class Instance; }
+// clang-format on
 
 namespace vkl {
 

@@ -1,28 +1,18 @@
+// clang-format off
 #include <shadow/Basic/BasicDescriptorSets.hpp>
-
-#include <common/misc/DescriptorSet.hpp>
-#include <common/struct/Material.hpp>
+#include <stddef.h>                          // for size_t
+#include <vulkan/vulkan_core.h>              // for VkWriteDescriptorSet
+#include <common/misc/DescriptorSet.hpp>     // for writeDescriptorSet
+#include <common/struct/DepthMVP.hpp>        // for DepthMVP
+#include <common/struct/Material.hpp>        // for Material
+#include <common/Device.hpp>                 // for Device
+#include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
+#include <common/QueueFamily.hpp>            // for vkl
+#include <common/RenderPass.hpp>             // for IRenderPass
+#include <common/buffer/IBuffer.hpp>         // for IBuffer, IUniformBuffers
+// clang-format on
 
 using namespace vkl;
-
-BasicDescriptorSets::BasicDescriptorSets(const Device& device,
-                                         const SwapChain& swapChain,
-                                         const DepthRenderPass& renderPass,
-                                         const UniformBuffers<MVP>& uniformBuffers,
-                                         const MaterialBuffer& materialUniformBuffer,
-                                         const UniformBuffers<Depth>& depthUniformBuffer,
-                                         const DescriptorSetLayout& descriptorSetLayout,
-                                         const DescriptorPool& descriptorPool)
-    : DescriptorSets(device,
-                     swapChain,
-                     renderPass,
-                     uniformBuffers,
-                     materialUniformBuffer,
-                     depthUniformBuffer,
-                     descriptorSetLayout,
-                     descriptorPool) {
-  createDescriptorSets();
-}
 
 /**
  * Note Exposé : Creation d'un descriptor set
@@ -36,25 +26,28 @@ void BasicDescriptorSets::createDescriptorSets() {
 
   std::vector<VkWriteDescriptorSet> writeDescriptorSets;
 
+  const IBuffer* materialBuffer                   = m_buffers[0];
   const VkDescriptorBufferInfo materialBufferInfo = {
-      .buffer = m_materialUniformBuffer.buffer(),
+      .buffer = materialBuffer->buffer(),
       .offset = 0,
       .range  = sizeof(Material),
   };
 
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
+  const IUniformBuffers* ubo    = m_uniformBuffers[0];
+  const IRenderPass* renderPass = m_renderPasses[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
     const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = m_uniformBuffers.buffer(i),
+        .buffer = ubo->buffer(i),
         .offset = 0,
-        .range  = sizeof(MVP),
+        .range  = sizeof(DepthMVP),
     };
 
     // Image descriptor for the shadow map attachment
     const VkDescriptorImageInfo depthDescriptor = {
         // le shader va lire les valeurs écrits a cette position, juste avant
-        .sampler     = m_renderPass.depthAttachment(i).sample(),
-        .imageView   = m_renderPass.depthAttachment(i).view(),
+        .sampler     = renderPass->depthAttachment(i).sample(),
+        .imageView   = renderPass->depthAttachment(i).view(),
         .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
     };
 

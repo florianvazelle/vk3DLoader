@@ -6,11 +6,11 @@
 #ifndef FRAMEBUFFERATTACHMENT_HPP
 #define FRAMEBUFFERATTACHMENT_HPP
 
-#include <vulkan/vulkan.h>
-
-#include <NonCopyable.hpp>
-#include <common/Device.hpp>
-#include <common/SwapChain.hpp>
+// clang-format off
+#include <vulkan/vulkan_core.h>  // for VkImage, VkImageView, VkSampler, VkF...
+namespace vkl { class Device; }
+namespace vkl { class SwapChain; }
+// clang-format on
 
 namespace vkl {
 

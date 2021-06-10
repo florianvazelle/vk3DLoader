@@ -7,42 +7,35 @@
 
 #pragma once
 
-#include <algorithm>
-#include <array>
-#include <cstdint>
-#include <cstdlib>
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <optional>
-#include <set>
-#include <stdexcept>
-#include <vector>
-
+// clang-format off
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_vulkan.h>
-
-#include <common/Application.hpp>
-#include <common/DescriptorPool.hpp>
-#include <common/DescriptorSetLayout.hpp>
-#include <common/DescriptorSets.hpp>
-#include <common/GraphicsPipeline.hpp>
-#include <common/ImGui/ImGuiApp.hpp>
-#include <common/Model.hpp>
-#include <common/buffer/Buffer.hpp>
-#include <common/buffer/UniformBuffers.hpp>
-#include <shadow/Basic/BasicCommandBuffers.hpp>
-#include <shadow/Basic/BasicDescriptorSets.hpp>
-#include <shadow/Basic/BasicGraphicsPipeline.hpp>
-#include <shadow/Basic/BasicRenderPass.hpp>
-#include <shadow/Depth/DepthCommandBuffers.hpp>
-#include <shadow/Depth/DepthDescriptorSets.hpp>
-#include <shadow/Depth/DepthGraphicsPipeline.hpp>
-#include <shadow/Depth/DepthRenderPass.hpp>
+#include <vulkan/vulkan_core.h>                    // for VkDescriptorPoolSize
+#include <common/Application.hpp>                  // for Application
+#include <common/DescriptorPool.hpp>               // for DescriptorPool
+#include <common/DescriptorSetLayout.hpp>          // for DescriptorSetLayout
+#include <common/ImGui/ImGuiApp.hpp>               // for ImGuiApp
+#include <common/Model.hpp>                        // for Model
+#include <common/buffer/Buffer.hpp>                // for Buffer
+#include <common/buffer/UniformBuffers.hpp>        // for UniformBuffers
+#include <common/struct/Depth.hpp>                 // for Depth
+#include <common/struct/DepthMVP.hpp>              // for DepthMVP
+#include <cstdlib>                                 // for size_t
+#include <shadow/Basic/BasicCommandBuffers.hpp>    // for BasicCommandBuffers
+#include <shadow/Basic/BasicDescriptorSets.hpp>    // for BasicDescriptorSets
+#include <shadow/Basic/BasicGraphicsPipeline.hpp>  // for BasicGraphicsPipeline
+#include <shadow/Basic/BasicRenderPass.hpp>        // for BasicRenderPass
+#include <shadow/Depth/DepthCommandBuffers.hpp>    // for DepthCommandBuffers
+#include <shadow/Depth/DepthDescriptorSets.hpp>    // for DepthDescriptorSets
+#include <shadow/Depth/DepthGraphicsPipeline.hpp>  // for DepthGraphicsPipeline
+#include <shadow/Depth/DepthRenderPass.hpp>        // for DepthRenderPass
+#include <string>                                  // for string
+#include <vector>                                  // for allocator, vector
+#include <common/CommandPool.hpp>                  // for CommandPool
+#include <common/struct/Material.hpp>              // for Material
+#include <common/struct/Vertex.hpp>                // for Vertex
+// clang-format on
 
 namespace vkl {
 
@@ -59,10 +52,10 @@ namespace vkl {
 
     CommandPool commandPool;
 
-    VertexBuffer vertexBuffer;
-    MVPUniformBuffers uniformBuffers;
-    DepthUniformBuffers depthUniformBuffer;
-    MaterialBuffer materialUniformBuffer;
+    Buffer<Vertex> vertexBuffer;
+    UniformBuffers<DepthMVP> uniformBuffers;
+    UniformBuffers<Depth> depthUniformBuffer;
+    Buffer<Material> materialUniformBuffer;
 
     /**
      * Depth
@@ -74,6 +67,11 @@ namespace vkl {
     const std::vector<VkDescriptorPoolSize> psDepth;
     VkDescriptorPoolCreateInfo dpiDepth;
     DescriptorPool dpDepth;
+
+    std::vector<const IRenderPass*> vecRPDepth;
+    std::vector<const IUniformBuffers*> vecUBDepth;
+    std::vector<const IBuffer*> vecVertexBuffer;
+
     DepthDescriptorSets dsDepth;
     DepthCommandBuffers cbDepth;
 
@@ -87,6 +85,11 @@ namespace vkl {
     const std::vector<VkDescriptorPoolSize> psBasic;
     VkDescriptorPoolCreateInfo dpiBasic;
     DescriptorPool dpBasic;
+
+    std::vector<const IRenderPass*> vecRPBasic;
+    std::vector<const IUniformBuffers*> vecUBBasic;
+    std::vector<const IBuffer*> vecBBasic;
+
     BasicDescriptorSets dsBasic;
     BasicCommandBuffers cbBasic;
 

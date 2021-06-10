@@ -1,14 +1,114 @@
+// clang-format off
 #include <shadow/ShadowMapping.hpp>
-
-#include <common/misc/DescriptorPool.hpp>
-#include <common/misc/DescriptorSetLayout.hpp>
-
-#include <chrono>
-
+#include <chrono>                                  // for duration, operator-
+#include <common/misc/DescriptorPool.hpp>          // for descriptorPoolSize
+#include <common/misc/DescriptorSetLayout.hpp>     // for descriptorSetLayou...
+#include <cstdint>                                 // for uint32_t, UINT64_MAX
+#include <cstring>                                 // for memcpy
+#include <deque>                                   // for deque
+#include <memory>                                  // for allocator_traits<>...
+#include <stdexcept>                               // for runtime_error
+#include <GLFW/glfw3.h>                            // for glfwWaitEvents
+#include <common/Application.hpp>                  // for Application, Debug...
+#include <common/DebugUtilsMessenger.hpp>          // for vkl
+#include <common/DescriptorPool.hpp>               // for DescriptorPool
+#include <common/Device.hpp>                       // for Device
+#include <common/ImGui/ImGuiApp.hpp>               // for ImGuiApp
+#include <common/Model.hpp>                        // for Model
+#include <common/SwapChain.hpp>                    // for SwapChain
+#include <common/SyncObjects.hpp>                  // for SyncObjects
+#include <common/Window.hpp>                       // for Window
+#include <common/buffer/Buffer.hpp>                // for Buffer
+#include <common/buffer/UniformBuffers.hpp>        // for UniformBuffers
+#include <common/struct/Depth.hpp>                 // for Depth
+#include <common/struct/DepthMVP.hpp>              // for DepthMVP
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>                                 // for Text, ColorEdit3
+#include <imgui_impl_glfw.h>                       // for ImGui_ImplGlfw_New...
+#include <imgui_impl_vulkan.h>                     // for ImGui_ImplVulkan_N...
+#include <shadow/Basic/BasicCommandBuffers.hpp>    // for BasicCommandBuffers
+#include <shadow/Basic/BasicDescriptorSets.hpp>    // for BasicDescriptorSets
+#include <shadow/Basic/BasicGraphicsPipeline.hpp>  // for BasicGraphicsPipeline
+#include <shadow/Basic/BasicRenderPass.hpp>        // for BasicRenderPass
+#include <shadow/Depth/DepthCommandBuffers.hpp>    // for DepthCommandBuffers
+#include <shadow/Depth/DepthDescriptorSets.hpp>    // for DepthDescriptorSets
+#include <shadow/Depth/DepthGraphicsPipeline.hpp>  // for DepthGraphicsPipeline
+#include <shadow/Depth/DepthRenderPass.hpp>        // for DepthRenderPass
+#include <common/buffer/IBuffer.hpp>               // for IBuffer
+#include <common/RenderPass.hpp>                   // for IRenderPass
+#include <common/buffer/IBuffer.hpp>               // for IUniformBuffers
+// clang-format on
 
 using namespace vkl;
+
+struct Light {
+  glm::vec3 position;
+  glm::vec3 axis;
+};
+
+static Light light = {
+    .axis = glm::vec3(1.f, 1.5f, 1.f),
+};
+
+void updateBasicUniformBuffers(const Device& device,
+                               const SwapChain& swapChain,
+                               std::deque<Buffer<DepthMVP>>& uniformBuffers,
+                               float time,
+                               uint32_t currentImage) {
+  DepthMVP& ubo = uniformBuffers.at(currentImage).data().at(0);
+
+  ubo.model = glm::mat4(1.0f);
+  ubo.view  = glm::lookAt(glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+  const float aspect = swapChain.extent().width / (float)swapChain.extent().height;
+  ubo.proj           = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
+  // ubo.model = glm::mat4(1.0f);
+  // ubo.view  = glm::lookAt(light.position, glm::vec3(0.0f), glm::vec3(0, 1, 0));
+  // ubo.proj  = glm::perspective(glm::radians(80.0f), 1.0f, 0.1f, 100.0f);
+
+  ubo.proj[1][1] *= -1;
+
+  light.position = glm::vec3(glm::vec4(light.axis, 1)
+                             * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+
+  ubo.lightPos = light.position;
+
+  void* data;
+  vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(DepthMVP), 0, &data);
+  memcpy(data, &ubo, sizeof(DepthMVP));
+  vkUnmapMemory(device.logical(), uniformBuffers[currentImage].memory());
+}
+
+void updateDepthUniformBuffers(const Device& device,
+                               const SwapChain& swapChain,
+                               std::deque<Buffer<Depth>>& uniformBuffers,
+                               float time,
+                               uint32_t currentImage) {
+  Depth& ubo = uniformBuffers.at(currentImage).data().at(0);
+
+  // Keep depth range as small as possible
+  // for better shadow map precision
+  float zNear = 0.1f;
+  float zFar  = 10.0f;
+
+  float lightFOV = 45.0f;
+
+  // Matrix from light's point of view
+  glm::mat4 depthModel = glm::mat4(1.0f);
+  glm::mat4 depthView  = glm::lookAt(light.position, glm::vec3(0.0f), glm::vec3(0, 1, 0));
+  glm::mat4 depthProj  = glm::perspective(glm::radians(lightFOV), 1.0f, zNear, zFar);
+
+  depthProj[1][1] *= -1;
+
+  ubo.depthMVP = depthProj * depthView * depthModel;
+
+  void* data;
+  vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(Depth), 0, &data);
+  memcpy(data, &ubo, sizeof(Depth));
+  vkUnmapMemory(device.logical(), uniformBuffers[currentImage].memory());
+}
 
 /**
  * Basic is for SwapChain render (default)
@@ -36,10 +136,16 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       model(modelPath),
 
       // Buffer
-      vertexBuffer(device, model.vertices()),
-      uniformBuffers(device, swapChain),
-      materialUniformBuffer(device, model.materials().at(0)),
-      depthUniformBuffer(device, swapChain),
+      vertexBuffer(device,
+                   model.vertices(),
+                   VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+      uniformBuffers(device, swapChain, &updateBasicUniformBuffers),
+      materialUniformBuffer(device,
+                            model.materials(),
+                            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+      depthUniformBuffer(device, swapChain, &updateDepthUniformBuffers),
 
       /**
        * Depth
@@ -64,11 +170,18 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       dpiDepth(misc::descriptorPoolCreateInfo(psDepth, (swapChain.numImages() + 1))),
       dpDepth(device, dpiDepth),
 
+      // ~ My Vectors
+      // Utile car sinon les pointeurs change, donc on copie d'abord par valeur
+      // et on passe le vecteur qui sera concervé dans la class Application
+      vecRPDepth({&rpDepth}),
+      vecUBDepth({&depthUniformBuffer}),
+      vecVertexBuffer({&vertexBuffer}),
+
       // 5. Descriptor Sets
-      dsDepth(device, swapChain, rpDepth, uniformBuffers, materialUniformBuffer, depthUniformBuffer, dslDepth, dpDepth),
+      dsDepth(device, swapChain, dslDepth, dpDepth, vecRPDepth, {}, vecUBDepth),
 
       // 6. Command Buffers
-      cbDepth(device, rpDepth, swapChain, gpDepth, commandPool, vertexBuffer, dsDepth),
+      cbDepth(device, rpDepth, swapChain, gpDepth, commandPool, dsDepth, vecVertexBuffer),
 
       /**
        * Basic
@@ -101,11 +214,16 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       dpiBasic(misc::descriptorPoolCreateInfo(psBasic, (swapChain.numImages() * 2 + 1) + (swapChain.numImages() + 1))),
       dpBasic(device, dpiBasic),
 
+      // ~ My Vectors 2
+      vecRPBasic({&rpDepth}),
+      vecUBBasic({&uniformBuffers}),
+      vecBBasic({&materialUniformBuffer}),
+
       // 5. Descriptor Sets
-      dsBasic(device, swapChain, rpDepth, uniformBuffers, materialUniformBuffer, depthUniformBuffer, dslBasic, dpBasic),
+      dsBasic(device, swapChain, dslBasic, dpBasic, vecRPBasic, vecBBasic, vecUBBasic),
 
       // 6. Command Buffers
-      cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, vertexBuffer, dsBasic),
+      cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, dsBasic, vecVertexBuffer),
 
       /* ImGui */
       interface(instance, window, device, swapChain, gpBasic) {}
@@ -166,7 +284,7 @@ void ShadowMapping::drawFrame(bool& framebufferResized) {
   float time       = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
   depthUniformBuffer.update(time, imageIndex);
-  uniformBuffers.data(imageIndex).depthBiasMVP = depthUniformBuffer.data(imageIndex).depthMVP;
+  uniformBuffers.data(imageIndex).at(0).depthBiasMVP = depthUniformBuffer.data(imageIndex).at(0).depthMVP;
   uniformBuffers.update(time, imageIndex);
   materialUniformBuffer.update(time, imageIndex);
 
@@ -246,10 +364,10 @@ void ShadowMapping::drawImGui() {
     ImGui::SliderFloat3("Axis", glm::value_ptr(light.axis), 1.0f, 5.0f);
     ImGui::Separator();
     ImGui::Text("Material Setting");
-    ImGui::ColorEdit3("diffuse", glm::value_ptr(materialUniformBuffer.data().diffuse));
-    ImGui::ColorEdit3("specular", glm::value_ptr(materialUniformBuffer.data().specular));
-    ImGui::ColorEdit3("ambient", glm::value_ptr(materialUniformBuffer.data().ambient));
-    ImGui::SliderFloat("shininess", &(materialUniformBuffer.data().shininess), 0.5f, 256.0f);
+    ImGui::ColorEdit3("diffuse", glm::value_ptr(materialUniformBuffer.data().at(0).diffuse));
+    ImGui::ColorEdit3("specular", glm::value_ptr(materialUniformBuffer.data().at(0).specular));
+    ImGui::ColorEdit3("ambient", glm::value_ptr(materialUniformBuffer.data().at(0).ambient));
+    ImGui::SliderFloat("shininess", &(materialUniformBuffer.data().at(0).shininess), 0.5f, 256.0f);
     ImGui::Separator();
     ImGui::Text("Depth Setting");
     ImGui::SliderFloat("constant", &cbDepth.depthBiasConstant(), 0.0f, 5.0f);

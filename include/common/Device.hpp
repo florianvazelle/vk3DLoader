@@ -6,16 +6,16 @@
 #ifndef DEVICE_HPP
 #define DEVICE_HPP
 
-#include <vulkan/vulkan.h>
-#include <vector>
-
-#include <NonCopyable.hpp>
-#include <common/QueueFamily.hpp>
+// clang-format off
+#include <vulkan/vulkan_core.h>    // for VkPhysicalDevice, VkQueue, VkDevice
+#include <NonCopyable.hpp>         // for NonCopyable
+#include <common/QueueFamily.hpp>  // for QueueFamilyIndices
+#include <vector>                  // for vector
+namespace vkl { class Instance; }
+namespace vkl { class Window; }
+// clang-format on
 
 namespace vkl {
-
-  class Instance;
-  class Window;
 
   /**
    * @brief  A class which allows to manage devices.

@@ -9,6 +9,7 @@
 #include <vulkan/vulkan.h>
 #include <NonCopyable.hpp>
 #include <common/CommandPool.hpp>
+#include <common/DescriptorSets.hpp>
 #include <common/Device.hpp>
 #include <common/GraphicsPipeline.hpp>
 #include <common/RenderPass.hpp>
@@ -21,10 +22,12 @@ namespace vkl {
   class CommandBuffers : public NonCopyable {
   public:
     CommandBuffers(const Device& device,
-                   const RenderPass& renderpass,
+                   const IRenderPass& renderpass,
                    const SwapChain& swapChain,
                    const GraphicsPipeline& graphicsPipeline,
-                   const CommandPool& commandPool);
+                   const CommandPool& commandPool,
+                   const DescriptorSets& descriptorSets,
+                   const std::vector<const IBuffer*>& buffers);
     ~CommandBuffers();
 
     inline VkCommandBuffer& command(uint32_t index) { return m_commandBuffers[index]; }
@@ -39,10 +42,12 @@ namespace vkl {
     std::vector<VkCommandBuffer> m_commandBuffers;
 
     const Device& m_device;
-    const RenderPass& m_renderPass;
+    const IRenderPass& m_renderPass;
     const SwapChain& m_swapChain;
     const GraphicsPipeline& m_graphicsPipeline;
     const CommandPool& m_commandPool;
+    const DescriptorSets& m_descriptorSets;
+    const std::vector<const IBuffer*>& m_buffers;
 
     virtual void createCommandBuffers() = 0;
     void destroyCommandBuffers();

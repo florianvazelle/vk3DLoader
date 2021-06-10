@@ -6,10 +6,11 @@
 #ifndef DESCRIPTORPOOL_HPP
 #define DESCRIPTORPOOL_HPP
 
-#include <vulkan/vulkan.h>
-#include <NonCopyable.hpp>
-#include <common/Device.hpp>
-#include <common/SwapChain.hpp>
+// clang-format off
+#include <vulkan/vulkan_core.h>  // for VkDescriptorPool, VkDescriptorPoolCr...
+#include <NonCopyable.hpp>       // for NonCopyable
+namespace vkl { class Device; }
+// clang-format on
 
 namespace vkl {
 

@@ -1,26 +1,31 @@
+// clang-format off
 #include <common/DescriptorSets.hpp>
-
-#include <common/misc/DescriptorSet.hpp>
-#include <common/struct/Material.hpp>
+#include <stddef.h>                        // for size_t
+#include <stdint.h>                        // for uint32_t
+#include <common/DescriptorPool.hpp>       // for DescriptorPool
+#include <common/DescriptorSetLayout.hpp>  // for DescriptorSetLayout
+#include <common/Device.hpp>               // for Device
+#include <common/SwapChain.hpp>            // for SwapChain
+#include <common/misc/DescriptorSet.hpp>   // for descriptorSetAllocateInfo
+#include <stdexcept>                       // for runtime_error
+// clang-format on
 
 using namespace vkl;
 
 DescriptorSets::DescriptorSets(const Device& device,
                                const SwapChain& swapChain,
-                               const DepthRenderPass& renderPass,
-                               const UniformBuffers<MVP>& uniformBuffers,
-                               const MaterialBuffer& materialUniformBuffer,
-                               const UniformBuffers<Depth>& depthUniformBuffer,
                                const DescriptorSetLayout& descriptorSetLayout,
-                               const DescriptorPool& descriptorPool)
+                               const DescriptorPool& descriptorPool,
+                               const std::vector<const IRenderPass*>& renderPasses,
+                               const std::vector<const IBuffer*>& buffers,
+                               const std::vector<const IUniformBuffers*>& uniformBuffers)
     : m_device(device),
       m_swapChain(swapChain),
-      m_renderPass(renderPass),
-      m_uniformBuffers(uniformBuffers),
-      m_materialUniformBuffer(materialUniformBuffer),
-      m_depthUniformBuffer(depthUniformBuffer),
       m_descriptorSetLayout(descriptorSetLayout),
-      m_descriptorPool(descriptorPool) {}
+      m_descriptorPool(descriptorPool),
+      m_renderPasses(renderPasses),
+      m_buffers(buffers),
+      m_uniformBuffers(uniformBuffers) {}
 
 void DescriptorSets::recreate() { createDescriptorSets(); }
 

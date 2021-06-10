@@ -1,32 +1,37 @@
 #ifndef BASICCOMMANDBUFFERS_HPP
 #define BASICCOMMANDBUFFERS_HPP
 
-#include <vulkan/vulkan.h>
-#include <vector>
-
-#include <common/CommandBuffers.hpp>
-#include <common/DescriptorSets.hpp>
-#include <common/buffer/Buffer.hpp>
+// clang-format off
+#include <common/CommandBuffers.hpp>  // for CommandBuffers
+#include <vector>                     // for vector
+namespace vkl { class CommandPool; }
+namespace vkl { class DescriptorSets; }
+namespace vkl { class Device; }
+namespace vkl { class GraphicsPipeline; }
+namespace vkl { class IBuffer; }
+namespace vkl { class IRenderPass; }
+namespace vkl { class SwapChain; }
+// clang-format on
 
 namespace vkl {
 
   class BasicCommandBuffers : public CommandBuffers {
   public:
     BasicCommandBuffers(const Device& device,
-                        const BasicRenderPass& m_basicRenderPass,
+                        const IRenderPass& renderPass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
-                        const VertexBuffer& vertexBuffer,
-                        const DescriptorSets& descriptorSets);
+                        const DescriptorSets& descriptorSets,
+                        const std::vector<const IBuffer*>& buffers)
+        : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, descriptorSets, buffers) {
+      createCommandBuffers();
+    }
+
     void recreate();
 
   private:
     void createCommandBuffers();
-
-    const BasicRenderPass& m_basicRenderPass;
-    const VertexBuffer& m_vertexBuffer;
-    const DescriptorSets& m_descriptorSets;
   };
 
 }  // namespace vkl

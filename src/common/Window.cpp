@@ -1,9 +1,11 @@
+// clang-format off
 #include <common/Window.hpp>
-
-#include <common/Instance.hpp>
-
-#include <exception>
-#include <iostream>
+#include <stdint.h>                  // for uint32_t
+#include <common/Instance.hpp>       // for Instance
+#include <stdexcept>                 // for runtime_error
+#include <GLFW/glfw3.h>              // for glfwCreateWindow, glfwCreateWind...
+#include <glm/detail/type_vec2.hpp>  // for vec<>::(anonymous)
+// clang-format on
 
 using namespace vkl;
 

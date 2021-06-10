@@ -6,18 +6,18 @@
 #ifndef DESCRIPTORSETS_HPP
 #define DESCRIPTORSETS_HPP
 
-#include <vulkan/vulkan.h>
-
-#include <NonCopyable.hpp>
-#include <common/DescriptorPool.hpp>
-#include <common/DescriptorSetLayout.hpp>
-#include <common/Device.hpp>
-#include <common/buffer/Buffer.hpp>
-#include <common/buffer/UniformBuffers.hpp>
-#include <common/struct/Depth.hpp>
-#include <common/struct/MVP.hpp>
-#include <shadow/Basic/BasicRenderPass.hpp>
-#include <shadow/Depth/DepthRenderPass.hpp>
+// clang-format off
+#include <vulkan/vulkan_core.h>  // for VkDescriptorSet, VkDescriptorSet_T
+#include <NonCopyable.hpp>       // for NonCopyable
+#include <vector>                // for vector
+namespace vkl { class DescriptorPool; }
+namespace vkl { class DescriptorSetLayout; }
+namespace vkl { class Device; }
+namespace vkl { class IBuffer; }
+namespace vkl { class IRenderPass; }
+namespace vkl { class IUniformBuffers; }
+namespace vkl { class SwapChain; }
+// clang-format on
 
 namespace vkl {
 
@@ -25,12 +25,11 @@ namespace vkl {
   public:
     DescriptorSets(const Device& device,
                    const SwapChain& swapChain,
-                   const DepthRenderPass& renderPass,
-                   const UniformBuffers<MVP>& uniformBuffers,
-                   const MaterialBuffer& materialUniformBuffer,
-                   const UniformBuffers<Depth>& depthUniformBuffer,
                    const DescriptorSetLayout& descriptorSetLayout,
-                   const DescriptorPool& descriptorPool);
+                   const DescriptorPool& descriptorPool,
+                   const std::vector<const IRenderPass*>& renderPasses,
+                   const std::vector<const IBuffer*>& buffers,
+                   const std::vector<const IUniformBuffers*>& uniformBuffers);
     // ~DescriptorSets(); no need destructor because VkDescriptorSet is deleted when pool is deleted
 
     inline const VkDescriptorSet& descriptor(int index) const { return m_descriptorSets.at(index); }
@@ -42,12 +41,11 @@ namespace vkl {
 
     const Device& m_device;
     const SwapChain& m_swapChain;
-    const DepthRenderPass& m_renderPass;
-    const UniformBuffers<MVP>& m_uniformBuffers;
-    const MaterialBuffer& m_materialUniformBuffer;
-    const UniformBuffers<Depth>& m_depthUniformBuffer;
     const DescriptorSetLayout& m_descriptorSetLayout;
     const DescriptorPool& m_descriptorPool;
+    const std::vector<const IRenderPass*>& m_renderPasses;
+    const std::vector<const IBuffer*>& m_buffers;
+    const std::vector<const IUniformBuffers*>& m_uniformBuffers;
 
     void allocateDescriptorSets();
     virtual void createDescriptorSets() = 0;

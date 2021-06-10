@@ -6,13 +6,16 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include <NonCopyable.hpp>
-#include <common/DebugUtilsMessenger.hpp>
-#include <common/Device.hpp>
-#include <common/Instance.hpp>
-#include <common/SwapChain.hpp>
-#include <common/SyncObjects.hpp>
-#include <common/Window.hpp>
+// clang-format off
+#include <NonCopyable.hpp>                 // for NonCopyable
+#include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
+#include <common/Device.hpp>               // for Device
+#include <common/Instance.hpp>             // for Instance
+#include <common/SwapChain.hpp>            // for SwapChain
+#include <common/SyncObjects.hpp>          // for SyncObjects
+#include <common/Window.hpp>               // for Window
+#include <string>                          // for allocator, string
+// clang-format on
 
 #define MAX_FRAMES_IN_FLIGHT 2
 

@@ -1,14 +1,18 @@
+// clang-format off
 #include <shadow/Depth/DepthGraphicsPipeline.hpp>
-
-#include <depth_basic_vert.h>
-
-#include <common/DescriptorSetLayout.hpp>
-#include <common/Device.hpp>
-#include <common/RenderPass.hpp>
-#include <common/SwapChain.hpp>
-#include <common/misc/GraphicsPipeline.hpp>
-#include <common/struct/Vertex.hpp>
-#include <iostream>
+#include <depth_basic_vert.h>                // for DEPTH_BASIC_VERT
+#include <stdint.h>                          // for uint32_t
+#include <vulkan/vulkan_core.h>              // for VkDynamicState, VkPipeli...
+#include <common/DescriptorSetLayout.hpp>    // for DescriptorSetLayout
+#include <common/Device.hpp>                 // for Device
+#include <common/RenderPass.hpp>             // for RenderPass
+#include <common/SwapChain.hpp>              // for vkl
+#include <common/misc/GraphicsPipeline.hpp>  // for pipelineShaderStageCreat...
+#include <common/struct/Vertex.hpp>          // for Vertex
+#include <stdexcept>                         // for runtime_error
+#include <vector>                            // for vector
+#include <common/GraphicsPipeline.hpp>       // for GraphicsPipeline
+// clang-format on
 
 using namespace vkl;
 
@@ -46,8 +50,8 @@ void DepthGraphicsPipeline::createPipeline() {
   VkPipelineColorBlendStateCreateInfo colorBlending;
   VkPipelineDepthStencilStateCreateInfo depthStencil;
 
-  initDefaultPipeline(vertexInputInfo, inputAssembly, viewportState, rasterizer, multisampling, colorBlending,
-                      depthStencil);
+  initDefaultPipeline<Vertex>(vertexInputInfo, inputAssembly, viewportState, rasterizer, multisampling, colorBlending,
+                              depthStencil);
 
   {
     /* Depth pipeline (vertex shader only) */

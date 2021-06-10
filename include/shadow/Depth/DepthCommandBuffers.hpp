@@ -1,25 +1,36 @@
 #ifndef DEPTHCOMMANDBUFFERS_HPP
 #define DEPTHCOMMANDBUFFERS_HPP
 
-#include <vulkan/vulkan.h>
-#include <vector>
-
-#include <common/CommandBuffers.hpp>
-#include <common/DescriptorSets.hpp>
-#include <common/buffer/Buffer.hpp>
-#include <shadow/Depth/DepthRenderPass.hpp>
+// clang-format off
+#include <stdint.h>                   // for uint32_t
+#include <cassert>                    // for assert
+#include <common/CommandBuffers.hpp>  // for CommandBuffers
+#include <iostream>                   // for operator<<, endl, basic_ostream
+#include <vector>                     // for vector
+namespace vkl { class CommandPool; }
+namespace vkl { class DescriptorSets; }
+namespace vkl { class Device; }
+namespace vkl { class GraphicsPipeline; }
+namespace vkl { class IBuffer; }
+namespace vkl { class IRenderPass; }
+namespace vkl { class SwapChain; }
+// clang-format on
 
 namespace vkl {
 
   class DepthCommandBuffers : public CommandBuffers {
   public:
     DepthCommandBuffers(const Device& device,
-                        const DepthRenderPass& depthRenderpass,
+                        const IRenderPass& renderPass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
-                        const VertexBuffer& vertexBuffer,
-                        const DescriptorSets& descriptorSets);
+                        const DescriptorSets& descriptorSets,
+                        const std::vector<const IBuffer*>& buffers)
+        : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, descriptorSets, buffers) {
+      createCommandBuffers();
+    }
+
     void recreate();
     void recordCommandBuffers(uint32_t bufferIdx);
 
@@ -34,10 +45,6 @@ namespace vkl {
     float m_depthBiasConstant = 1.25f;
     // Slope depth bias factor, applied depending on polygon's slope
     float m_depthBiasSlope = 1.75f;
-
-    const DepthRenderPass& m_depthRenderpass;
-    const VertexBuffer& m_vertexBuffer;
-    const DescriptorSets& m_descriptorSets;
   };
 
 }  // namespace vkl

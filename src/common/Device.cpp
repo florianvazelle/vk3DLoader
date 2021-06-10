@@ -1,15 +1,17 @@
+// clang-format off
 #include <common/Device.hpp>
-
-#include <common/Instance.hpp>
-#include <common/Window.hpp>
-
-#include <iostream>
-#include <map>
-#include <set>
-#include <vector>
-
-#include <common/QueueFamily.hpp>
-#include <common/SwapChain.hpp>
+#include <common/Instance.hpp>     // for Instance, Instance::ValidationLayers
+#include <common/QueueFamily.hpp>  // for QueueFamilyIndices, QueueFamily, vkl
+#include <common/SwapChain.hpp>    // for SwapChainSupportDetails, SwapChain
+#include <common/Window.hpp>       // for Window
+#include <cstdint>                 // for uint32_t
+#include <iostream>                // for operator<<, basic_ostream, cout
+#include <optional>                // for optional
+#include <set>                     // for set
+#include <stdexcept>               // for runtime_error
+#include <string>                  // for string
+#include <vector>                  // for vector, allocator
+// clang-format on
 
 using namespace vkl;
 

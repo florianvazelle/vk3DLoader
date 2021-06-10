@@ -6,15 +6,17 @@
 #ifndef SWAPCHAIN_HPP
 #define SWAPCHAIN_HPP
 
-#include <vulkan/vulkan.h>
-
-#include <NonCopyable.hpp>
-#include <vector>
+// clang-format off
+#include <stddef.h>              // for size_t
+#include <stdint.h>              // for uint32_t
+#include <vulkan/vulkan_core.h>  // for VkSurfaceFormatKHR, VkPresentModeKHR
+#include <NonCopyable.hpp>       // for NonCopyable
+#include <vector>                // for vector
+namespace vkl { class Device; }
+namespace vkl { class Window; }
+// clang-format on
 
 namespace vkl {
-  class Device;
-  class Window;
-
   struct SwapChainSupportDetails {
     VkSurfaceCapabilitiesKHR capabilities;
     std::vector<VkSurfaceFormatKHR> formats;

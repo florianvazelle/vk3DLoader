@@ -6,8 +6,11 @@
 #ifndef QUEUEFAMILY_HPP
 #define QUEUEFAMILY_HPP
 
-#include <vulkan/vulkan.h>
-#include <optional>
+// clang-format off
+#include <stdint.h>              // for uint32_t
+#include <vulkan/vulkan_core.h>  // for VkPhysicalDevice, VkSurfaceKHR
+#include <optional>              // for optional
+// clang-format on
 
 namespace vkl {
   struct QueueFamilyIndices {

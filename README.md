@@ -30,6 +30,26 @@ cmake --build build
 ./build/bin/vk3DLoaderTests
 ```
 
+### Developement
+
+To run it with [include-what-you-use](https://github.com/include-what-you-use/include-what-you-use) :
+```bash
+sudo apt install llvm-10-dev libclang-10-dev clang-10
+git clone https://github.com/include-what-you-use/include-what-you-use.git iwyu
+
+cd iwyu
+git checkout clang_10
+
+mkdir build
+cd build
+
+cmake -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10 ..
+
+cd ..
+CC="clang" CXX="clang++" cmake -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE="iwyu/build/bin/include-what-you-use;-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args" -Bbuild
+cmake --build build 2> iwyu.log
+```
+
 ## Dependencies
 
 - C++20 compiler :

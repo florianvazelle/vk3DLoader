@@ -1,6 +1,12 @@
-#include <shadow/ShadowMapping.hpp>
-
-#include <cxxopts.hpp>
+// clang-format off
+#include <stdlib.h>                  // for EXIT_FAILURE, EXIT_SUCCESS
+#include <cxxopts.hpp>               // for Options, ParseResult, value, Opt...
+#include <iostream>                  // for operator<<, cout, ostream, basic...
+#include <memory>                    // for allocator, shared_ptr
+#include <shadow/ShadowMapping.hpp>  // for glfwInit, glfwTerminate, glfwWin...
+#include <string>                    // for string, operator<<, char_traits
+#include <common/Application.hpp>    // for DebugOption
+// clang-format on
 
 int main(int argc, char** argv) {
   cxxopts::Options options(argv[0], "A program to load and visualize a 3D model !");

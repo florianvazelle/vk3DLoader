@@ -1,23 +1,20 @@
+// clang-format off
 #include <shadow/Basic/BasicCommandBuffers.hpp>
-
-#include <iostream>
-#include <stdexcept>
+#include <stddef.h>                     // for size_t
+#include <stdint.h>                     // for uint32_t
+#include <vulkan/vulkan_core.h>         // for VkCommandBuffer, VkCommandBuf...
+#include <stdexcept>                    // for runtime_error
+#include <common/CommandPool.hpp>       // for CommandPool, vkl
+#include <common/DescriptorSets.hpp>    // for DescriptorSets
+#include <common/Device.hpp>            // for Device
+#include <common/GraphicsPipeline.hpp>  // for GraphicsPipeline
+#include <common/RenderPass.hpp>        // for IRenderPass
+#include <common/SwapChain.hpp>         // for SwapChain
+#include <common/buffer/Buffer.hpp>     // for Buffer
+#include <common/struct/Vertex.hpp>     // for Vertex
+// clang-format on
 
 using namespace vkl;
-
-BasicCommandBuffers::BasicCommandBuffers(const Device& device,
-                                         const BasicRenderPass& basicRenderPass,
-                                         const SwapChain& swapChain,
-                                         const GraphicsPipeline& graphicsPipeline,
-                                         const CommandPool& commandPool,
-                                         const VertexBuffer& vertexBuffer,
-                                         const DescriptorSets& descriptorSets)
-    : CommandBuffers(device, basicRenderPass, swapChain, graphicsPipeline, commandPool),
-      m_basicRenderPass(basicRenderPass),
-      m_vertexBuffer(vertexBuffer),
-      m_descriptorSets(descriptorSets) {
-  createCommandBuffers();
-}
 
 void BasicCommandBuffers::recreate() {
   destroyCommandBuffers();
@@ -88,10 +85,11 @@ void BasicCommandBuffers::createCommandBuffers() {
       vkCmdBindDescriptorSets(m_commandBuffers.at(i), VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline.layout(), 0,
                               1, &(m_descriptorSets.descriptor(i)), 0, nullptr);
 
-      const VkBuffer vertexBuffers[] = {m_vertexBuffer.buffer()};
-      const VkDeviceSize offsets[]   = {0};
+      const Buffer<Vertex>* vertexBuffer = dynamic_cast<const Buffer<Vertex>*>(m_buffers[0]);
+      const VkBuffer vertexBuffers[]     = {vertexBuffer->buffer()};
+      const VkDeviceSize offsets[]       = {0};
       vkCmdBindVertexBuffers(m_commandBuffers.at(i), 0, 1, vertexBuffers, offsets);
-      vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(m_vertexBuffer.data().size()), 1, 0, 0);
+      vkCmdDraw(m_commandBuffers.at(i), static_cast<uint32_t>(vertexBuffer->data().size()), 1, 0, 0);
     }
 
     vkCmdEndRenderPass(m_commandBuffers.at(i));

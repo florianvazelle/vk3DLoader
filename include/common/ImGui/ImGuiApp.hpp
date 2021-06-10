@@ -2,21 +2,18 @@
 #ifndef IMGUIAPP_HPP
 #define IMGUIAPP_HPP
 
-#include <vulkan/vulkan.h>
-
-#include <vector>
-
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_vulkan.h>
-
-#include <common/CommandPool.hpp>
-#include <common/Device.hpp>
-#include <common/ImGui/ImGuiCommandBuffers.hpp>
-#include <common/ImGui/ImGuiRenderPass.hpp>
-#include <common/Instance.hpp>
-#include <common/SwapChain.hpp>
-#include <common/Window.hpp>
+// clang-format off
+#include <stdint.h>                              // for uint32_t
+#include <vulkan/vulkan_core.h>                  // for VkCommandBuffer, VkD...
+#include <common/CommandPool.hpp>                // for CommandPool
+#include <common/ImGui/ImGuiCommandBuffers.hpp>  // for ImGuiCommandBuffers
+#include <common/ImGui/ImGuiRenderPass.hpp>      // for ImGuiRenderPass
+namespace vkl { class Device; }
+namespace vkl { class GraphicsPipeline; }
+namespace vkl { class Instance; }
+namespace vkl { class SwapChain; }
+namespace vkl { class Window; }
+// clang-format on
 
 namespace vkl {
 

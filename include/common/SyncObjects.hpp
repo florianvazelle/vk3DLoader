@@ -6,9 +6,13 @@
 #ifndef SYNCOBJECTS_HPP
 #define SYNCOBJECTS_HPP
 
-#include <vulkan/vulkan.h>
-#include <NonCopyable.hpp>
-#include <vector>
+// clang-format off
+#include <stdint.h>              // for uint32_t
+#include <vulkan/vulkan_core.h>  // for VkFence, VkSemaphore
+#include <NonCopyable.hpp>       // for NonCopyable
+#include <vector>                // for vector
+namespace vkl { class Device; }
+// clang-format on
 
 namespace vkl {
   class Device;

@@ -1,7 +1,7 @@
+// clang-format off
 #include <common/QueueFamily.hpp>
-
-#include <iostream>
-#include <vector>
+#include <vector>  // for vector
+// clang-format on
 
 using namespace vkl;
 

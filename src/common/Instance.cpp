@@ -1,7 +1,11 @@
+// clang-format off
 #include <common/Instance.hpp>
-
-#include <common/DebugUtilsMessenger.hpp>
-#include <common/Window.hpp>
+#include <stdint.h>                        // for uint32_t
+#include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
+#include <common/Window.hpp>               // for Window
+#include <cstring>                         // for strcmp
+#include <stdexcept>                       // for runtime_error
+// clang-format on
 
 using namespace vkl;
 

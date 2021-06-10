@@ -1,7 +1,10 @@
-#include <common/Device.hpp>
+// clang-format off
 #include <common/SyncObjects.hpp>
-
-#include <stdexcept>
+#include <stddef.h>                // for size_t
+#include <common/Device.hpp>       // for Device
+#include <stdexcept>               // for runtime_error
+#include <common/QueueFamily.hpp>  // for vkl
+// clang-format on
 
 using namespace vkl;
 

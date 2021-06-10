@@ -9,3 +9,6 @@
 
 imgui.ini
 **/*.h
+
+/iwyu
+iwyu.log

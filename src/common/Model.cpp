@@ -1,10 +1,15 @@
+// clang-format off
 #include <common/Model.hpp>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
+#include <tiny_obj_loader.h>           // for material_t, attrib_t, (anonymous)
 
-#include <iostream>
-#include <stdexcept>
+#include <iostream>                    // for endl, basic_ostream, cerr, ost...
+#include <stdexcept>                   // for runtime_error
+#include <common/struct/Material.hpp>  // for Material, vkl
+#include <common/struct/Vertex.hpp>    // for Vertex
+#include <glm/glm.hpp>
+// clang-format on
 
 using namespace vkl;
 

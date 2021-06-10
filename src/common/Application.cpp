@@ -1,4 +1,10 @@
+// clang-format off
 #include <common/Application.hpp>
+#include <common/DebugUtilsMessenger.hpp>  // for vkl
+#include <common/Instance.hpp>             // for Instance, Instance::Device...
+#include <common/SwapChain.hpp>            // for SwapChain
+#include <glm/glm.hpp>
+// clang-format on
 
 using namespace vkl;
 

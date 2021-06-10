@@ -1,8 +1,12 @@
-#include <particle/ParticleSystem.hpp>
-
-#include <cxxopts.hpp>
-
-#include <iostream>
+// clang-format off
+#include <stdlib.h>                     // for EXIT_FAILURE, EXIT_SUCCESS
+#include <cxxopts.hpp>                  // for OptionAdder, Options, ParseRe...
+#include <iostream>                     // for operator<<, cout, endl, ostream
+#include <memory>                       // for allocator, shared_ptr
+#include <particle/ParticleSystem.hpp>  // for glfwInit, glfwTerminate, glfw...
+#include <string>                       // for string
+#include <common/Application.hpp>       // for DebugOption
+// clang-format on
 
 int main(int argc, char** argv) {
   cxxopts::Options options(argv[0], "A program to simulate a lava flow !");
@@ -37,9 +41,7 @@ int main(int argc, char** argv) {
   vkl::ParticleSystem app("vkLavaMpm", debugOption);
 
   try {
-    app.run([](){
-      std::cout << "hello lava!\n";
-    });
+    app.run([]() { std::cout << "hello lava!\n"; });
   } catch (std::exception& e) {
     std::cout << e.what() << std::endl;
     return EXIT_FAILURE;

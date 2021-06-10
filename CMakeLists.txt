@@ -65,7 +65,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_IMPL_VULKAN)
 
 # ---- Compile shader into SPIR-V ----
 
-file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/assets/shaders/*.vert" "${CMAKE_SOURCE_DIR}/assets/shaders/*.frag")
+file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/assets/shaders/*.vert" "${CMAKE_SOURCE_DIR}/assets/shaders/*.frag" "${CMAKE_SOURCE_DIR}/assets/shaders/*.comp")
 
 compile_shaders(TARGETS ${SHADERS})
 

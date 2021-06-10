@@ -1,10 +1,17 @@
+// clang-format off
 #include <common/ImGui/ImGuiCommandBuffers.hpp>
-
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_vulkan.h>
-
-#include <iostream>
+#include <imgui.h>                    // for GetDrawData
+#include <imgui_impl_vulkan.h>        // for ImGui_ImplVulkan_RenderDrawData
+#include <vulkan/vulkan_core.h>       // for VkCommandBuffer, VkCommandBuffer_T
+#include <common/CommandBuffers.hpp>  // for CommandBuffers
+#include <common/CommandPool.hpp>     // for CommandPool, vkl
+#include <common/DescriptorSets.hpp>  // for DescriptorSets
+#include <common/Device.hpp>          // for Device
+#include <common/RenderPass.hpp>      // for IRenderPass, RenderPass
+#include <common/SwapChain.hpp>       // for SwapChain
+#include <stdexcept>                  // for runtime_error
+#include <vector>                     // for vector
+// clang-format on
 
 using namespace vkl;
 
@@ -13,7 +20,7 @@ ImGuiCommandBuffers::ImGuiCommandBuffers(const Device& device,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool) {
+    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, *((DescriptorSets*)nullptr), {}) {
   createCommandBuffers();
 }
 

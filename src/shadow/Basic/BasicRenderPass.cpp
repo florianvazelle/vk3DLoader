@@ -1,10 +1,19 @@
+// clang-format off
 #include <shadow/Basic/BasicRenderPass.hpp>
-
-#include <array>
-#include <common/Device.hpp>
-#include <common/SwapChain.hpp>
-#include <common/misc/Device.hpp>
-#include <iostream>
+#include <stddef.h>                          // for size_t
+#include <stdint.h>                          // for uint32_t
+#include <array>                             // for array
+#include <vulkan/vulkan_core.h>              // for VkAttachmentDescription
+#include <common/Device.hpp>                 // for Device
+#include <common/SwapChain.hpp>              // for SwapChain
+#include <common/misc/Device.hpp>            // for findDepthFormat
+#include <memory>                            // for unique_ptr, make_unique
+#include <stdexcept>                         // for runtime_error
+#include <vector>                            // for vector
+#include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
+#include <common/QueueFamily.hpp>            // for vkl
+#include <common/RenderPass.hpp>             // for RenderPass
+// clang-format on
 
 using namespace vkl;
 
@@ -113,16 +122,23 @@ void BasicRenderPass::createRenderPass() {
 
   /* STEP 4 : Les dependances des subpass */
 
-  const std::vector<VkSubpassDependency> dependencies = {
-      {
-          .srcSubpass    = VK_SUBPASS_EXTERNAL,
-          .dstSubpass    = 0,
-          .srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-          .dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-          .srcAccessMask = 0,
-          .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-      },
-  };
+  std::array<VkSubpassDependency, 2> dependencies;
+
+  dependencies[0].srcSubpass      = VK_SUBPASS_EXTERNAL;
+  dependencies[0].dstSubpass      = 0;
+  dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+  dependencies[0].dstStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+  dependencies[0].srcAccessMask   = VK_ACCESS_MEMORY_READ_BIT;
+  dependencies[0].dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+  dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+  dependencies[1].srcSubpass      = 0;
+  dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
+  dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+  dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+  dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+  dependencies[1].dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT;
+  dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
   /* STEP 5 : Création de la render pass */
 
