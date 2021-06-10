@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::CommandBuffers class | vkCommon</title>
+  <title>vkl::StorageBuffer class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>CommandBuffers <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="CommandBuffers_8hpp.html">&lt;common/CommandBuffers.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>StorageBuffer <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="StorageBuffer_8hpp.html">&lt;common/buffer/StorageBuffer.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -55,10 +55,8 @@
               <ul>
                 <li><a href="#base-classes">Base classes</a></li>
                 <li><a href="#derived-classes">Derived classes</a></li>
-                <li><a href="#pub-static-methods">Public static functions</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
-                <li><a href="#pro-methods">Protected functions</a></li>
                 <li><a href="#pro-attribs">Protected variables</a></li>
               </ul>
             </li>
@@ -68,58 +66,48 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
+              class <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>
             </dt>
-            <dd>A class to prohibit copying.</dd>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="derived-classes">
           <h2><a href="#derived-classes">Derived classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classvkl_1_1BasicCommandBuffers.html" class="m-doc">BasicCommandBuffers</a>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              class <a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A templating class to define buffer.</dd>
             <dt>
-              class <a href="classvkl_1_1DepthCommandBuffers.html" class="m-doc">DepthCommandBuffers</a>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              class <a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A templating class to define buffer.</dd>
             <dt>
-              class <a href="classvkl_1_1GraphicCommandBuffers.html" class="m-doc">GraphicCommandBuffers</a>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              class <a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A templating class to define buffer.</dd>
             <dt>
-              class <a href="classvkl_1_1ImGuiCommandBuffers.html" class="m-doc">ImGuiCommandBuffers</a>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              class <a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>
             </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-static-methods">
-          <h2><a href="#pub-static-methods">Public static functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a225136da7546640b7dd78cdf4e366904">
-              <span class="m-doc-wrap-bumper">static void <a href="#a225136da7546640b7dd78cdf4e366904" class="m-doc-self">SingleTimeCommands</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; cmdPool,
-              const std::function&lt;void(const VkCommandBuffer&amp;)&gt;&amp; func)</span>
-            </dt>
-            <dd><span></span></dd>
+            <dd>A templating class to define buffer.</dd>
           </dl>
         </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="ad3a6e1ae996e275cbec5aa5c0b0a70ce">
-              <span class="m-doc-wrap-bumper"><a href="#ad3a6e1ae996e275cbec5aa5c0b0a70ce" class="m-doc-self">CommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderpass,
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
-              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; graphicsPipeline,
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
-              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; descriptorSets,
-              const std::vector&lt;const <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>*&gt;&amp; buffers)</span>
+            <dt id="adc31a6e42835c2851f75a47b696ff09b">
+              <span class="m-doc-wrap-bumper"><a href="#adc31a6e42835c2851f75a47b696ff09b" class="m-doc-self">StorageBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              VkDeviceSize size,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags properties)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af8cd49b90925fa3da03cb5a0b3f7462f">
-              <span class="m-doc-wrap-bumper"><a href="#af8cd49b90925fa3da03cb5a0b3f7462f" class="m-doc-self">~CommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a3f259e6ecb5bc4d98729377186351cca">
+              <span class="m-doc-wrap-bumper"><a href="#a3f259e6ecb5bc4d98729377186351cca" class="m-doc-self">~StorageBuffer</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -127,69 +115,76 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a1a64b32d41018cb11182bbc98b6a7bbc">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1a64b32d41018cb11182bbc98b6a7bbc" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) -&gt; VkCommandBuffer&amp;</span>
+            <dt id="a68f97dcf975885dad145b515d28eff12">
+              <span class="m-doc-wrap-bumper">auto <a href="#a68f97dcf975885dad145b515d28eff12" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">) const -&gt; const VkBuffer&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="adfe2eec15d1815e308b3e5be9e5bb6b9">
-              <span class="m-doc-wrap-bumper">auto <a href="#adfe2eec15d1815e308b3e5be9e5bb6b9" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkCommandBuffer&amp;</span>
+            <dt id="aa512589e4ce12a83bd83fb61d7b73a4a">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa512589e4ce12a83bd83fb61d7b73a4a" class="m-doc-self">memory</a>(</span><span class="m-doc-wrap">) const -&gt; const VkDeviceMemory&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="adeb8d7d7766c9ef7aee407718f2d16ee">
-              <span class="m-doc-wrap-bumper">void <a href="#adeb8d7d7766c9ef7aee407718f2d16ee" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt id="af34d07a11d003347f8370c6ad10349a8">
+              <span class="m-doc-wrap-bumper">auto <a href="#af34d07a11d003347f8370c6ad10349a8" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">) const -&gt; const VkDeviceSize&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pro-methods">
-          <h2><a href="#pro-methods">Protected functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a94081baf921afa1d1b1ec92512f12674">
-              <span class="m-doc-wrap-bumper">void <a href="#a94081baf921afa1d1b1ec92512f12674" class="m-doc-self">createCommandBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a7e83dc6b3fef95fbd5b780c122514662" class="m-doc">createBuffer</a>(</span><span class="m-doc-wrap">VkDeviceSize size,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags properties)</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a5f746be54959d730bde7e96b47f35e50">
-              <span class="m-doc-wrap-bumper">void <a href="#a5f746be54959d730bde7e96b47f35e50" class="m-doc-self">destroyCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
+            <dd>Wrapper for create a new buffer.</dd>
           </dl>
         </section>
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="a1608e811ceb830b4fee0e6cba951a3c2">
-              std::vector&lt;VkCommandBuffer&gt; <a href="#a1608e811ceb830b4fee0e6cba951a3c2" class="m-doc-self">m_commandBuffers</a>
+            <dt id="ae7a255cc3f96ec0b05dbf2a7b3331718">
+              VkBuffer <a href="#ae7a255cc3f96ec0b05dbf2a7b3331718" class="m-doc-self">m_buffer</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a603d1f7d70b2662b4ce37e4a484f3f4a">
-              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a603d1f7d70b2662b4ce37e4a484f3f4a" class="m-doc-self">m_device</a>
+            <dt id="a0cc542ad934a12c3dbeb6e937d77598c">
+              VkDeviceMemory <a href="#a0cc542ad934a12c3dbeb6e937d77598c" class="m-doc-self">m_bufferMemory</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7e8916b515d752dd33e7c0a3475bebe7">
-              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; <a href="#a7e8916b515d752dd33e7c0a3475bebe7" class="m-doc-self">m_renderPass</a>
+            <dt id="ad9c4fbaec42a82b31f5abeccab865363">
+              VkDeviceSize <a href="#ad9c4fbaec42a82b31f5abeccab865363" class="m-doc-self">m_bufferSize</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4f96501aca711b72791e106a05cbce04">
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; <a href="#a4f96501aca711b72791e106a05cbce04" class="m-doc-self">m_swapChain</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ae84834b1be004cacbacf20e38109a81a">
-              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; <a href="#ae84834b1be004cacbacf20e38109a81a" class="m-doc-self">m_graphicsPipeline</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="abceacf315b93fa4a12c149705f48ecb8">
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#abceacf315b93fa4a12c149705f48ecb8" class="m-doc-self">m_commandPool</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a8f96fb5d3d8d28b0573fda9338f9f7d4">
-              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; <a href="#a8f96fb5d3d8d28b0573fda9338f9f7d4" class="m-doc-self">m_descriptorSets</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ad5a9aa376aabb8d03001fa7a13900828">
-              const std::vector&lt;const <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>*&gt;&amp; <a href="#ad5a9aa376aabb8d03001fa7a13900828" class="m-doc-self">m_buffers</a>
+            <dt id="afa55b75d81e8962afe768074851b8b3b">
+              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#afa55b75d81e8962afe768074851b8b3b" class="m-doc-self">m_device</a>
             </dt>
             <dd><span></span></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a7e83dc6b3fef95fbd5b780c122514662"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void vkl::<wbr />StorageBuffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7e83dc6b3fef95fbd5b780c122514662" class="m-doc-self">createBuffer</a>(</span><span class="m-doc-wrap">VkDeviceSize size,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags properties)</span></span>
+            </h3>
+            <p>Wrapper for create a new buffer.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">size</td>
+                  <td>Is the size of the buffer you want</td>
+                </tr>
+                <tr>
+                  <td>usage</td>
+                  <td>Is a flag to describe for what usage the buffer is destinate</td>
+                </tr>
+                <tr>
+                  <td>properties</td>
+                  <td>Is for find the memory type</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
         </section>
       </div>
     </div>

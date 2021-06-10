@@ -50,7 +50,20 @@
 cmake --build build
 ./build/bin/vk3DLoader --help</pre></section><section id="autotoc_md3"><h4><a href="#autotoc_md3">Build and run test suite</a></h4><p>Use the following commands from the project&#x27;s root directory to run the test suite.</p><pre class="m-code">cmake -Bbuild
 cmake --build build
-./build/bin/vk3DLoaderTests</pre></section></section><section id="autotoc_md4"><h3><a href="#autotoc_md4">Dependencies</a></h3><ul><li>C++20 compiler :<ul><li>Visual Studio 2019</li><li>GCC 9+ or Clang 10+</li></ul></li><li><a href="https://cmake.org/">CMake</a> for build system creation (&gt;= 3.8)</li><li><a href="https://conan.io/">Conan</a> for install packages (&gt;= 1.0)</li><li><a href="https://doxygen.org/">Doxygen</a> for generate documentation (&gt;= 1.8, optional)</li></ul></section><section id="autotoc_md5"><h3><a href="#autotoc_md5">References</a></h3><ul><li><a href="https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/">Writing an Efficient Vulkan Renderer</a></li><li><a href="https://developer.nvidia.com/vulkan-shader-resource-binding">Vulkan Shader Resource-Binding</a></li><li><a href="https://www.saschawillems.de/blog/2018/07/19/vulkan-input-attachments-and-sub-passes/">Vulkan Input Attachments and Sub Passes</a></li><li><a href="https://themaister.net/blog/2019/08/14/yet-another-blog-explaining-vulkan-synchronization/">Yet Another Blog Explaining Vulkan Synchronization</a></li></ul></section><section id="autotoc_md6"><h3><a href="#autotoc_md6">Quote to save many hours</a></h3><blockquote><p>Input attachments of course are not &quot;textures&quot;; they&#x27;re attachments.</p></blockquote></section></section>
+./build/bin/vk3DLoaderTests</pre></section><section id="autotoc_md4"><h4><a href="#autotoc_md4">Developement</a></h4><p>To run it with <a href="https://github.com/include-what-you-use/include-what-you-use">include-what-you-use</a> :</p><pre class="m-code">sudo apt install llvm-10-dev libclang-10-dev clang-10
+git clone https://github.com/include-what-you-use/include-what-you-use.git iwyu
+
+<span class="nb">cd</span> iwyu
+git checkout clang_10
+
+mkdir build
+<span class="nb">cd</span> build
+
+cmake -G <span class="s2">&quot;Unix Makefiles&quot;</span> -DCMAKE_PREFIX_PATH<span class="o">=</span>/usr/lib/llvm-10 ..
+
+<span class="nb">cd</span> ..
+<span class="nv">CC</span><span class="o">=</span><span class="s2">&quot;clang&quot;</span> <span class="nv">CXX</span><span class="o">=</span><span class="s2">&quot;clang++&quot;</span> cmake -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE<span class="o">=</span><span class="s2">&quot;iwyu/build/bin/include-what-you-use;-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args&quot;</span> -Bbuild
+cmake --build build <span class="m">2</span>&gt; iwyu.log</pre></section></section><section id="autotoc_md5"><h3><a href="#autotoc_md5">Dependencies</a></h3><ul><li>C++20 compiler :<ul><li>Visual Studio 2019</li><li>GCC 9+ or Clang 10+</li></ul></li><li><a href="https://cmake.org/">CMake</a> for build system creation (&gt;= 3.8)</li><li><a href="https://conan.io/">Conan</a> for install packages (&gt;= 1.0)</li><li><a href="https://doxygen.org/">Doxygen</a> for generate documentation (&gt;= 1.8, optional)</li></ul></section><section id="autotoc_md6"><h3><a href="#autotoc_md6">References</a></h3><ul><li><a href="https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/">Writing an Efficient Vulkan Renderer</a></li><li><a href="https://developer.nvidia.com/vulkan-shader-resource-binding">Vulkan Shader Resource-Binding</a></li><li><a href="https://www.saschawillems.de/blog/2018/07/19/vulkan-input-attachments-and-sub-passes/">Vulkan Input Attachments and Sub Passes</a></li><li><a href="https://themaister.net/blog/2019/08/14/yet-another-blog-explaining-vulkan-synchronization/">Yet Another Blog Explaining Vulkan Synchronization</a></li></ul></section><section id="autotoc_md7"><h3><a href="#autotoc_md7">Quote to save many hours</a></h3><blockquote><p>Input attachments of course are not &quot;textures&quot;; they&#x27;re attachments.</p></blockquote></section></section>
       </div>
     </div>
   </div>

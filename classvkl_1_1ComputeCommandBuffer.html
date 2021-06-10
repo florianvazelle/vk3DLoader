@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::CommandBuffers class | vkCommon</title>
+  <title>vkl::ComputeCommandBuffer class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>CommandBuffers <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="CommandBuffers_8hpp.html">&lt;common/CommandBuffers.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>ComputeCommandBuffer <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="ComputeCommandBuffer_8hpp.html">&lt;particle/Compute/ComputeCommandBuffer.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -54,8 +54,6 @@
               Reference
               <ul>
                 <li><a href="#base-classes">Base classes</a></li>
-                <li><a href="#derived-classes">Derived classes</a></li>
-                <li><a href="#pub-static-methods">Public static functions</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
                 <li><a href="#pro-methods">Protected functions</a></li>
@@ -73,53 +71,17 @@
             <dd>A class to prohibit copying.</dd>
           </dl>
         </section>
-        <section id="derived-classes">
-          <h2><a href="#derived-classes">Derived classes</a></h2>
-          <dl class="m-doc">
-            <dt>
-              class <a href="classvkl_1_1BasicCommandBuffers.html" class="m-doc">BasicCommandBuffers</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              class <a href="classvkl_1_1DepthCommandBuffers.html" class="m-doc">DepthCommandBuffers</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              class <a href="classvkl_1_1GraphicCommandBuffers.html" class="m-doc">GraphicCommandBuffers</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              class <a href="classvkl_1_1ImGuiCommandBuffers.html" class="m-doc">ImGuiCommandBuffers</a>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-static-methods">
-          <h2><a href="#pub-static-methods">Public static functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a225136da7546640b7dd78cdf4e366904">
-              <span class="m-doc-wrap-bumper">static void <a href="#a225136da7546640b7dd78cdf4e366904" class="m-doc-self">SingleTimeCommands</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; cmdPool,
-              const std::function&lt;void(const VkCommandBuffer&amp;)&gt;&amp; func)</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="ad3a6e1ae996e275cbec5aa5c0b0a70ce">
-              <span class="m-doc-wrap-bumper"><a href="#ad3a6e1ae996e275cbec5aa5c0b0a70ce" class="m-doc-self">CommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderpass,
+            <dt id="a6a5fd5324d7b675d70e5d2d3b158141e">
+              <span class="m-doc-wrap-bumper"><a href="#a6a5fd5324d7b675d70e5d2d3b158141e" class="m-doc-self">ComputeCommandBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderPass,
               const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
-              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; graphicsPipeline,
+              const <a href="classvkl_1_1ComputePipeline.html" class="m-doc">ComputePipeline</a>&amp; computePipeline,
+              const <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a>&amp; storageBuffer,
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
-              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; descriptorSets,
-              const std::vector&lt;const <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>*&gt;&amp; buffers)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af8cd49b90925fa3da03cb5a0b3f7462f">
-              <span class="m-doc-wrap-bumper"><a href="#af8cd49b90925fa3da03cb5a0b3f7462f" class="m-doc-self">~CommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
+              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; descriptorSets)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -127,16 +89,16 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a1a64b32d41018cb11182bbc98b6a7bbc">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1a64b32d41018cb11182bbc98b6a7bbc" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) -&gt; VkCommandBuffer&amp;</span>
+            <dt id="acd12c3817d8ad2e89bd2e915f7042a4b">
+              <span class="m-doc-wrap-bumper">void <a href="#acd12c3817d8ad2e89bd2e915f7042a4b" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="adfe2eec15d1815e308b3e5be9e5bb6b9">
-              <span class="m-doc-wrap-bumper">auto <a href="#adfe2eec15d1815e308b3e5be9e5bb6b9" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkCommandBuffer&amp;</span>
+            <dt id="a48568c95661ad92f9d1c29647fe8dcb9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a48568c95661ad92f9d1c29647fe8dcb9" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">) -&gt; VkCommandBuffer&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="adeb8d7d7766c9ef7aee407718f2d16ee">
-              <span class="m-doc-wrap-bumper">void <a href="#adeb8d7d7766c9ef7aee407718f2d16ee" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt id="a7cde027e79344fff2460267096bfc3da">
+              <span class="m-doc-wrap-bumper">auto <a href="#a7cde027e79344fff2460267096bfc3da" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">) const -&gt; const VkCommandBuffer&amp;</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -144,12 +106,12 @@
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="a94081baf921afa1d1b1ec92512f12674">
-              <span class="m-doc-wrap-bumper">void <a href="#a94081baf921afa1d1b1ec92512f12674" class="m-doc-self">createCommandBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt id="ac81c0406a0d4ac9beb05f2b0eeea158b">
+              <span class="m-doc-wrap-bumper">void <a href="#ac81c0406a0d4ac9beb05f2b0eeea158b" class="m-doc-self">createCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a5f746be54959d730bde7e96b47f35e50">
-              <span class="m-doc-wrap-bumper">void <a href="#a5f746be54959d730bde7e96b47f35e50" class="m-doc-self">destroyCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a57f80d02c9387d081e14849b39a7bb84">
+              <span class="m-doc-wrap-bumper">void <a href="#a57f80d02c9387d081e14849b39a7bb84" class="m-doc-self">destroyCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -157,36 +119,36 @@
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="a1608e811ceb830b4fee0e6cba951a3c2">
-              std::vector&lt;VkCommandBuffer&gt; <a href="#a1608e811ceb830b4fee0e6cba951a3c2" class="m-doc-self">m_commandBuffers</a>
+            <dt id="a68db8dd046a079a9f29ce7cc89d2d7a8">
+              VkCommandBuffer <a href="#a68db8dd046a079a9f29ce7cc89d2d7a8" class="m-doc-self">m_commandBuffer</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a603d1f7d70b2662b4ce37e4a484f3f4a">
-              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a603d1f7d70b2662b4ce37e4a484f3f4a" class="m-doc-self">m_device</a>
+            <dt id="a4c533c1840c6301f3218e638326c7602">
+              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a4c533c1840c6301f3218e638326c7602" class="m-doc-self">m_device</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7e8916b515d752dd33e7c0a3475bebe7">
-              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; <a href="#a7e8916b515d752dd33e7c0a3475bebe7" class="m-doc-self">m_renderPass</a>
+            <dt id="a48b2a98e8ca3aa7c42b8e9119c48b3a1">
+              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; <a href="#a48b2a98e8ca3aa7c42b8e9119c48b3a1" class="m-doc-self">m_renderPass</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4f96501aca711b72791e106a05cbce04">
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; <a href="#a4f96501aca711b72791e106a05cbce04" class="m-doc-self">m_swapChain</a>
+            <dt id="aab75fbf22da4735af31dcac4168b20e1">
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; <a href="#aab75fbf22da4735af31dcac4168b20e1" class="m-doc-self">m_swapChain</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="ae84834b1be004cacbacf20e38109a81a">
-              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; <a href="#ae84834b1be004cacbacf20e38109a81a" class="m-doc-self">m_graphicsPipeline</a>
+            <dt id="a2ab243e395a6752d3fc65bab2a14f9e8">
+              const <a href="classvkl_1_1ComputePipeline.html" class="m-doc">ComputePipeline</a>&amp; <a href="#a2ab243e395a6752d3fc65bab2a14f9e8" class="m-doc-self">m_computePipeline</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="abceacf315b93fa4a12c149705f48ecb8">
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#abceacf315b93fa4a12c149705f48ecb8" class="m-doc-self">m_commandPool</a>
+            <dt id="a015fdc4841a93783b05a06ded0b5486a">
+              const <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a>&amp; <a href="#a015fdc4841a93783b05a06ded0b5486a" class="m-doc-self">m_storageBuffer</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a8f96fb5d3d8d28b0573fda9338f9f7d4">
-              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; <a href="#a8f96fb5d3d8d28b0573fda9338f9f7d4" class="m-doc-self">m_descriptorSets</a>
+            <dt id="a78eeba140f07560f3d2cc413ceb1910e">
+              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#a78eeba140f07560f3d2cc413ceb1910e" class="m-doc-self">m_commandPool</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="ad5a9aa376aabb8d03001fa7a13900828">
-              const std::vector&lt;const <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>*&gt;&amp; <a href="#ad5a9aa376aabb8d03001fa7a13900828" class="m-doc-self">m_buffers</a>
+            <dt id="a9c24a41e21548a360344ef43f2a5f2ef">
+              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; <a href="#a9c24a41e21548a360344ef43f2a5f2ef" class="m-doc-self">m_descriptorSets</a>
             </dt>
             <dd><span></span></dd>
           </dl>

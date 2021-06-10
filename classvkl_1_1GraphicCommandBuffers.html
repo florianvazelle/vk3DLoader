@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>common/buffer/ directory | vkCommon</title>
+  <title>vkl::GraphicCommandBuffers class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,7 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html">common</a>/</span>buffer<span class="m-breadcrumb">/</span> <span class="m-thin">directory</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>GraphicCommandBuffers <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="GraphicCommandBuffers_8hpp.html">&lt;particle/Graphic/GraphicCommandBuffers.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -52,21 +53,53 @@
             <li>
               Reference
               <ul>
-                <li><a href="#files">Files</a></li>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pri-methods">Private functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="files">
-          <h2><a href="#files">Files</a></h2>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
-            <dt>file <a href="Buffer_8hpp.html" class="m-doc">Buffer.hpp</a></dt>
-            <dd>Define Buffer template class.</dd>
-            <dt>file <a href="IBuffer_8hpp.html" class="m-doc">IBuffer.hpp</a></dt>
+            <dt>
+              class <a href="classvkl_1_1CommandBuffers.html" class="m-doc">CommandBuffers</a>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="StorageBuffer_8hpp.html" class="m-doc">StorageBuffer.hpp</a></dt>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="a22c31d5dde3a5fd048904ac697dc40da">
+              <span class="m-doc-wrap-bumper"><a href="#a22c31d5dde3a5fd048904ac697dc40da" class="m-doc-self">GraphicCommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderPass,
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
+              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; graphicsPipeline,
+              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
+              const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; descriptorSets,
+              const std::vector&lt;const <a href="classvkl_1_1IBuffer.html" class="m-doc">IBuffer</a>*&gt;&amp; buffers)</span>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="UniformBuffers_8hpp.html" class="m-doc">UniformBuffers.hpp</a></dt>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a12fe71a01e2d97b27ceaa9bbca86cdbd">
+              <span class="m-doc-wrap-bumper">void <a href="#a12fe71a01e2d97b27ceaa9bbca86cdbd" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pri-methods">
+          <h2><a href="#pri-methods">Private functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a3d07f9b4962fb31ad6ee9cd98bafaea2">
+              <span class="m-doc-wrap-bumper">void <a href="#a3d07f9b4962fb31ad6ee9cd98bafaea2" class="m-doc-self">createCommandBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
             <dd><span></span></dd>
           </dl>
         </section>

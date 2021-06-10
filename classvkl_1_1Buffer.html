@@ -66,28 +66,27 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
+              class <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a>
             </dt>
-            <dd>A class to prohibit copying.</dd>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a9a0ed751b5efed911c7c2afa4e944017">
-              <span class="m-doc-wrap-bumper"><a href="#a9a0ed751b5efed911c7c2afa4e944017" class="m-doc-self">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const T&amp; bufferData)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              <span class="m-doc-wrap-bumper"><a href="#a62509c33ca709f2942b9f152070e70cd" class="m-doc">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const T&amp; bufferData,
+            <dt id="acff77b21dfdcaaf45ee79ca379395b17">
+              <span class="m-doc-wrap-bumper"><a href="#acff77b21dfdcaaf45ee79ca379395b17" class="m-doc-self">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const std::vector&lt;T&gt;&amp; bufferData,
+              VkDeviceSize size,
               VkBufferUsageFlags usage,
               VkMemoryPropertyFlags properties)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a96f7bfb204a3c9f1df358e6b52108092">
-              <span class="m-doc-wrap-bumper"><a href="#a96f7bfb204a3c9f1df358e6b52108092" class="m-doc-self">~Buffer</a>(</span><span class="m-doc-wrap">)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a4b05cf84ba045322600e87f39806bc03" class="m-doc">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const std::vector&lt;T&gt;&amp; bufferData,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags properties)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -95,28 +94,14 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="af5ca792cc57f90faea2d6a42842a3339">
-              <span class="m-doc-wrap-bumper">auto <a href="#af5ca792cc57f90faea2d6a42842a3339" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">) -&gt; T&amp;</span>
+            <dt id="ab54625eb252fc4336b633a2d21c110b4">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab54625eb252fc4336b633a2d21c110b4" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;T&gt;&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a8835cfe34807ee9745f174d2f3c1b622">
-              <span class="m-doc-wrap-bumper">auto <a href="#a8835cfe34807ee9745f174d2f3c1b622" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">) const -&gt; const T&amp;</span>
+            <dt id="a33a1f561b67fb755a611108baf0307d9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a33a1f561b67fb755a611108baf0307d9" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">) const -&gt; const std::vector&lt;T&gt;&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="aa2eff9915be96cfd62932b6d5b92adac">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa2eff9915be96cfd62932b6d5b92adac" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">) const -&gt; const VkBuffer&amp;</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a8c8b2194cb56db262d071803425d85d8">
-              <span class="m-doc-wrap-bumper">auto <a href="#a8c8b2194cb56db262d071803425d85d8" class="m-doc-self">memory</a>(</span><span class="m-doc-wrap">) const -&gt; const VkDeviceMemory&amp;</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#ab7cca701a3dd2f945ed180c4498e5919" class="m-doc">createBuffer</a>(</span><span class="m-doc-wrap">VkDeviceSize size,
-              VkBufferUsageFlags usage,
-              VkMemoryPropertyFlags properties)</span>
-            </dt>
-            <dd>Wrapper for create a new buffer.</dd>
             <dt id="a10cbf41b5bf183915c0f76120b1e12ae">
               <span class="m-doc-wrap-bumper">void <a href="#a10cbf41b5bf183915c0f76120b1e12ae" class="m-doc-self">update</a>(</span><span class="m-doc-wrap">float time,
               uint32_t currentImage)</span>
@@ -127,72 +112,26 @@
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="aad3c580b49a9b1556c78c7386bfee61e">
-              T <a href="#aad3c580b49a9b1556c78c7386bfee61e" class="m-doc-self">m_bufferData</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ad4bc4181d52b3d6c285234de517964a0">
-              VkBuffer <a href="#ad4bc4181d52b3d6c285234de517964a0" class="m-doc-self">m_buffer</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a4007a2b27869669d8f02235d32396409">
-              VkDeviceMemory <a href="#a4007a2b27869669d8f02235d32396409" class="m-doc-self">m_bufferMemory</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a8b55af34aaad25d6367f625d4c3f8fe6">
-              VkDeviceSize <a href="#a8b55af34aaad25d6367f625d4c3f8fe6" class="m-doc-self">m_bufferSize</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ad925c7dc416998f23a8042aff1264f5e">
-              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#ad925c7dc416998f23a8042aff1264f5e" class="m-doc-self">m_device</a>
+            <dt id="ad30581fde38ad1a85fc72a2d63d4088b">
+              std::vector&lt;T&gt; <a href="#ad30581fde38ad1a85fc72a2d63d4088b" class="m-doc-self">m_bufferData</a>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="a62509c33ca709f2942b9f152070e70cd"><div>
+          <section class="m-doc-details" id="a4b05cf84ba045322600e87f39806bc03"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;typename T&gt;
               </div>
-              <span class="m-doc-wrap-bumper"> vkl::<wbr />Buffer&lt;T&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a62509c33ca709f2942b9f152070e70cd" class="m-doc-self">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const T&amp; bufferData,
+              <span class="m-doc-wrap-bumper"> vkl::<wbr />Buffer&lt;T&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4b05cf84ba045322600e87f39806bc03" class="m-doc-self">Buffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const std::vector&lt;T&gt;&amp; bufferData,
               VkBufferUsageFlags usage,
               VkMemoryPropertyFlags properties)</span></span>
             </h3>
             <p><span></span></p>
 <p>Note Exposé : La fonction vkMapMemory permet d&#x27;accéder à une région spécifique d&#x27;une ressource. Il faut indiquer un décalage et une taille. On met ici 0 et bufferInfo.size. L&#x27;avant-dernier paramètre est un champ de bits (flags) pour l&#x27;instant non implémenté par Vulkan. Il est impératif de le laisser à 0. &quot;is reserved for future use&quot; Le dernier paramètre permet de fournir un pointeur vers la mémoire mappée.</p>
-          </div></section>
-          <section class="m-doc-details" id="ab7cca701a3dd2f945ed180c4498e5919"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;typename T&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">void vkl::<wbr />Buffer&lt;T&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab7cca701a3dd2f945ed180c4498e5919" class="m-doc-self">createBuffer</a>(</span><span class="m-doc-wrap">VkDeviceSize size,
-              VkBufferUsageFlags usage,
-              VkMemoryPropertyFlags properties)</span></span>
-            </h3>
-            <p>Wrapper for create a new buffer.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">size</td>
-                  <td>Is the size of the buffer you want</td>
-                </tr>
-                <tr>
-                  <td>usage</td>
-                  <td>Is a flag to describe for what usage the buffer is destinate</td>
-                </tr>
-                <tr>
-                  <td>properties</td>
-                  <td>Is for find the memory type</td>
-                </tr>
-              </tbody>
-            </table>
           </div></section>
         </section>
       </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::VertexBuffer class | vkCommon</title>
+  <title>vkl::GraphicGraphicsPipeline class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>VertexBuffer <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Buffer_8hpp.html">&lt;common/buffer/Buffer.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>GraphicGraphicsPipeline <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="GraphicGraphicsPipeline_8hpp.html">&lt;particle/Graphic/GraphicGraphicsPipeline.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -55,6 +55,7 @@
               <ul>
                 <li><a href="#base-classes">Base classes</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pri-methods">Private functions</a></li>
               </ul>
             </li>
           </ul>
@@ -63,18 +64,28 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              <div class="m-doc-template">template&lt;typename T&gt;</div>
-              class <a href="classvkl_1_1Buffer.html" class="m-doc">Buffer&lt;std::vector&lt;Vertex&gt;&gt;</a>
+              class <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>
             </dt>
-            <dd>A templating class to define buffer.</dd>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a63023b3f45c1f51d78ec26167d4a72d6">
-              <span class="m-doc-wrap-bumper"><a href="#a63023b3f45c1f51d78ec26167d4a72d6" class="m-doc-self">VertexBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const std::vector&lt;<a href="structvkl_1_1Vertex.html" class="m-doc">Vertex</a>&gt;&amp; vertices)</span>
+            <dt id="ad9f305fb9dc60ac78dd9d8486fdf304c">
+              <span class="m-doc-wrap-bumper"><a href="#ad9f305fb9dc60ac78dd9d8486fdf304c" class="m-doc-self">GraphicGraphicsPipeline</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
+              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; renderPass,
+              const <a href="classvkl_1_1DescriptorSetLayout.html" class="m-doc">DescriptorSetLayout</a>&amp; descriptorSetLayout)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pri-methods">
+          <h2><a href="#pri-methods">Private functions</a></h2>
+          <dl class="m-doc">
+            <dt id="abd709526b0abc69cfb665c556c218aa4">
+              <span class="m-doc-wrap-bumper">void <a href="#abd709526b0abc69cfb665c556c218aa4" class="m-doc-self">createPipeline</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>

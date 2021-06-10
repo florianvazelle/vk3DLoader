@@ -55,6 +55,7 @@
               Reference
               <ul>
                 <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#pub-types">Public types</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
                 <li><a href="#pro-methods">Protected functions</a></li>
@@ -68,17 +69,31 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
+              class <a href="classvkl_1_1IUniformBuffers.html" class="m-doc">IUniformBuffers</a>
             </dt>
-            <dd>A class to prohibit copying.</dd>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a68a7a3b6aaeb92b0d404fadc644cc263">
+              using <a href="#a68a7a3b6aaeb92b0d404fadc644cc263" class="m-doc-self">UBOCallBack</a> = std::function&lt;void(const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp;, const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp;, std::deque&lt;<a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>&lt;T&gt;&gt;&amp;, float, uint32_t)&gt;
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="af97cc4254ba2cc87a16db4cbe6f37b4f">
-              <span class="m-doc-wrap-bumper"><a href="#af97cc4254ba2cc87a16db4cbe6f37b4f" class="m-doc-self">UniformBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain)</span>
+            <dt id="abdef7882f2ad39b6cafc0f135fdb439f">
+              <span class="m-doc-wrap-bumper"><a href="#abdef7882f2ad39b6cafc0f135fdb439f" class="m-doc-self">UniformBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
+              <a href="classvkl_1_1UniformBuffers.html#a68a7a3b6aaeb92b0d404fadc644cc263" class="m-doc">UBOCallBack</a> update)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad38bdf5421294a4c28393e47bf7f1260">
+              <span class="m-doc-wrap-bumper"><a href="#ad38bdf5421294a4c28393e47bf7f1260" class="m-doc-self">~UniformBuffers</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -86,16 +101,16 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a397dcd465076b7e7141c57806e7ffe12">
-              <span class="m-doc-wrap-bumper">auto <a href="#a397dcd465076b7e7141c57806e7ffe12" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">int i) -&gt; T&amp;</span>
+            <dt id="a2b5e52973364a15bcd5ed4c7d736b4d8">
+              <span class="m-doc-wrap-bumper">auto <a href="#a2b5e52973364a15bcd5ed4c7d736b4d8" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">int i) -&gt; std::vector&lt;T&gt;&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="abae215807752b49d85f47515a8b8faa4">
-              <span class="m-doc-wrap-bumper">auto <a href="#abae215807752b49d85f47515a8b8faa4" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">int i) const -&gt; const T&amp;</span>
+            <dt id="a3d6ca6b2e3848f7148f22d082aed65ab">
+              <span class="m-doc-wrap-bumper">auto <a href="#a3d6ca6b2e3848f7148f22d082aed65ab" class="m-doc-self">data</a>(</span><span class="m-doc-wrap">int i) const -&gt; const std::vector&lt;T&gt;&amp;</span>
             </dt>
             <dd><span></span></dd>
             <dt id="abc552a89f9c95b8f5458729ec0a2ef87">
-              <span class="m-doc-wrap-bumper">auto <a href="#abc552a89f9c95b8f5458729ec0a2ef87" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">int index) const -&gt; const VkBuffer&amp;</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#abc552a89f9c95b8f5458729ec0a2ef87" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">int index) const -&gt; const VkBuffer&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt>
@@ -123,6 +138,10 @@
           <dl class="m-doc">
             <dt id="ab903672453ea01d8251290db3c841406">
               std::deque&lt;<a href="classvkl_1_1Buffer.html" class="m-doc">Buffer</a>&lt;T&gt;&gt; <a href="#ab903672453ea01d8251290db3c841406" class="m-doc-self">m_uniformBuffers</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab8b878f29ce8ca59a10b24916a459c8e">
+              <a href="classvkl_1_1UniformBuffers.html#a68a7a3b6aaeb92b0d404fadc644cc263" class="m-doc">UBOCallBack</a> <a href="#ab8b878f29ce8ca59a10b24916a459c8e" class="m-doc-self">m_update</a>
             </dt>
             <dd><span></span></dd>
             <dt id="a53d20dbc36092329deb50c2cf272451d">

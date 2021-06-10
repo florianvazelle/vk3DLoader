@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>common/buffer/ directory | vkCommon</title>
+  <title>vkl::Application class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,7 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html">common</a>/</span>buffer<span class="m-breadcrumb">/</span> <span class="m-thin">directory</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Application <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Application_8hpp.html">&lt;common/Application.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -52,21 +53,72 @@
             <li>
               Reference
               <ul>
-                <li><a href="#files">Files</a></li>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#derived-classes">Derived classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pro-attribs">Protected variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="files">
-          <h2><a href="#files">Files</a></h2>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
-            <dt>file <a href="Buffer_8hpp.html" class="m-doc">Buffer.hpp</a></dt>
-            <dd>Define Buffer template class.</dd>
-            <dt>file <a href="IBuffer_8hpp.html" class="m-doc">IBuffer.hpp</a></dt>
+            <dt>
+              class <a href="classNonCopyable.html" class="m-doc">NonCopyable</a>
+            </dt>
+            <dd>A class to prohibit copying.</dd>
+          </dl>
+        </section>
+        <section id="derived-classes">
+          <h2><a href="#derived-classes">Derived classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classvkl_1_1ParticleSystem.html" class="m-doc">ParticleSystem</a>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="StorageBuffer_8hpp.html" class="m-doc">StorageBuffer.hpp</a></dt>
+            <dt>
+              class <a href="classvkl_1_1ShadowMapping.html" class="m-doc">ShadowMapping</a>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="UniformBuffers_8hpp.html" class="m-doc">UniformBuffers.hpp</a></dt>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="ac929f7e7ada0841d77b9bcff62c8dab9">
+              <span class="m-doc-wrap-bumper"><a href="#ac929f7e7ada0841d77b9bcff62c8dab9" class="m-doc-self">Application</a>(</span><span class="m-doc-wrap">const std::string&amp; appName,
+              const <a href="structvkl_1_1DebugOption.html" class="m-doc">DebugOption</a>&amp; debugOption)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-attribs">
+          <h2><a href="#pro-attribs">Protected variables</a></h2>
+          <dl class="m-doc">
+            <dt id="af474990d0a37014f98b1b856dc9eb032">
+              <a href="classvkl_1_1Instance.html" class="m-doc">Instance</a> <a href="#af474990d0a37014f98b1b856dc9eb032" class="m-doc-self">instance</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a40187c6e22d6ec27c274b4ba7834e9c6">
+              <a href="classvkl_1_1DebugUtilsMessenger.html" class="m-doc">DebugUtilsMessenger</a> <a href="#a40187c6e22d6ec27c274b4ba7834e9c6" class="m-doc-self">debugMessenger</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab761f36bae7570be46be0947aa3d7775">
+              <a href="classvkl_1_1Window.html" class="m-doc">Window</a> <a href="#ab761f36bae7570be46be0947aa3d7775" class="m-doc-self">window</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad819b1152e0cf66b41c86f09203660a6">
+              <a href="classvkl_1_1Device.html" class="m-doc">Device</a> <a href="#ad819b1152e0cf66b41c86f09203660a6" class="m-doc-self">device</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="af4559ccd2d3ca1347dd0756e88cbd0ed">
+              <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a> <a href="#af4559ccd2d3ca1347dd0756e88cbd0ed" class="m-doc-self">swapChain</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aad4ff6459f409b5a4c831f1e0eab6b24">
+              <a href="classvkl_1_1SyncObjects.html" class="m-doc">SyncObjects</a> <a href="#aad4ff6459f409b5a4c831f1e0eab6b24" class="m-doc-self">syncObjects</a>
+            </dt>
             <dd><span></span></dd>
           </dl>
         </section>
