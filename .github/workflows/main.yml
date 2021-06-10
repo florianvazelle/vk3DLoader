@@ -41,6 +41,12 @@ jobs:
             ${{ env.CPM_SOURCE_CACHE }}
           key: ubuntu-${{ hashFiles('conanfile.txt') }} }}
 
+      - name: Install clang-9
+        if: ${{ matrix.compiler == 'clang++-9' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install clang-9 -y
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
