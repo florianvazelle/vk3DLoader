@@ -83,10 +83,9 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       // Descriptor Pool
       ps({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages()),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() * 2),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, swapChain.numImages()),
       }),
-      dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages() * 2)),
+      dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages() * 2)), // * 2 car on utilise le meme descriptor pool pour les Graphic et Compute
       dp(device, dpi),
 
       // Buffer
@@ -123,13 +122,6 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       // 2. Descriptor Set Layout
       dslGraphic(device,
                  misc::descriptorSetLayoutCreateInfo({
-                     // Binding 0 :
-                     misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                      VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                      0),
-                     misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                      VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                      1),
                      misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 2),
                  })),
 

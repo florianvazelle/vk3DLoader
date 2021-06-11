@@ -26,11 +26,6 @@ void GraphicDescriptorSets::createDescriptorSets() {
     };
 
     writeDescriptorSets = {
-        // Binding 0 :
-        // misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 0, &bufferInfo),
-        // Binding 1 :
-        // misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1,
-        // &depthDescriptor),
         // Binding 2 :
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &bufferInfo),
     };
