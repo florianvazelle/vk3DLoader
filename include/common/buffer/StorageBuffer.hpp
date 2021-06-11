@@ -28,9 +28,9 @@ namespace vkl {
       vkFreeMemory(m_device.logical(), m_bufferMemory, nullptr);
     }
 
-    const VkBuffer& buffer() const { return m_buffer; }
-    const VkDeviceMemory& memory() const { return m_bufferMemory; }
-    const VkDeviceSize& size() const { return m_bufferSize; }
+    inline const VkBuffer& buffer() const { return m_buffer; }
+    inline const VkDeviceMemory& memory() const { return m_bufferMemory; }
+    inline const VkDeviceSize& size() const { return m_bufferSize; }
 
     /**
      * @brief Wrapper for create a new buffer

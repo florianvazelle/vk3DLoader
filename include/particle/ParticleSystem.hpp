@@ -56,11 +56,20 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpi;
     DescriptorPool dp;
 
-    // Graphic
-
-    BasicRenderPass rpGraphic;
+    // Buffers
     Buffer<Particle> particleBuffer;
     UniformBuffers<MVP> uniformBuffersGraphic;
+    StorageBuffer storageBuffer;
+    UniformBuffers<ComputeParticle> uniformBuffersCompute;
+
+    // Vector Buffer
+    std::vector<const IRenderPass*> vecRPGraphic;
+    std::vector<const IUniformBuffers*> vecUBGraphic;
+    std::vector<const IUniformBuffers*> vecUBCompute;
+    std::vector<const IBuffer*> vecSBCompute;
+
+    // Graphic
+    BasicRenderPass rpGraphic;
 
     DescriptorSetLayout dslGraphic;
     GraphicGraphicsPipeline gpGraphic;
@@ -70,8 +79,6 @@ namespace vkl {
 
     // Compute
 
-    StorageBuffer storageBuffer;
-    UniformBuffers<ComputeParticle> uniformBuffersCompute;
     DescriptorSetLayout dslCompute;
     ComputeDescriptorSets dsCompute;
     ComputePipeline gpCompute;

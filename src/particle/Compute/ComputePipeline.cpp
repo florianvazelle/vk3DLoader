@@ -77,7 +77,7 @@ void ComputePipeline::createPipeline() {
   if (vkCreateComputePipelines(m_device.logical(), VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr,
                                &m_pipelineCalculate)
       == VK_SUCCESS) {
-    throw std::runtime_error("Compute Pipeline creation failed");
+    throw std::runtime_error("Compute Pipeline Calculate creation failed");
   }
 
   // 2nd pass
@@ -87,6 +87,6 @@ void ComputePipeline::createPipeline() {
   if (vkCreateComputePipelines(m_device.logical(), VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr,
                                &m_pipelineIntegrate)
       == VK_SUCCESS) {
-    throw std::runtime_error("Compute Pipeline creation failed");
+    throw std::runtime_error("Compute Pipeline Integrate creation failed");
   }
 }

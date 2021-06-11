@@ -89,18 +89,36 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages() * 2)),
       dp(device, dpi),
 
+      // Buffer
+      // Graphic
+      particleBuffer(device,
+                     particles,
+                     VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+      uniformBuffersGraphic(device, swapChain, &updateGraphicsUniformBuffers),
+
+      // Compute
+      storageBuffer(
+          device,
+          NUM_PARTICLE * sizeof(Particle),
+          VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+      uniformBuffersCompute(device, swapChain, &updateComputeUniformBuffers),
+
+      // ~ My Vectors
+      // Utile car sinon les pointeurs change, donc on copie d'abord par valeur
+      // et on passe le vecteur qui sera concervé dans la class Application
+      vecRPGraphic({&rpGraphic}),
+      vecUBGraphic({&uniformBuffersGraphic}),
+      vecUBCompute({&uniformBuffersCompute}),
+      vecSBCompute({&storageBuffer}),
+
       /*
        * Basic Graphics
        */
 
       // 1. Render Pass
       rpGraphic(device, swapChain),
-
-      particleBuffer(device,
-                     particles,
-                     VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-      uniformBuffersGraphic(device, swapChain, &updateGraphicsUniformBuffers),
 
       // 2. Descriptor Set Layout
       dslGraphic(device,
@@ -119,9 +137,9 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       gpGraphic(device, swapChain, rpGraphic, dslGraphic),
 
       // 5. Descriptor Sets
-      dsGraphic(device, swapChain, dslGraphic, dp, {&rpGraphic}, {}, {&uniformBuffersGraphic}),
+      dsGraphic(device, swapChain, dslGraphic, dp, vecRPGraphic, {}, vecUBGraphic),
 
-      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, {&storageBuffer}),
+      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute),
 
       // Semaphore for compute & graphics sync
       semaphoreGraphic(device),
@@ -129,13 +147,6 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       /*
        * Compute
        */
-
-      storageBuffer(
-          device,
-          NUM_PARTICLE * sizeof(Particle),
-          VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
-      uniformBuffersCompute(device, swapChain, &updateComputeUniformBuffers),
 
       // 2. Descriptor Set Layout
       dslCompute(
@@ -148,7 +159,7 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
           })),
 
       // 5. Descriptor Sets
-      dsCompute(device, swapChain, dslCompute, dp, {&rpGraphic}, {&storageBuffer}, {&uniformBuffersCompute}),
+      dsCompute(device, swapChain, dslCompute, dp, vecRPGraphic, vecSBCompute, vecUBCompute),
 
       // 3. Graphic Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),
