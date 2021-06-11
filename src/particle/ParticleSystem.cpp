@@ -82,11 +82,11 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       // Descriptor Pool
       ps({
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages()),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() * 2),
       }),
-      dpi(misc::descriptorPoolCreateInfo(ps, 1)),
+      dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages() * 2)),
       dp(device, dpi),
 
       /*
@@ -285,7 +285,6 @@ void ParticleSystem::drawImGui() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  static int frame      = 0;
   static auto startTime = std::chrono::high_resolution_clock::now();
 
   auto currentTime = std::chrono::high_resolution_clock::now();
@@ -295,6 +294,7 @@ void ParticleSystem::drawImGui() {
   ImGui::Begin("Config");
 
   {
+    static int frame = 0;
     ImGui::Text("frame: %d", ++frame);
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);

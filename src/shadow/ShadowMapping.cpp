@@ -165,9 +165,9 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
 
       // 4. Descriptor Pool
       psDepth({
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() + 1),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages()),
       }),
-      dpiDepth(misc::descriptorPoolCreateInfo(psDepth, (swapChain.numImages() + 1))),
+      dpiDepth(misc::descriptorPoolCreateInfo(psDepth, swapChain.numImages())),
       dpDepth(device, dpiDepth),
 
       // ~ My Vectors
@@ -208,10 +208,10 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
 
       // 4. Descriptor Pool
       psBasic({
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2 + 1),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() + 1),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages()),
       }),
-      dpiBasic(misc::descriptorPoolCreateInfo(psBasic, (swapChain.numImages() * 2 + 1) + (swapChain.numImages() + 1))),
+      dpiBasic(misc::descriptorPoolCreateInfo(psBasic, swapChain.numImages())),
       dpBasic(device, dpiBasic),
 
       // ~ My Vectors 2
@@ -346,7 +346,6 @@ void ShadowMapping::drawImGui() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  static int frame      = 0;
   static auto startTime = std::chrono::high_resolution_clock::now();
 
   auto currentTime = std::chrono::high_resolution_clock::now();
@@ -356,6 +355,7 @@ void ShadowMapping::drawImGui() {
   ImGui::Begin("Config");
 
   {
+    static int frame = 0;
     ImGui::Text("frame: %d", ++frame);
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
