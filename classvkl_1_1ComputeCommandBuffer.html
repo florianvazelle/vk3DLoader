@@ -74,13 +74,14 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a6a5fd5324d7b675d70e5d2d3b158141e">
-              <span class="m-doc-wrap-bumper"><a href="#a6a5fd5324d7b675d70e5d2d3b158141e" class="m-doc-self">ComputeCommandBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+            <dt id="aeb9992c6d07c133b22f07617d3937022">
+              <span class="m-doc-wrap-bumper"><a href="#aeb9992c6d07c133b22f07617d3937022" class="m-doc-self">ComputeCommandBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
               const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderPass,
               const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
               const <a href="classvkl_1_1ComputePipeline.html" class="m-doc">ComputePipeline</a>&amp; computePipeline,
               const <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a>&amp; storageBuffer,
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
+              const <a href="classvkl_1_1Semaphore.html" class="m-doc">Semaphore</a>&amp; semaphore,
               const <a href="classvkl_1_1DescriptorSets.html" class="m-doc">DescriptorSets</a>&amp; descriptorSets)</span>
             </dt>
             <dd><span></span></dd>
@@ -114,6 +115,19 @@
               <span class="m-doc-wrap-bumper">void <a href="#a57f80d02c9387d081e14849b39a7bb84" class="m-doc-self">destroyCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
+            <dt id="a2d8bf5ea25868f74934e061e22576c6c">
+              <span class="m-doc-wrap-bumper">auto <a href="#a2d8bf5ea25868f74934e061e22576c6c" class="m-doc-self">allocCommandBuffer</a>(</span><span class="m-doc-wrap">VkCommandBufferLevel level,
+              VkCommandPool pool,
+              bool begin = false) const -&gt; VkCommandBuffer</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a4e8eb15309eafcd59648cb80483de26a">
+              <span class="m-doc-wrap-bumper">void <a href="#a4e8eb15309eafcd59648cb80483de26a" class="m-doc-self">flushCommandBuffer</a>(</span><span class="m-doc-wrap">VkCommandBuffer cmdBuffer,
+              VkQueue queue,
+              VkCommandPool pool,
+              bool free = true) const</span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="pro-attribs">
@@ -145,6 +159,10 @@
             <dd><span></span></dd>
             <dt id="a78eeba140f07560f3d2cc413ceb1910e">
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#a78eeba140f07560f3d2cc413ceb1910e" class="m-doc-self">m_commandPool</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a6ce34242524b40a913b6b9fafafadca0">
+              const <a href="classvkl_1_1Semaphore.html" class="m-doc">Semaphore</a>&amp; <a href="#a6ce34242524b40a913b6b9fafafadca0" class="m-doc-self">m_semaphore</a>
             </dt>
             <dd><span></span></dd>
             <dt id="a9c24a41e21548a360344ef43f2a5f2ef">
