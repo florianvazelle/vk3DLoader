@@ -7,7 +7,10 @@
 #include <common/GraphicsPipeline.hpp>       // for GraphicsPipeline
 #include <common/SwapChain.hpp>              // for vkl
 #include <common/misc/GraphicsPipeline.hpp>  // for pipelineShaderStageCreat...
+#include <common/misc/Specialization.hpp>
+#include <glm/glm.hpp>
 #include <stdexcept>                         // for runtime_error
+#include <map>
 // clang-format on
 
 using namespace vkl;
@@ -44,39 +47,44 @@ void ComputePipeline::createPipeline() {
   VkShaderModule compShaderModule = createShaderModule(PARTICLE_CALCULATE_COMP);
   computePipelineCreateInfo.stage = misc::pipelineShaderStageCreateInfo(compShaderModule, VK_SHADER_STAGE_COMPUTE_BIT);
 
-  //   {
-  //     // Set shader parameters via specialization constants
-  //     struct SpecializationData {
-  //       uint32_t sharedDataSize;
-  //       float gravity;
-  //       float power;
-  //       float soften;
-  //     } specializationData;
+  // Set shader parameters via specialization constants
+  struct SpecializationData {
+    uint32_t sharedDataSize;
+    float gravity;
+    float power;
+    float soften;
+  } specializationData;
 
-  //     std::vector<VkSpecializationMapEntry> specializationMapEntries;
-  //     specializationMapEntries.push_back(vks::initializers::specializationMapEntry(0, offsetof(SpecializationData,
-  //     sharedDataSize), sizeof(uint32_t))); specializationMapEntries.push_back(
-  //     vks::initializers::specializationMapEntry(1, offsetof(SpecializationData, gravity), sizeof(float)));
-  //     specializationMapEntries.push_back( vks::initializers::specializationMapEntry(2, offsetof(SpecializationData,
-  //     power), sizeof(float))); specializationMapEntries.push_back(vks::initializers::specializationMapEntry(3,
-  //     offsetof(SpecializationData, soften), sizeof(float)));
+  std::vector<VkSpecializationMapEntry> specializationMapEntries;
+  specializationMapEntries.push_back(
+      misc::specializationMapEntry(0, offsetof(SpecializationData, sharedDataSize), sizeof(uint32_t)));
 
-  //     specializationData.sharedDataSize = std::min((uint32_t)1024,
-  //     (uint32_t)(vulkanDevice->properties.limits.maxComputeSharedMemorySize / sizeof(glm::vec4)));
+  specializationMapEntries.push_back(
+      misc::specializationMapEntry(1, offsetof(SpecializationData, gravity), sizeof(float)));
 
-  //     specializationData.gravity = 0.002f;
-  //     specializationData.power   = 0.75f;
-  //     specializationData.soften  = 0.05f;
+  specializationMapEntries.push_back(
+      misc::specializationMapEntry(2, offsetof(SpecializationData, power), sizeof(float)));
 
-  //     VkSpecializationInfo specializationInfo = vks::initializers::specializationInfo(
-  //     static_cast<uint32_t>(specializationMapEntries.size()), specializationMapEntries.data(),
-  //     sizeof(specializationData), &specializationData); computePipelineCreateInfo.stage.pSpecializationInfo =
-  //     &specializationInfo;
-  //   }
+  specializationMapEntries.push_back(
+      misc::specializationMapEntry(3, offsetof(SpecializationData, soften), sizeof(float)));
+
+  VkPhysicalDeviceProperties deviceProperties;
+  vkGetPhysicalDeviceProperties(m_device.physical(), &deviceProperties);
+  specializationData.sharedDataSize
+      = std::min((uint32_t)1024, (uint32_t)(deviceProperties.limits.maxComputeSharedMemorySize / sizeof(glm::vec4)));
+
+  specializationData.gravity = 0.002f;
+  specializationData.power   = 0.75f;
+  specializationData.soften  = 0.05f;
+
+  VkSpecializationInfo specializationInfo
+      = misc::specializationInfo(static_cast<uint32_t>(specializationMapEntries.size()),
+                                  specializationMapEntries.data(), sizeof(specializationData), &specializationData);
+
+  computePipelineCreateInfo.stage.pSpecializationInfo = &specializationInfo;
 
   if (vkCreateComputePipelines(m_device.logical(), VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr,
-                               &m_pipelineCalculate)
-      == VK_SUCCESS) {
+                               &m_pipelineCalculate) != VK_SUCCESS) {
     throw std::runtime_error("Compute Pipeline Calculate creation failed");
   }
 
@@ -86,7 +94,7 @@ void ComputePipeline::createPipeline() {
 
   if (vkCreateComputePipelines(m_device.logical(), VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr,
                                &m_pipelineIntegrate)
-      == VK_SUCCESS) {
+      != VK_SUCCESS) {
     throw std::runtime_error("Compute Pipeline Integrate creation failed");
   }
 }

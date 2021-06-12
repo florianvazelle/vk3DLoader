@@ -25,8 +25,8 @@ void ComputeDescriptorSets::createDescriptorSets() {
   };
 
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
+  const IUniformBuffers* ubo              = m_uniformBuffers[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
-    const IUniformBuffers* ubo              = m_uniformBuffers[0];
     const VkDescriptorBufferInfo bufferInfo = {
         .buffer = ubo->buffer(i),
         .offset = 0,
@@ -40,6 +40,6 @@ void ComputeDescriptorSets::createDescriptorSets() {
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, &bufferInfo),
     };
 
-    vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
+    vkUpdateDescriptorSets(m_device.logical(), static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
   }
 }

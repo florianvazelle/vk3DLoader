@@ -8,6 +8,7 @@
 #include <particle/Compute/ComputePipeline.hpp>  // for ComputePipeline
 #include <common/RenderPass.hpp>                // for IRenderPass
 #include <common/SwapChain.hpp>                  // for SwapChain
+#include <common/Device.hpp>
 // clang-format on
 
 #ifndef NUM_PARTICLE
@@ -62,21 +63,24 @@ void ComputeCommandBuffer::createCommandBuffers() {
     throw std::runtime_error("failed to begin recording command buffer!");
   }
 
-  // Acquire barrier
-  // if (graphics.queueFamilyIndex != compute.queueFamilyIndex) {
-  //   VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-  //                                           nullptr,
-  //                                           0,
-  //                                           VK_ACCESS_SHADER_WRITE_BIT,
-  //                                           graphics.queueFamilyIndex,
-  //                                           compute.queueFamilyIndex,
-  //                                           m_storageBuffer.buffer(),
-  //                                           0,
-  //                                           m_storageBuffer.size()};
+  const std::optional<uint32_t>& queueGraphicFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
+  const std::optional<uint32_t>& queueComputeFamilyIndex = m_device.queueFamilyIndices().computeFamily;
 
-  //   vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
-  //                        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
-  // }
+  // Acquire barrier
+  if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
+    VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                                            nullptr,
+                                            0,
+                                            VK_ACCESS_SHADER_WRITE_BIT,
+                                            queueGraphicFamilyIndex.value(),
+                                            queueComputeFamilyIndex.value(),
+                                            m_storageBuffer.buffer(),
+                                            0,
+                                            m_storageBuffer.size()};
+
+    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
+  }
 
   // First pass: Calculate particle movement
   // -------------------------------------------------------------------------------------------------------
@@ -108,20 +112,20 @@ void ComputeCommandBuffer::createCommandBuffers() {
   vkCmdDispatch(m_commandBuffer, NUM_PARTICLE / 256, 1, 1);
 
   // Release barrier
-  // if (graphics.queueFamilyIndex != compute.queueFamilyIndex) {
-  //   VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-  //                                           nullptr,
-  //                                           VK_ACCESS_SHADER_WRITE_BIT,
-  //                                           0,
-  //                                           compute.queueFamilyIndex,
-  //                                           graphics.queueFamilyIndex,
-  //                                           m_storageBuffer.buffer(),
-  //                                           0,
-  //                                           m_storageBuffer.size()};
+  if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
+    VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                                            nullptr,
+                                            VK_ACCESS_SHADER_WRITE_BIT,
+                                            0,
+                                            queueComputeFamilyIndex.value(),
+                                            queueGraphicFamilyIndex.value(),
+                                            m_storageBuffer.buffer(),
+                                            0,
+                                            m_storageBuffer.size()};
 
-  //   vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-  //                        VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
-  // }
+    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                         VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
+  }
 
   if (vkEndCommandBuffer(m_commandBuffer) != VK_SUCCESS) {
     throw std::runtime_error("failed to record command buffer!");

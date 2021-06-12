@@ -158,13 +158,10 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
 
-      semaphoreCompute(device) {
-  // Create a compute capable device queue
-  // The VulkanDevice::createLogicalDevice functions finds a compute capable queue and prefers queue families that only
-  // support compute Depending on the implementation this may result in different queue family indices for graphics and
-  // computes, requiring proper synchronization (see the memory barriers in buildComputeCommandBuffer)
-  // vkGetDeviceQueue(device.logical(), compute.queueFamilyIndex, 0, &queueCompute);
-}
+      semaphoreCompute(device),
+
+      /* ImGui */
+      interface(instance, window, device, swapChain, gpGraphic)  {}
 
 void ParticleSystem::run(std::function<void(void)> update) {
   window.setDrawFrameFunc([this, update](bool& framebufferResized) {
@@ -274,7 +271,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
         .pSignalSemaphores    = &semaphoreCompute.handle(),
     };
 
-    if (vkQueueSubmit(queueCompute, 1, &computeSubmitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+    if (vkQueueSubmit(device.computeQueue(), 1, &computeSubmitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
   }

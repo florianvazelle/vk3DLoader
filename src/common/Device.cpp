@@ -26,7 +26,7 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
   m_indices  = QueueFamily::FindQueueFamilies(m_physical, m_window.surface());
 
   // Setup queue families for device
-  std::set<uint32_t> uniqueQueueFamilies = {m_indices.graphicsFamily.value(), m_indices.presentFamily.value()};
+  std::set<uint32_t> uniqueQueueFamilies = {m_indices.graphicsFamily.value(), m_indices.computeFamily.value(), m_indices.transferFamily.value(), m_indices.presentFamily.value()};
   std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
   float priority = 1.0f;
@@ -64,6 +64,8 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
 
   // Get handles for graphics and presentation queues
   vkGetDeviceQueue(m_logical, m_indices.graphicsFamily.value(), 0, &m_graphicsQueue);
+  vkGetDeviceQueue(m_logical, m_indices.computeFamily.value(), 0, &m_computeQueue);
+  vkGetDeviceQueue(m_logical, m_indices.transferFamily.value(), 0, &m_transferQueue);
   vkGetDeviceQueue(m_logical, m_indices.presentFamily.value(), 0, &m_presentQueue);
 }
 
@@ -93,8 +95,6 @@ bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice& device, const s
 VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
                                             const VkSurfaceKHR& surface,
                                             const std::vector<const char*>& requiredExtensions) {
-  std::cout << "Device list:\n";
-
   // Check for devices with vulkan support
   uint32_t deviceCount = 0;
   vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -107,6 +107,7 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
   std::vector<VkPhysicalDevice> devices(deviceCount);
   vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
+  std::cout << "Device list:\n";
   for (const auto& device : devices) {
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -117,7 +118,7 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
     if (IsDeviceSuitable(device, surface)) {
       VkPhysicalDeviceProperties deviceProperties;
       vkGetPhysicalDeviceProperties(device, &deviceProperties);
-      std::cout << "Pick: " << deviceProperties.deviceName << '\n';
+      std::cout << "Pick: " << deviceProperties.deviceName << "\n\n";
       return device;
     }
   }

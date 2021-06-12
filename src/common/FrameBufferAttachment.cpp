@@ -124,6 +124,8 @@ void FrameBufferAttachment::createSample() {
 FrameBufferAttachment ::~FrameBufferAttachment() {
   vkDestroyImage(m_device.logical(), m_image, nullptr);
   vkDestroyImageView(m_device.logical(), m_imageView, nullptr);
+  vkFreeMemory(m_device.logical(), m_bufferMemory, nullptr);
+
 
   if (m_sampler != VK_NULL_HANDLE) vkDestroySampler(m_device.logical(), m_sampler, nullptr);
 }

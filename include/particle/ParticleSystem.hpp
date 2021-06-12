@@ -15,6 +15,7 @@
 #include <common/Application.hpp>                        // for Application
 #include <common/CommandPool.hpp>                        // for CommandPool
 #include <common/DescriptorPool.hpp>                     // for DescriptorPool
+#include <common/ImGui/ImGuiApp.hpp>                     // for ImGuiApp
 #include <common/DescriptorSetLayout.hpp>                // for DescriptorSe...
 #include <common/Semaphore.hpp>                          // for Semaphore
 #include <common/buffer/Buffer.hpp>                      // for Buffer
@@ -46,9 +47,6 @@ namespace vkl {
     void run(std::function<void(void)> update);
 
   private:
-    // Separate queue for compute commands (queue family may differ from the one used for graphics)
-    VkQueue queueCompute;
-
     CommandPool commandPool, commandPoolCompute;
 
     // Descriptor Pool
@@ -84,6 +82,8 @@ namespace vkl {
     ComputePipeline gpCompute;
     ComputeCommandBuffer cbCompute;
     Semaphore semaphoreCompute;
+
+    ImGuiApp interface;
 
     size_t currentFrame = 0;
 

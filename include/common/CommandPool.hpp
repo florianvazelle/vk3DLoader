@@ -8,6 +8,7 @@
 
 #include <vulkan/vulkan.h>
 #include <NonCopyable.hpp>
+#include <optional>
 
 namespace vkl {
   class Device;
@@ -19,14 +20,13 @@ namespace vkl {
 
   class CommandPool : public NonCopyable {
   public:
-    CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags);
+    CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags, std::optional<uint32_t> queueFamilyIndex = std::nullopt);
     ~CommandPool();
 
     inline const VkCommandPool& handle() const { return m_pool; };
 
   private:
     VkCommandPool m_pool;
-    VkCommandPoolCreateFlags m_flags;
 
     const Device& m_device;
   };
