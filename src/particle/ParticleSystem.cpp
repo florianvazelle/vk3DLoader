@@ -156,17 +156,17 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       // 3. Graphic Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),
 
-      cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
-
       semaphoreCompute(device),
+
+      // signal semaphore
+
+      cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, semaphoreCompute, dsCompute),
 
       /* ImGui */
       interface(instance, window, device, swapChain, gpGraphic)  {}
 
-void ParticleSystem::run(std::function<void(void)> update) {
-  window.setDrawFrameFunc([this, update](bool& framebufferResized) {
-    update();
-
+void ParticleSystem::run() {
+  window.setDrawFrameFunc([this](bool& framebufferResized) {
     drawImGui();
     drawFrame(framebufferResized);
   });

@@ -11,6 +11,7 @@ namespace vkl { class Device; }
 namespace vkl { class IRenderPass; }
 namespace vkl { class StorageBuffer; }
 namespace vkl { class SwapChain; }
+namespace vkl { class Semaphore; }
 // clang-format on
 
 namespace vkl {
@@ -23,6 +24,7 @@ namespace vkl {
                          const ComputePipeline& computePipeline,
                          const StorageBuffer& storageBuffer,
                          const CommandPool& commandPool,
+                         const Semaphore& semaphore,
                          const DescriptorSets& descriptorSets);
     void recreate();
 
@@ -38,10 +40,15 @@ namespace vkl {
     const ComputePipeline& m_computePipeline;
     const StorageBuffer& m_storageBuffer;
     const CommandPool& m_commandPool;
+    const Semaphore& m_semaphore;
     const DescriptorSets& m_descriptorSets;
 
     void createCommandBuffers();
     void destroyCommandBuffers();
+
+    // allocate one command buffer
+    VkCommandBuffer allocCommandBuffer(VkCommandBufferLevel level, VkCommandPool pool, bool begin = false) const;
+  void flushCommandBuffer(VkCommandBuffer cmdBuffer, VkQueue queue, VkCommandPool pool, bool free = true) const;
   };
 
 }  // namespace vkl

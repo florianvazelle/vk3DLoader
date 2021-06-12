@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
   vkl::ParticleSystem app("vkLavaMpm", debugOption);
 
   try {
-    app.run([]() { std::cout << "hello lava!\n"; });
+    app.run();
   } catch (std::exception& e) {
     std::cout << e.what() << std::endl;
     return EXIT_FAILURE;

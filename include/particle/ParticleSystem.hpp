@@ -44,7 +44,7 @@ namespace vkl {
   public:
     ParticleSystem(const std::string& appName, const DebugOption& debugOption);
 
-    void run(std::function<void(void)> update);
+    void run();
 
   private:
     CommandPool commandPool, commandPoolCompute;
@@ -80,8 +80,8 @@ namespace vkl {
     DescriptorSetLayout dslCompute;
     ComputeDescriptorSets dsCompute;
     ComputePipeline gpCompute;
-    ComputeCommandBuffer cbCompute;
     Semaphore semaphoreCompute;
+    ComputeCommandBuffer cbCompute;
 
     ImGuiApp interface;
 
