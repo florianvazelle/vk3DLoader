@@ -51,9 +51,6 @@ namespace vkl {
     static VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, const Window& window);
 
   private:
-    const Device& m_device;
-    const Window& m_window;
-
     SwapChainSupportDetails m_supportDetails;
     VkSwapchainKHR m_swapChain;
     VkSwapchainKHR m_oldSwapChain;
@@ -64,6 +61,9 @@ namespace vkl {
 
     VkFormat m_imageFormat;
     VkExtent2D m_extent;
+
+    const Device& m_device;
+    const Window& m_window;
 
     void createSwapChain();
     void createImageViews();

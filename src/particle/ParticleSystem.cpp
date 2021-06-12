@@ -78,7 +78,7 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       // Use a separate command pool (queue family may differ from the one used for graphics)
-      commandPoolCompute(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
+      commandPoolCompute(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT, device.queueFamilyIndices().computeFamily),
 
       // Descriptor Pool
       ps({
@@ -210,7 +210,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
 
   const VkPipelineStageFlags graphicsWaitStageMasks[]
       = {VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-  const VkSemaphore graphicsWaitSemaphores[]   = {/*compute.semaphore,*/ syncObjects.imageAvailable(currentFrame)};
+  const VkSemaphore graphicsWaitSemaphores[]   = {semaphoreCompute.handle(), syncObjects.imageAvailable(currentFrame)};
   const VkSemaphore graphicsSignalSemaphores[] = {semaphoreGraphic.handle(), syncObjects.renderFinished(currentFrame)};
 
   // Submit graphics commands

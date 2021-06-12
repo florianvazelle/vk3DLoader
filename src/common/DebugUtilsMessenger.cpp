@@ -7,7 +7,7 @@
 using namespace vkl;
 
 DebugUtilsMessenger::DebugUtilsMessenger(const Instance& instance, bool exitOnError)
-    : m_debugMessenger(VK_NULL_HANDLE), m_instance(instance), m_exitOnError(exitOnError) {
+    : m_debugMessenger(VK_NULL_HANDLE), m_exitOnError(exitOnError), m_instance(instance) {
   if (instance.validationLayersEnabled()) {
     // Setup the debug messenger
     VkDebugUtilsMessengerCreateInfoEXT createInfo = {

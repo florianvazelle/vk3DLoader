@@ -28,8 +28,8 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
       m_renderPass(renderPass),
       m_swapChain(swapChain),
       m_computePipeline(computePipeline),
-      m_commandPool(commandPool),
       m_storageBuffer(storageBuffer),
+      m_commandPool(commandPool),
       m_descriptorSets(descriptorSets) {
   createCommandBuffers();
 }
@@ -68,18 +68,20 @@ void ComputeCommandBuffer::createCommandBuffers() {
 
   // Acquire barrier
   if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-    VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                                            nullptr,
-                                            0,
-                                            VK_ACCESS_SHADER_WRITE_BIT,
-                                            queueGraphicFamilyIndex.value(),
-                                            queueComputeFamilyIndex.value(),
-                                            m_storageBuffer.buffer(),
-                                            0,
-                                            m_storageBuffer.size()};
+    VkBufferMemoryBarrier buffer_barrier = {
+        VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+        nullptr,
+        0,
+        VK_ACCESS_SHADER_WRITE_BIT,
+        queueGraphicFamilyIndex.value(),
+        queueComputeFamilyIndex.value(),
+        m_storageBuffer.buffer(),
+        0,
+        m_storageBuffer.size(),
+    };
 
-    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
-                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
+    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
+                         0, nullptr, 1, &buffer_barrier, 0, nullptr);
   }
 
   // First pass: Calculate particle movement
@@ -113,18 +115,20 @@ void ComputeCommandBuffer::createCommandBuffers() {
 
   // Release barrier
   if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-    VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                                            nullptr,
-                                            VK_ACCESS_SHADER_WRITE_BIT,
-                                            0,
-                                            queueComputeFamilyIndex.value(),
-                                            queueGraphicFamilyIndex.value(),
-                                            m_storageBuffer.buffer(),
-                                            0,
-                                            m_storageBuffer.size()};
+    VkBufferMemoryBarrier buffer_barrier = {
+        VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+        nullptr,
+        VK_ACCESS_SHADER_WRITE_BIT,
+        0,
+        queueComputeFamilyIndex.value(),
+        queueGraphicFamilyIndex.value(),
+        m_storageBuffer.buffer(),
+        0,
+        m_storageBuffer.size(),
+    };
 
-    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                         VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
+    vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,
+                         0, nullptr, 1, &buffer_barrier, 0, nullptr);
   }
 
   if (vkEndCommandBuffer(m_commandBuffer) != VK_SUCCESS) {

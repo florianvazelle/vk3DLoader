@@ -72,15 +72,17 @@ void GraphicCommandBuffers::createCommandBuffers() {
 
     // Acquire barrier
     if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-      VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                                              nullptr,
-                                              0,
-                                              VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                              queueComputeFamilyIndex.value(),
-                                              queueGraphicFamilyIndex.value(),
-                                              storageBuffer->buffer(),
-                                              0,
-                                              storageBuffer->size()};
+      VkBufferMemoryBarrier buffer_barrier = {
+          VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+          nullptr,
+          0,
+          VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+          queueComputeFamilyIndex.value(),
+          queueGraphicFamilyIndex.value(),
+          storageBuffer->buffer(),
+          0,
+          storageBuffer->size(),
+      };
 
       vkCmdPipelineBarrier(m_commandBuffers[i], VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
                            VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
@@ -101,15 +103,17 @@ void GraphicCommandBuffers::createCommandBuffers() {
 
     // Release barrier
     if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-      VkBufferMemoryBarrier buffer_barrier = {VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                                              nullptr,
-                                              VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                              0,
-                                              queueGraphicFamilyIndex.value(),
-                                              queueComputeFamilyIndex.value(),
-                                              storageBuffer->buffer(),
-                                              0,
-                                              storageBuffer->size()};
+      VkBufferMemoryBarrier buffer_barrier = {
+          VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+          nullptr,
+          VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+          0,
+          queueGraphicFamilyIndex.value(),
+          queueComputeFamilyIndex.value(),
+          storageBuffer->buffer(),
+          0,
+          storageBuffer->size(),
+      };
 
       vkCmdPipelineBarrier(m_commandBuffers[i], VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
                            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);

@@ -15,8 +15,6 @@ using namespace vkl;
 SwapChain::SwapChain(const Device& device, const Window& window)
     : m_swapChain(VK_NULL_HANDLE),
       m_oldSwapChain(VK_NULL_HANDLE),
-      m_extent(),
-      m_imageFormat(),
       m_device(device),
       m_window(window) {
   createSwapChain();

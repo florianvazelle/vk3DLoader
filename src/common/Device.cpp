@@ -18,8 +18,8 @@ using namespace vkl;
 Device::Device(const Instance& instance, const Window& window, const std::vector<const char*>& extensions)
     : m_physical(VK_NULL_HANDLE),
       m_logical(VK_NULL_HANDLE),
-      m_window(window),
       m_instance(instance),
+      m_window(window),
       m_graphicsQueue(VK_NULL_HANDLE),
       m_presentQueue(VK_NULL_HANDLE) {
   m_physical = PickPhysicalDevice(m_instance.handle(), m_window.surface(), extensions);

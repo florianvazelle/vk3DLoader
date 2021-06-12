@@ -54,8 +54,8 @@ namespace vkl {
 
     Buffer<Vertex> vertexBuffer;
     UniformBuffers<DepthMVP> uniformBuffers;
-    UniformBuffers<Depth> depthUniformBuffer;
     Buffer<Material> materialUniformBuffer;
+    UniformBuffers<Depth> depthUniformBuffer;
 
     /**
      * Depth

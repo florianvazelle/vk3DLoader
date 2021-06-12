@@ -24,18 +24,18 @@ ImGuiApp::ImGuiApp(const Instance& instance,
                    const Device& device,
                    const SwapChain& swapChain,
                    const GraphicsPipeline& graphicsPipeline)
-    : m_instance(instance),
-      m_device(device),
-      m_swapChain(swapChain),
-      m_graphicsPipeline(graphicsPipeline),
+    : imGuiDescriptorPool(VK_NULL_HANDLE),
       renderPass(device, swapChain),
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       commandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool),
-      imGuiDescriptorPool(VK_NULL_HANDLE) {
+      m_instance(instance),
+      m_device(device),
+      m_swapChain(swapChain),
+      m_graphicsPipeline(graphicsPipeline) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
+  // ImGuiIO& io = ImGui::GetIO();
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();

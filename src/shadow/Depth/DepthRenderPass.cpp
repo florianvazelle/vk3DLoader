@@ -92,7 +92,7 @@ void DepthRenderPass::createFrameBuffers() {
 
   // Fill attachments for one depth attachment by frame
   m_depthAttachments.resize(numImages);
-  for (auto i = 0; i < numImages; i++) {
+  for (size_t i = 0; i < numImages; i++) {
     m_depthAttachments[i] = std::make_unique<FrameBufferAttachment>(
         m_device, m_swapChain, depthFormat, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
     m_depthAttachments[i]->createSample();

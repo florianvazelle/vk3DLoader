@@ -17,18 +17,18 @@ FrameBufferAttachment::FrameBufferAttachment(const Device& device,
                                              const SwapChain& swapChain,
                                              VkFormat format,
                                              VkImageUsageFlags usage)
-    : m_device(device), m_swapChain(swapChain), m_format(format), m_sampler(VK_NULL_HANDLE) {
+    : m_format(format), m_sampler(VK_NULL_HANDLE), m_device(device), m_swapChain(swapChain) {
   VkImageAspectFlags aspectMask = 0;
-  VkImageLayout imageLayout;
+  // VkImageLayout imageLayout;
 
   if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) {
     aspectMask  = VK_IMAGE_ASPECT_COLOR_BIT;
-    imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    // imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   }
 
   if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) {
     aspectMask  = VK_IMAGE_ASPECT_DEPTH_BIT;
-    imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    // imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
   }
 
   const VkImageCreateInfo imageInfo = {

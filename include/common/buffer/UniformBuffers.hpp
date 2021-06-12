@@ -34,7 +34,7 @@ namespace vkl {
     using UBOCallBack = std::function<void(const Device&, const SwapChain&, std::deque<Buffer<T>>&, float, uint32_t)>;
 
     UniformBuffers(const Device& device, const SwapChain& swapChain, UBOCallBack update)
-        : m_device(device), m_swapChain(swapChain), m_update(update) {
+        : m_update(update), m_device(device), m_swapChain(swapChain) {
       createUniformBuffers();
     }
 

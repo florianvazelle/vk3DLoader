@@ -132,8 +132,8 @@ void updateDepthUniformBuffers(const Device& device,
 ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debugOption, const std::string& modelPath)
     : Application(appName, debugOption),
 
-      commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       model(modelPath),
+      commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
 
       // Buffer
       vertexBuffer(device,

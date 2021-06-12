@@ -19,6 +19,9 @@ project(
 
 set(CMAKE_CXX_STANDARD 20)
 
+include(cmake/tools/libcpp.cmake)
+include(cmake/tools/sanitizer.cmake)
+
 # Vulkan is a required dependency.
 include(FindVulkan)
 if(NOT VULKAN_FOUND)
