@@ -32,6 +32,7 @@ namespace vkl {
     inline const VkPhysicalDevice& physical() const { return m_physical; }
     inline const VkDevice& logical() const { return m_logical; }
     inline const QueueFamilyIndices& queueFamilyIndices() const { return m_indices; }
+
     inline const VkQueue& graphicsQueue() const { return m_graphicsQueue; }
     inline const VkQueue& computeQueue() const { return m_computeQueue; }
     inline const VkQueue& transferQueue() const { return m_transferQueue; }
@@ -52,7 +53,7 @@ namespace vkl {
 
     static bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device, const std::vector<const char*>& extensions);
     static uint32_t GetQueueFamilyIndex(const std::vector<VkQueueFamilyProperties>& families,
-                                     const VkQueueFlagBits& queueFlags);
+                                        const VkQueueFlagBits& queueFlags);
 
     static VkPhysicalDevice PickPhysicalDevice(const VkInstance& instance,
                                                const VkSurfaceKHR& surface,

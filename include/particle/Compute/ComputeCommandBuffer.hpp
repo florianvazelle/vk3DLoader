@@ -48,7 +48,6 @@ namespace vkl {
 
     // allocate one command buffer
     VkCommandBuffer allocCommandBuffer(VkCommandBufferLevel level, VkCommandPool pool, bool begin = false) const;
-  void flushCommandBuffer(VkCommandBuffer cmdBuffer, VkQueue queue, VkCommandPool pool, bool free = true) const;
   };
 
 }  // namespace vkl

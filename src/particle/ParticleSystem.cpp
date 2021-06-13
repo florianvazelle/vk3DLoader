@@ -78,14 +78,18 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       // Use a separate command pool (queue family may differ from the one used for graphics)
-      commandPoolCompute(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT, device.queueFamilyIndices().computeFamily),
+      commandPoolCompute(device,
+                         VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+                         device.queueFamilyIndices().computeFamily),
 
       // Descriptor Pool
       ps({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, swapChain.numImages()),
       }),
-      dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages() * 2)), // * 2 car on utilise le meme descriptor pool pour les Graphic et Compute
+      dpi(misc::descriptorPoolCreateInfo(
+          ps,
+          swapChain.numImages() * 2)),  // * 2 car on utilise le meme descriptor pool pour les Graphic et Compute
       dp(device, dpi),
 
       // Buffer
@@ -160,10 +164,17 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       // signal semaphore
 
-      cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, semaphoreCompute, dsCompute),
+      cbCompute(device,
+                rpGraphic,
+                swapChain,
+                gpCompute,
+                storageBuffer,
+                commandPoolCompute,
+                semaphoreCompute,
+                dsCompute),
 
       /* ImGui */
-      interface(instance, window, device, swapChain, gpGraphic)  {}
+      interface(instance, window, device, swapChain, gpGraphic) {}
 
 void ParticleSystem::run() {
   window.setDrawFrameFunc([this](bool& framebufferResized) {
@@ -176,24 +187,9 @@ void ParticleSystem::run() {
 }
 
 void ParticleSystem::drawFrame(bool& framebufferResized) {
-  vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE, UINT64_MAX);
-
-  // Get image from swap chain
   uint32_t imageIndex;
-  VkResult result = vkAcquireNextImageKHR(device.logical(), swapChain.handle(), UINT64_MAX,
-                                          syncObjects.imageAvailable(currentFrame), VK_NULL_HANDLE, &imageIndex);
-  // Create new swap chain if needed
-  if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-    recreateSwapChain(framebufferResized);
-    return;
-  } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-    throw std::runtime_error("Failed to acquire swapchain image");
-  }
-
-  if (syncObjects.imageInFlight(imageIndex) != VK_NULL_HANDLE) {
-    vkWaitForFences(device.logical(), 1, &syncObjects.imageInFlight(imageIndex), VK_TRUE, UINT64_MAX);
-  }
-  syncObjects.imageInFlight(imageIndex) = syncObjects.inFlightFence(currentFrame);
+  VkResult result = prepareFrame(framebufferResized, imageIndex);
+  if (result != VK_SUCCESS) return;
 
   /* Update Uniform Buffers */
 
@@ -234,26 +230,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   }
 
   // Submit frame
-  {
-    const VkSwapchainKHR swapChains[] = {swapChain.handle()};
-
-    const VkPresentInfoKHR presentInfo = {
-        .sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-        .waitSemaphoreCount = 1,
-        .pWaitSemaphores    = graphicsSignalSemaphores,
-        .swapchainCount     = 1,
-        .pSwapchains        = swapChains,
-        .pImageIndices      = &imageIndex,
-    };
-
-    result = vkQueuePresentKHR(device.presentQueue(), &presentInfo);
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
-      recreateSwapChain(framebufferResized);
-      framebufferResized = false;
-    } else if (result != VK_SUCCESS) {
-      throw std::runtime_error("Failed to present swap chain image");
-    }
-  }
+  submitFrame(framebufferResized, imageIndex);
 
   // Wait for rendering finished
   VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
@@ -262,8 +239,8 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   {
     const VkSubmitInfo computeSubmitInfo = {
         .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-        .waitSemaphoreCount   = 2,
-        .pWaitSemaphores      = graphicsWaitSemaphores,
+        .waitSemaphoreCount   = 1,
+        .pWaitSemaphores      = &semaphoreGraphic.handle(),
         .pWaitDstStageMask    = &waitStageMask,
         .commandBufferCount   = 1,
         .pCommandBuffers      = &cbCompute.command(),

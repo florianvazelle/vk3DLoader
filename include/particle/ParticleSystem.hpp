@@ -85,8 +85,6 @@ namespace vkl {
 
     ImGuiApp interface;
 
-    size_t currentFrame = 0;
-
     void drawFrame(bool& framebufferResized);
     void drawImGui();
 

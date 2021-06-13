@@ -95,8 +95,6 @@ namespace vkl {
 
     ImGuiApp interface;
 
-    size_t currentFrame = 0;
-
     void mainLoop();
 
     void drawFrame(bool& framebufferResized);
