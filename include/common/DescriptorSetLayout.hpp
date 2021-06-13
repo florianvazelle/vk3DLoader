@@ -8,13 +8,13 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkDescriptorSetLayout, VkDescriptorS...
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on
 
 namespace vkl {
 
-  class DescriptorSetLayout : public NonCopyable {
+  class DescriptorSetLayout : public NoCopy {
   public:
     DescriptorSetLayout(const Device& device, const VkDescriptorSetLayoutCreateInfo& layoutInfo);
     ~DescriptorSetLayout();

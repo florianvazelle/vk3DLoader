@@ -3,13 +3,13 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkSemaphore, VkSemaphore_T
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on
 
 namespace vkl {
 
-  class Semaphore : public NonCopyable {
+  class Semaphore : public NoCopy {
   public:
     Semaphore(const Device& device);
     Semaphore() = delete;

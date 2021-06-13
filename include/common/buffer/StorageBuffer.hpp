@@ -4,7 +4,7 @@
 #include <vulkan/vulkan.h>
 #include <stdexcept>
 
-#include <NonCopyable.hpp>
+#include <NoCopy.hpp>
 #include <common/Device.hpp>
 #include <common/buffer/IBuffer.hpp>
 #include <common/misc/Device.hpp>

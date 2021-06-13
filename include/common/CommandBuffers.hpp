@@ -7,7 +7,7 @@
 #define COMMANDBUFFERS_HPP
 
 #include <vulkan/vulkan.h>
-#include <NonCopyable.hpp>
+#include <NoCopy.hpp>
 #include <common/CommandPool.hpp>
 #include <common/DescriptorSets.hpp>
 #include <common/Device.hpp>
@@ -19,7 +19,7 @@
 
 namespace vkl {
 
-  class CommandBuffers : public NonCopyable {
+  class CommandBuffers : public NoCopy {
   public:
     CommandBuffers(const Device& device,
                    const IRenderPass& renderpass,

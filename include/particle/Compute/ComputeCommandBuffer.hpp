@@ -3,7 +3,7 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkCommandBuffer, VkCommandBuffer_T
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 namespace vkl { class CommandPool; }
 namespace vkl { class ComputePipeline; }
 namespace vkl { class DescriptorSets; }
@@ -16,7 +16,7 @@ namespace vkl { class Semaphore; }
 
 namespace vkl {
 
-  class ComputeCommandBuffer : public NonCopyable {
+  class ComputeCommandBuffer : public NoCopy {
   public:
     ComputeCommandBuffer(const Device& device,
                          const IRenderPass& renderPass,

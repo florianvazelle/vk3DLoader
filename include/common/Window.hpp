@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vulkan/vulkan_core.h>      // for VkSurfaceKHR, VkSurfaceKHR_T
-#include <NonCopyable.hpp>           // for NonCopyable
+#include <NoCopy.hpp>           // for NoCopy
 #include <functional>                // for function
 #include <string>                    // for string
 #include <vector>                    // for vector
@@ -26,7 +26,7 @@ namespace vkl {
   /**
    * @brief A class which allows to manage a surface, with GLFW.
    */
-  class Window : public NonCopyable {
+  class Window : public NoCopy {
   public:
     // using DrawFrameFunc = void(*)(bool& framebufferResized);
 

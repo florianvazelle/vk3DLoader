@@ -3,11 +3,11 @@
 
 #include <vulkan/vulkan.h>
 
-#include <NonCopyable.hpp>
+#include <NoCopy.hpp>
 
 namespace vkl {
 
-  class IBuffer : public NonCopyable {
+  class IBuffer : public NoCopy {
   public:
     virtual ~IBuffer() {}
 
@@ -17,7 +17,7 @@ namespace vkl {
     virtual const VkDescriptorBufferInfo& descriptor() const = 0;
   };
 
-  class IUniformBuffers : public NonCopyable {
+  class IUniformBuffers : public NoCopy {
   public:
     virtual ~IUniformBuffers() {}
 

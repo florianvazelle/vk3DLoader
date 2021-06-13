@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vulkan/vulkan_core.h>  // for VkInstance, VkInstance_T
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 #include <string>                // for string
 #include <vector>                // for vector
 // clang-format on
@@ -22,7 +22,7 @@ namespace vkl {
    * @brief A class that allows you to manage the instance.
    * A VkInstance is an object that contains all of the information our Vulkan application needs to function.
    */
-  class Instance : public NonCopyable {
+  class Instance : public NoCopy {
   public:
     Instance(const std::string& appName, const std::string& engineName, bool validationLayers);
     Instance() = delete;

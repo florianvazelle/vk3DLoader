@@ -5,7 +5,7 @@
 #include <deque>
 #include <stdexcept>
 
-#include <NonCopyable.hpp>
+#include <NoCopy.hpp>
 #include <common/Device.hpp>
 #include <common/SwapChain.hpp>
 #include <common/buffer/Buffer.hpp>

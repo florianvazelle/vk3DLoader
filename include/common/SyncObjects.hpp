@@ -9,7 +9,7 @@
 // clang-format off
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VkFence, VkSemaphore
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 #include <vector>                // for vector
 namespace vkl { class Device; }
 // clang-format on
@@ -27,7 +27,7 @@ namespace vkl {
    * alors que les sémaphores synchronisent les opérations entre elles.
    */
 
-  class SyncObjects : public NonCopyable {
+  class SyncObjects : public NoCopy {
   public:
     SyncObjects(const Device& device, uint32_t numImages, uint32_t maxFramesInFlight);
     ~SyncObjects();

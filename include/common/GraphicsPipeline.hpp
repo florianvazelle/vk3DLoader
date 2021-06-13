@@ -9,7 +9,7 @@
 // clang-format off
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VK_FALSE, VkPipelineLayout, VK_TRUE
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 #include <common/SwapChain.hpp>  // for SwapChain
 #include <vector>                // for vector
 namespace vkl { class DescriptorSetLayout; }
@@ -19,7 +19,7 @@ namespace vkl { class RenderPass; }
 
 namespace vkl {
 
-  class GraphicsPipeline : public NonCopyable {
+  class GraphicsPipeline : public NoCopy {
   public:
     GraphicsPipeline(const Device& device,
                      const SwapChain& swapChain,

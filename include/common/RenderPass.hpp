@@ -10,7 +10,7 @@
 #include <stddef.h>              // for size_t
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VkFramebuffer, VkRenderPass, VkRende...
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 #include <iostream>              // for operator<<, cout, ostream
 #include <memory>                // for unique_ptr
 #include <vector>                // for vector
@@ -20,7 +20,7 @@ namespace vkl { class SwapChain; }
 // clang-format on
 
 namespace vkl {
-  class IRenderPass : public NonCopyable {
+  class IRenderPass : public NoCopy {
   public:
     virtual ~IRenderPass() {}
 

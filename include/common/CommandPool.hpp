@@ -7,7 +7,7 @@
 #define COMMANDPOOL_HPP
 
 #include <vulkan/vulkan.h>
-#include <NonCopyable.hpp>
+#include <NoCopy.hpp>
 #include <optional>
 
 namespace vkl {
@@ -18,9 +18,11 @@ namespace vkl {
    * les command pools qui instancient les command buffers.
    */
 
-  class CommandPool : public NonCopyable {
+  class CommandPool : public NoCopy {
   public:
-    CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags, std::optional<uint32_t> queueFamilyIndex = std::nullopt);
+    CommandPool(const Device& device,
+                const VkCommandPoolCreateFlags& flags,
+                std::optional<uint32_t> queueFamilyIndex = std::nullopt);
     ~CommandPool();
 
     inline const VkCommandPool& handle() const { return m_pool; };

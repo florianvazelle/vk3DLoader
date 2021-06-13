@@ -7,7 +7,7 @@
 #define APPLICATION_HPP
 
 // clang-format off
-#include <NonCopyable.hpp>                 // for NonCopyable
+#include <NoCopy.hpp>                 // for NoCopy
 #include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
 #include <common/Device.hpp>               // for Device
 #include <common/Instance.hpp>             // for Instance
@@ -37,7 +37,7 @@ namespace vkl {
     bool exitOnError;
   };
 
-  class Application : public NonCopyable {
+  class Application : public NoCopy {
   public:
     Application(const std::string& appName, const DebugOption& debugOption);
 

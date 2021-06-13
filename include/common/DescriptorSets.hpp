@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkDescriptorSet, VkDescriptorSet_T
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 #include <vector>                // for vector
 namespace vkl { class DescriptorPool; }
 namespace vkl { class DescriptorSetLayout; }
@@ -21,7 +21,7 @@ namespace vkl { class SwapChain; }
 
 namespace vkl {
 
-  class DescriptorSets : public NonCopyable {
+  class DescriptorSets : public NoCopy {
   public:
     DescriptorSets(const Device& device,
                    const SwapChain& swapChain,

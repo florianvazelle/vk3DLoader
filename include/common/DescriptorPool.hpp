@@ -8,13 +8,13 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkDescriptorPool, VkDescriptorPoolCr...
-#include <NonCopyable.hpp>       // for NonCopyable
+#include <NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on
 
 namespace vkl {
 
-  class DescriptorPool : public NonCopyable {
+  class DescriptorPool : public NoCopy {
   public:
     DescriptorPool(const Device& device, const VkDescriptorPoolCreateInfo& poolInfo);
     ~DescriptorPool();

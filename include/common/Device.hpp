@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>    // for VkPhysicalDevice, VkQueue, VkDevice
-#include <NonCopyable.hpp>         // for NonCopyable
+#include <NoCopy.hpp>         // for NoCopy
 #include <common/QueueFamily.hpp>  // for QueueFamilyIndices
 #include <vector>                  // for vector
 namespace vkl { class Instance; }
@@ -24,7 +24,7 @@ namespace vkl {
    * A physical device is a single component of the system. It can also be several components working together to
    * function as a single device. A logical device is our interface to the physical device.
    */
-  class Device : public NonCopyable {
+  class Device : public NoCopy {
   public:
     Device(const Instance& instance, const Window& window, const std::vector<const char*>& extensions);
     ~Device();
