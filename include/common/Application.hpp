@@ -7,7 +7,8 @@
 #define APPLICATION_HPP
 
 // clang-format off
-#include <NoCopy.hpp>                 // for NoCopy
+#include <NoCopy.hpp>                      // for NoCopy
+#include <NoMove.hpp>                      // for NoMove
 #include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
 #include <common/Device.hpp>               // for Device
 #include <common/Instance.hpp>             // for Instance
@@ -37,9 +38,20 @@ namespace vkl {
     bool exitOnError;
   };
 
-  class Application : public NoCopy {
+  class Application : public NoCopy, NoMove {
   public:
     Application(const std::string& appName, const DebugOption& debugOption);
+
+    static void initialize() {
+      // need to init glfw first, to get the suitable glfw extension for the vkinstance
+      glfwInit();
+
+      // Disable OpenGL
+      glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+      // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    }
+
+    static void terminate() { glfwTerminate(); }
 
   protected:
     Instance instance;

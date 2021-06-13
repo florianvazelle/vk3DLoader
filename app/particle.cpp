@@ -21,12 +21,12 @@ int main(int argc, char** argv) {
 
   auto result = options.parse(argc, argv);
 
-  // need to init glfw first, to get the suitable glfw extension for the vkinstance
-  glfwInit();
+  if (result["help"].as<bool>()) {
+    std::cout << options.help();
+    return 0;
+  }
 
-  // Disable OpenGL
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+  vkl::ParticleSystem::initialize();
 
   int debugLevel = 0;
   if (result.count("debug")) {
@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  glfwTerminate();
+  vkl::ParticleSystem::terminate();
 
   return EXIT_SUCCESS;
 }

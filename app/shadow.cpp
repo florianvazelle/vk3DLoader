@@ -31,13 +31,6 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  // need to init glfw first, to get the suitable glfw extension for the vkinstance
-  glfwInit();
-
-  // Disable OpenGL
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
   std::string modelPath = "";
   if (result.count("model")) {
     modelPath = result["model"].as<std::string>();
@@ -57,6 +50,8 @@ int main(int argc, char** argv) {
       .exitOnError = result.count("error-exit") > 0,
   };
 
+  vkl::ShadowMapping::initialize();
+
   vkl::ShadowMapping app("vk3DLoader", debugOption, modelPath);
 
   try {
@@ -66,7 +61,7 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  glfwTerminate();
+  vkl::ShadowMapping::terminate();
 
   return EXIT_SUCCESS;
 }
