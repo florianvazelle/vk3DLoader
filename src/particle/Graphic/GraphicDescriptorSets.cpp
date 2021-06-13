@@ -19,11 +19,7 @@ void GraphicDescriptorSets::createDescriptorSets() {
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
   const IUniformBuffers* ubo = m_uniformBuffers[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
-    const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = ubo->buffer(i),
-        .offset = 0,
-        .range  = sizeof(MVP),
-    };
+    const VkDescriptorBufferInfo& bufferInfo = ubo->descriptor(i);
 
     writeDescriptorSets = {
         // Binding 2 :

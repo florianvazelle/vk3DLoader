@@ -19,11 +19,7 @@ void DepthDescriptorSets::createDescriptorSets() {
   const IUniformBuffers* depthUBO = m_uniformBuffers[0];
 
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
-    const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = depthUBO->buffer(i),
-        .offset = 0,
-        .range  = sizeof(Depth),
-    };
+    const VkDescriptorBufferInfo& bufferInfo = depthUBO->descriptor(i);
 
     writeDescriptorSets = {
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),

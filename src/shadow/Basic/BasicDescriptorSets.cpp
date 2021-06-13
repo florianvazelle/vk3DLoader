@@ -26,22 +26,14 @@ void BasicDescriptorSets::createDescriptorSets() {
 
   std::vector<VkWriteDescriptorSet> writeDescriptorSets;
 
-  const IBuffer* materialBuffer                   = m_buffers[0];
-  const VkDescriptorBufferInfo materialBufferInfo = {
-      .buffer = materialBuffer->buffer(),
-      .offset = 0,
-      .range  = sizeof(Material),
-  };
+  const IBuffer* materialBuffer                    = m_buffers[0];
+  const VkDescriptorBufferInfo& materialBufferInfo = materialBuffer->descriptor();
 
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
   const IUniformBuffers* ubo    = m_uniformBuffers[0];
   const IRenderPass* renderPass = m_renderPasses[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
-    const VkDescriptorBufferInfo bufferInfo = {
-        .buffer = ubo->buffer(i),
-        .offset = 0,
-        .range  = sizeof(DepthMVP),
-    };
+    const VkDescriptorBufferInfo& bufferInfo = ubo->descriptor(i);
 
     // Image descriptor for the shadow map attachment
     const VkDescriptorImageInfo depthDescriptor = {

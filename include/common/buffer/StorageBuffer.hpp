@@ -31,6 +31,7 @@ namespace vkl {
     inline const VkBuffer& buffer() const { return m_buffer; }
     inline const VkDeviceMemory& memory() const { return m_bufferMemory; }
     inline const VkDeviceSize& size() const { return m_bufferSize; }
+    inline const VkDescriptorBufferInfo& descriptor() const { return m_descriptor; }
 
     /**
      * @brief Wrapper for create a new buffer
@@ -73,12 +74,24 @@ namespace vkl {
 
       // Note : Pour allouer un grand espace mémoire, il faut que ce nombre soit divisible par
       // memRequirements.alignement
+
+      setupDescriptor();
+    }
+
+    void setupDescriptor(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) {
+      m_descriptor = {
+          .buffer = m_buffer,
+          .offset = offset,
+          .range  = size,
+      };
     }
 
   protected:
     VkBuffer m_buffer;
     VkDeviceMemory m_bufferMemory;
     VkDeviceSize m_bufferSize;
+
+    VkDescriptorBufferInfo m_descriptor;
 
     const Device& m_device;
   };

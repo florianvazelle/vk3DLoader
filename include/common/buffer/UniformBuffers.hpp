@@ -44,6 +44,7 @@ namespace vkl {
     inline const std::vector<T>& data(int i) const { return m_uniformBuffers.at(i).data(); }
 
     inline const VkBuffer& buffer(int index) const { return m_uniformBuffers[index].buffer(); }
+    inline const VkDescriptorBufferInfo& descriptor(int index) const { return m_uniformBuffers[index].descriptor(); }
 
     /**
      * @brief Génére une rotation à chaque frame pour que la géométrie tourne sur elle-même
