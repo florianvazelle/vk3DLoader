@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::CommandPool class | vkCommon</title>
+  <title>NoMove.hpp file | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,54 +43,27 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>CommandPool <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="CommandPool_8hpp.html">&lt;common/CommandPool.hpp&gt;</a></div>
+          NoMove.hpp <span class="m-thin">file</span>
         </h1>
+        <p>Define <a href="structNoMove.html" class="m-doc">NoMove</a> class.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#base-classes">Base classes</a></li>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
               </ul>
             </li>
           </ul>
         </div>
-<p>Note Exposé : Les command pools gèrent la mémoire utilisée par les command buffers, et ce sont les command pools qui instancient les command buffers.</p>
-        <section id="base-classes">
-          <h2><a href="#base-classes">Base classes</a></h2>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
           <dl class="m-doc">
             <dt>
-              struct <a href="structNoCopy.html" class="m-doc">NoCopy</a>
+              struct <a href="structNoMove.html" class="m-doc">NoMove</a>
             </dt>
-            <dd>A class to prohibit copying.</dd>
-          </dl>
-        </section>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
-          <dl class="m-doc">
-            <dt id="aaf1572ab7a4c80b393c0e177df4cd4e1">
-              <span class="m-doc-wrap-bumper"><a href="#aaf1572ab7a4c80b393c0e177df4cd4e1" class="m-doc-self">CommandPool</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const VkCommandPoolCreateFlags&amp; flags,
-              std::optional&lt;uint32_t&gt; queueFamilyIndex = std::nullopt)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aadd6431f9326c478017106f9eb4b2e34">
-              <span class="m-doc-wrap-bumper"><a href="#aadd6431f9326c478017106f9eb4b2e34" class="m-doc-self">~CommandPool</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a8e34b4999de1fdf5c53cb512200ac0ce">
-              <span class="m-doc-wrap-bumper">auto <a href="#a8e34b4999de1fdf5c53cb512200ac0ce" class="m-doc-self">handle</a>(</span><span class="m-doc-wrap">) const -&gt; const VkCommandPool&amp;</span>
-            </dt>
-            <dd><span></span></dd>
+            <dd>A class to prohibit move.</dd>
           </dl>
         </section>
       </div>
