@@ -157,7 +157,7 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       // 5. Descriptor Sets
       dsCompute(device, swapChain, dslCompute, dp, vecRPGraphic, vecSBCompute, vecUBCompute),
 
-      // 3. Graphic Pipeline
+      // 3. Compute Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),
 
       semaphoreCompute(device),
@@ -202,12 +202,15 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   uniformBuffersCompute.update(time, imageIndex);
 
   /* Submit */
-  std::vector<VkCommandBuffer> cmdBuffers = {};
-
   const VkPipelineStageFlags graphicsWaitStageMasks[]
       = {VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
   const VkSemaphore graphicsWaitSemaphores[]   = {semaphoreCompute.handle(), syncObjects.imageAvailable(currentFrame)};
   const VkSemaphore graphicsSignalSemaphores[] = {semaphoreGraphic.handle(), syncObjects.renderFinished(currentFrame)};
+
+  std::vector<VkCommandBuffer> cmdBuffers = {
+      cbGraphic.command(imageIndex),
+      interface.command(imageIndex),
+  };
 
   // Submit graphics commands
   {
@@ -293,5 +296,28 @@ void ParticleSystem::recreateSwapChain(bool& framebufferResized) {
   vkDeviceWaitIdle(device.logical());
 
   swapChain.recreate();
+
+  // Recreated because the number of buffer is based on number of image in swapchain
+  uniformBuffersGraphic.recreate();
+  uniformBuffersCompute.recreate();
+
+  /**
+   * Graphic
+   */
+  rpGraphic.recreate();
+  gpGraphic.recreate();
+  dp.recreate();
+  dsGraphic.recreate();
+  cbGraphic.recreate();
+
+  /**
+   * Compute
+   */
+  gpCompute.recreate();
+  dsCompute.recreate();
+  cbCompute.recreate();
+
+  interface.recreate();
+
   swapChain.cleanupOld();
 }
