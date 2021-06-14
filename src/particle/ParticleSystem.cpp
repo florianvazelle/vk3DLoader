@@ -164,19 +164,27 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       // signal semaphore
 
-      cbCompute(device,
-                rpGraphic,
-                swapChain,
-                gpCompute,
-                storageBuffer,
-                commandPoolCompute,
-                semaphoreCompute,
-                dsCompute),
+      cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
 
       /* ImGui */
       interface(instance, window, device, swapChain, gpGraphic) {}
 
 void ParticleSystem::run() {
+  // Trigger compute semaphore, to start by compute queue
+  {
+    const VkSubmitInfo submitInfo = {
+        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .signalSemaphoreCount = 1,
+        .pSignalSemaphores    = &semaphoreCompute.handle(),
+    };
+
+    // maybe graphics queue
+    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+      throw std::runtime_error("failed to submit signal semaphore!");
+    }
+    vkQueueWaitIdle(device.graphicsQueue());
+  }
+
   window.setDrawFrameFunc([this](bool& framebufferResized) {
     drawImGui();
     drawFrame(framebufferResized);
@@ -191,6 +199,15 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   VkResult result = prepareFrame(framebufferResized, imageIndex);
   if (result != VK_SUCCESS) return;
 
+  /* Buffer */
+
+  interface.recordCommandBuffers(imageIndex);
+
+  std::vector<VkCommandBuffer> cmdBuffers = {
+      cbGraphic.command(imageIndex),
+      interface.command(imageIndex),
+  };
+
   /* Update Uniform Buffers */
 
   static auto startTime = std::chrono::high_resolution_clock::now();
@@ -201,28 +218,24 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   uniformBuffersGraphic.update(time, imageIndex);
   uniformBuffersCompute.update(time, imageIndex);
 
-  /* Submit */
-  const VkPipelineStageFlags graphicsWaitStageMasks[]
-      = {VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-  const VkSemaphore graphicsWaitSemaphores[]   = {semaphoreCompute.handle(), syncObjects.imageAvailable(currentFrame)};
-  const VkSemaphore graphicsSignalSemaphores[] = {semaphoreGraphic.handle(), syncObjects.renderFinished(currentFrame)};
-
-  std::vector<VkCommandBuffer> cmdBuffers = {
-      cbGraphic.command(imageIndex),
-      interface.command(imageIndex),
-  };
-
-  // Submit graphics commands
+  /* Submit graphics commands */
   {
+    const VkPipelineStageFlags waitStageMasks[] = {
+        VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+    };
+    const VkSemaphore waitSemaphores[]   = {semaphoreCompute.handle(), syncObjects.imageAvailable(currentFrame)};
+    const VkSemaphore signalSemaphores[] = {semaphoreGraphic.handle(), syncObjects.renderFinished(currentFrame)};
+
     const VkSubmitInfo submitInfo = {
         .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
         .waitSemaphoreCount   = 2,
-        .pWaitSemaphores      = graphicsWaitSemaphores,
-        .pWaitDstStageMask    = graphicsWaitStageMasks,
+        .pWaitSemaphores      = waitSemaphores,
+        .pWaitDstStageMask    = waitStageMasks,
         .commandBufferCount   = static_cast<uint32_t>(cmdBuffers.size()),
         .pCommandBuffers      = cmdBuffers.data(),
         .signalSemaphoreCount = 2,
-        .pSignalSemaphores    = graphicsSignalSemaphores,
+        .pSignalSemaphores    = signalSemaphores,
     };
 
     vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
@@ -232,23 +245,23 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
     }
   }
 
-  // Submit frame
   submitFrame(framebufferResized, imageIndex);
 
-  // Wait for rendering finished
-  VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-
-  // Submit compute commands
+  /* Submit compute commands */
   {
+    const VkPipelineStageFlags waitStageMasks[] = {VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT};
+    const VkSemaphore waitSemaphores[]          = {semaphoreGraphic.handle()};
+    const VkSemaphore signalSemaphores[]        = {semaphoreCompute.handle()};
+
     const VkSubmitInfo computeSubmitInfo = {
         .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
         .waitSemaphoreCount   = 1,
-        .pWaitSemaphores      = &semaphoreGraphic.handle(),
-        .pWaitDstStageMask    = &waitStageMask,
+        .pWaitSemaphores      = waitSemaphores,
+        .pWaitDstStageMask    = waitStageMasks,
         .commandBufferCount   = 1,
         .pCommandBuffers      = &cbCompute.command(),
         .signalSemaphoreCount = 1,
-        .pSignalSemaphores    = &semaphoreCompute.handle(),
+        .pSignalSemaphores    = signalSemaphores,
     };
 
     if (vkQueueSubmit(device.computeQueue(), 1, &computeSubmitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {

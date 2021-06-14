@@ -8,7 +8,6 @@
 #include <common/struct/Particle.hpp>            // for Particle
 #include <particle/Compute/ComputePipeline.hpp>  // for ComputePipeline
 #include <common/RenderPass.hpp>                 // for IRenderPass
-#include <common/Semaphore.hpp>                  // for SwapChain
 #include <common/SwapChain.hpp>                  // for SwapChain
 #include <common/Device.hpp>
 // clang-format on
@@ -16,8 +15,6 @@
 #ifndef NUM_PARTICLE
 #  define NUM_PARTICLE 10
 #endif
-
-#define DEFAULT_FENCE_TIMEOUT 100000000000
 
 // https://community.khronos.org/t/why-i-am-getting-this-validator-message-memory-buffer-barrier/106638
 
@@ -29,7 +26,6 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
                                            const ComputePipeline& computePipeline,
                                            const StorageBuffer& storageBuffer,
                                            const CommandPool& commandPool,
-                                           const Semaphore& semaphore,
                                            const DescriptorSets& descriptorSets)
     : m_device(device),
       m_renderPass(renderPass),
@@ -37,7 +33,6 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
       m_computePipeline(computePipeline),
       m_storageBuffer(storageBuffer),
       m_commandPool(commandPool),
-      m_semaphore(semaphore),
       m_descriptorSets(descriptorSets) {
   createCommandBuffers();
 }
@@ -82,20 +77,6 @@ VkCommandBuffer ComputeCommandBuffer::allocCommandBuffer(VkCommandBufferLevel le
 }
 
 void ComputeCommandBuffer::createCommandBuffers() {
-  {
-    const VkSubmitInfo submitInfo = {
-        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-        .signalSemaphoreCount = 1,
-        .pSignalSemaphores    = &m_semaphore.handle(),
-    };
-
-    // maybe graphics queue
-    if (vkQueueSubmit(m_device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
-      throw std::runtime_error("failed to submit signal semaphore!");
-    }
-    vkQueueWaitIdle(m_device.computeQueue());
-  }
-
   const std::optional<uint32_t>& queueGraphicFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
   const std::optional<uint32_t>& queueComputeFamilyIndex = m_device.queueFamilyIndices().computeFamily;
 
