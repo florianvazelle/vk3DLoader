@@ -1,5 +1,5 @@
 /**
- * @file NoCopy.hpp
+ * @file common/NoCopy.hpp
  * @brief Define NoCopy class
  */
 

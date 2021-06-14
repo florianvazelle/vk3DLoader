@@ -68,7 +68,7 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpiDepth;
     DescriptorPool dpDepth;
 
-    std::vector<const IRenderPass*> vecRPDepth;
+    std::vector<const RenderPass*> vecRPDepth;
     std::vector<const IUniformBuffers*> vecUBDepth;
     std::vector<const IBuffer*> vecVertexBuffer;
 
@@ -86,7 +86,7 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpiBasic;
     DescriptorPool dpBasic;
 
-    std::vector<const IRenderPass*> vecRPBasic;
+    std::vector<const RenderPass*> vecRPBasic;
     std::vector<const IUniformBuffers*> vecUBBasic;
     std::vector<const IBuffer*> vecBBasic;
 
@@ -100,7 +100,7 @@ namespace vkl {
     void drawFrame(bool& framebufferResized);
     void drawImGui();
 
-    void recreateSwapChain(bool& framebufferResized);
+    void recreateSwapChain(bool& framebufferResized) final;
   };
 
 }  // namespace vkl

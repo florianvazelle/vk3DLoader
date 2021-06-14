@@ -7,7 +7,7 @@
 #define COMMANDPOOL_HPP
 
 #include <vulkan/vulkan.h>
-#include <NoCopy.hpp>
+#include <common/NoCopy.hpp>
 #include <optional>
 
 namespace vkl {

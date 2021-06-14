@@ -77,7 +77,7 @@ ImGuiApp::~ImGuiApp() {
 void ImGuiApp::recreate() {
   renderPass.recreate();
   commandBuffers.recreate();
-};
+}
 
 void ImGuiApp::createImGuiDescriptorPool() {
   const std::vector<VkDescriptorPoolSize> pool_sizes = {{VK_DESCRIPTOR_TYPE_SAMPLER, 1000},

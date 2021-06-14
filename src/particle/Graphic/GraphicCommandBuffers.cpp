@@ -8,7 +8,7 @@
 #include <common/DescriptorSets.hpp>        // for DescriptorSets
 #include <common/Device.hpp>                // for Device
 #include <common/GraphicsPipeline.hpp>      // for GraphicsPipeline
-#include <common/RenderPass.hpp>            // for IRenderPass
+#include <common/RenderPass.hpp>            // for RenderPass
 #include <common/SwapChain.hpp>             // for SwapChain
 #include <common/buffer/StorageBuffer.hpp>  // for StorageBuffer
 // clang-format on
@@ -18,11 +18,6 @@ using namespace vkl;
 #ifndef NUM_PARTICLE
 #  define NUM_PARTICLE 10
 #endif
-
-void GraphicCommandBuffers::recreate() {
-  destroyCommandBuffers();
-  createCommandBuffers();
-}
 
 void GraphicCommandBuffers::createCommandBuffers() {
   m_commandBuffers.resize(m_renderPass.size());

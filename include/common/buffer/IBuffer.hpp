@@ -3,13 +3,13 @@
 
 #include <vulkan/vulkan.h>
 
-#include <NoCopy.hpp>
+#include <common/NoCopy.hpp>
 
 namespace vkl {
 
   class IBuffer : public NoCopy {
   public:
-    virtual ~IBuffer() {}
+    virtual ~IBuffer() = default;
 
     virtual const VkBuffer& buffer() const                   = 0;
     virtual const VkDeviceMemory& memory() const             = 0;
@@ -19,7 +19,7 @@ namespace vkl {
 
   class IUniformBuffers : public NoCopy {
   public:
-    virtual ~IUniformBuffers() {}
+    virtual ~IUniformBuffers() = default;
 
     virtual const VkBuffer& buffer(int index) const                   = 0;
     virtual const VkDescriptorBufferInfo& descriptor(int index) const = 0;

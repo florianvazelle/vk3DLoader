@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>    // for VkPhysicalDevice, VkQueue, VkDevice
-#include <NoCopy.hpp>         // for NoCopy
+#include <common/NoCopy.hpp>         // for NoCopy
 #include <common/QueueFamily.hpp>  // for QueueFamilyIndices
 #include <vector>                  // for vector
 namespace vkl { class Instance; }

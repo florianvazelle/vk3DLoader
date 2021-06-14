@@ -3,6 +3,7 @@
 #include <common/Device.hpp>     // for Device
 #include <common/SwapChain.hpp>  // for vkl
 #include <stdexcept>             // for runtime_error
+#include <iostream>
 // clang-format on
 
 using namespace vkl;
@@ -20,15 +21,14 @@ GraphicsPipeline::GraphicsPipeline(const Device& device,
       m_renderPass(renderPass),
       m_descriptorSetLayout(descriptorSetLayout) {}
 
-GraphicsPipeline::~GraphicsPipeline() {
-  vkDestroyPipeline(m_device.logical(), m_pipeline, nullptr);
-  vkDestroyPipelineLayout(m_device.logical(), m_layout, nullptr);
+void GraphicsPipeline::recreate() {
+  destroyPipeline();
+  createPipeline();
 }
 
-void GraphicsPipeline::recreate() {
+void GraphicsPipeline::destroyPipeline() {
   vkDestroyPipeline(m_device.logical(), m_pipeline, nullptr);
   vkDestroyPipelineLayout(m_device.logical(), m_layout, nullptr);
-  createPipeline();
 }
 
 // TODO : maybe externilize shader module

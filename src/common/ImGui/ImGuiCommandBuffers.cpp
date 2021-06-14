@@ -7,7 +7,7 @@
 #include <common/CommandPool.hpp>     // for CommandPool, vkl
 #include <common/DescriptorSets.hpp>  // for DescriptorSets
 #include <common/Device.hpp>          // for Device
-#include <common/RenderPass.hpp>      // for IRenderPass, RenderPass
+#include <common/RenderPass.hpp>      // for RenderPass, RenderPass
 #include <common/SwapChain.hpp>       // for SwapChain
 #include <stdexcept>                  // for runtime_error
 #include <vector>                     // for vector

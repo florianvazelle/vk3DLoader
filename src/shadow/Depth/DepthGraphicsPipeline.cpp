@@ -24,6 +24,8 @@ DepthGraphicsPipeline::DepthGraphicsPipeline(const Device& device,
   createPipeline();
 }
 
+DepthGraphicsPipeline::~DepthGraphicsPipeline() { destroyPipeline(); }
+
 void DepthGraphicsPipeline::createPipeline() {
   // Creation Layout
   // TODO : made a separated method

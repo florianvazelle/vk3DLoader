@@ -61,7 +61,7 @@ namespace vkl {
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 
     // Vector Buffer
-    std::vector<const IRenderPass*> vecRPGraphic;
+    std::vector<const RenderPass*> vecRPGraphic;
     std::vector<const IUniformBuffers*> vecUBGraphic;
     std::vector<const IUniformBuffers*> vecUBCompute;
     std::vector<const IBuffer*> vecSBCompute;
@@ -88,7 +88,7 @@ namespace vkl {
     void drawFrame(bool& framebufferResized);
     void drawImGui();
 
-    void recreateSwapChain(bool& framebufferResized);
+    void recreateSwapChain(bool& framebufferResized) final;
   };
 
 }  // namespace vkl

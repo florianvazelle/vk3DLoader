@@ -10,7 +10,7 @@
 #include <stddef.h>              // for size_t
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VkFramebuffer, VkRenderPass, VkRende...
-#include <NoCopy.hpp>       // for NoCopy
+#include <common/NoCopy.hpp>       // for NoCopy
 #include <iostream>              // for operator<<, cout, ostream
 #include <memory>                // for unique_ptr
 #include <vector>                // for vector
@@ -20,29 +20,12 @@ namespace vkl { class SwapChain; }
 // clang-format on
 
 namespace vkl {
-  class IRenderPass : public NoCopy {
-  public:
-    virtual ~IRenderPass() {}
-
-    virtual const VkRenderPass& handle() const                        = 0;
-    virtual const VkFramebuffer& frameBuffer(uint32_t index) const    = 0;
-    virtual const FrameBufferAttachment& depthAttachment(int i) const = 0;
-    virtual size_t size() const                                       = 0;
-
-    virtual void recreate() = 0;
-
-  protected:
-    virtual void createRenderPass()    = 0;
-    virtual void createFrameBuffers()  = 0;
-    virtual void destroyFrameBuffers() = 0;
-  };
-
   /**
    * Note Exposé : Le render pass permet d'indiquer combien chaque framebuffer
    * aura de buffers de couleur et de profondeur, combien de samples il faudra utiliser avec chaque
    * frambuffer et comment les utiliser tout au long des opérations de rendu.
    */
-  class RenderPass : public IRenderPass {
+  class RenderPass : public NoCopy {
   public:
     RenderPass(const Device& device, const SwapChain& swapChain);
     ~RenderPass();
@@ -65,8 +48,9 @@ namespace vkl {
     const Device& m_device;
     const SwapChain& m_swapChain;
 
-    void createRenderPass() { std::cout << "Warning: call base createRenderPass" << std::endl; };
-    void createFrameBuffers();
+    virtual void createRenderPass() = 0;
+    virtual void createFrameBuffers();
+    void destroyRenderPass();
     void destroyFrameBuffers();
   };
 }  // namespace vkl

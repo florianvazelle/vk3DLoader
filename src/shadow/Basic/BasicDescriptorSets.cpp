@@ -8,7 +8,7 @@
 #include <common/Device.hpp>                 // for Device
 #include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
 #include <common/QueueFamily.hpp>            // for vkl
-#include <common/RenderPass.hpp>             // for IRenderPass
+#include <common/RenderPass.hpp>             // for RenderPass
 #include <common/buffer/IBuffer.hpp>         // for IBuffer, IUniformBuffers
 // clang-format on
 
@@ -30,8 +30,8 @@ void BasicDescriptorSets::createDescriptorSets() {
   const VkDescriptorBufferInfo& materialBufferInfo = materialBuffer->descriptor();
 
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
-  const IUniformBuffers* ubo    = m_uniformBuffers[0];
-  const IRenderPass* renderPass = m_renderPasses[0];
+  const IUniformBuffers* ubo   = m_uniformBuffers[0];
+  const RenderPass* renderPass = m_renderPasses[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
     const VkDescriptorBufferInfo& bufferInfo = ubo->descriptor(i);
 

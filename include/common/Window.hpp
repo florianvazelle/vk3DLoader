@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vulkan/vulkan_core.h>      // for VkSurfaceKHR, VkSurfaceKHR_T
-#include <NoCopy.hpp>           // for NoCopy
+#include <common/NoCopy.hpp>           // for NoCopy
 #include <functional>                // for function
 #include <string>                    // for string
 #include <vector>                    // for vector

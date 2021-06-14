@@ -17,9 +17,10 @@ namespace vkl {
                             const SwapChain& swapChain,
                             const RenderPass& renderPass,
                             const DescriptorSetLayout& descriptorSetLayout);
+    ~GraphicGraphicsPipeline();
 
   private:
-    void createPipeline();
+    void createPipeline() final;
   };
 }  // namespace vkl
 

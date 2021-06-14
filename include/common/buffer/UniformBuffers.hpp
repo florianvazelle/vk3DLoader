@@ -5,8 +5,8 @@
 #include <deque>
 #include <stdexcept>
 
-#include <NoCopy.hpp>
 #include <common/Device.hpp>
+#include <common/NoCopy.hpp>
 #include <common/SwapChain.hpp>
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/IBuffer.hpp>

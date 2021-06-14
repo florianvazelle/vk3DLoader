@@ -13,10 +13,7 @@
 using namespace vkl;
 
 SwapChain::SwapChain(const Device& device, const Window& window)
-    : m_swapChain(VK_NULL_HANDLE),
-      m_oldSwapChain(VK_NULL_HANDLE),
-      m_device(device),
-      m_window(window) {
+    : m_swapChain(VK_NULL_HANDLE), m_oldSwapChain(VK_NULL_HANDLE), m_device(device), m_window(window) {
   createSwapChain();
   createImageViews();
 }

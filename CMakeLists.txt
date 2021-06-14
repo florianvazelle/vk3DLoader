@@ -5,6 +5,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 include(cmake/tools/guards.cmake)
+include(cmake/tools/warnings.cmake)
 
 #
 # Project configuration
@@ -29,10 +30,6 @@ if(NOT VULKAN_FOUND)
 endif()
 
 include(cmake/tools/compile-shader.cmake)
-
-# ---- Options ----
-
-option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines." OFF)
 
 #
 # Define library target
@@ -64,7 +61,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/ex
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CONAN_LIBS} Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_IMPL_VULKAN)
 
-# target_set_warnings(${PROJECT_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+target_set_warnings(
+    ${PROJECT_NAME}
+    ENABLE ALL
+    AS_ERROR ALL
+    DISABLE Annoying missing-field-initializers unused-parameter
+)
 
 # ---- Compile shader into SPIR-V ----
 

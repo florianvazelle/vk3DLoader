@@ -18,10 +18,8 @@ namespace vkl {
     DepthRenderPass(const Device& device, const SwapChain& swapChain);
 
   private:
-    void createRenderPass();
-    void createFrameBuffers();
-
-    void destroyFrameBuffers();
+    void createRenderPass() final;
+    void createFrameBuffers() final;
   };
 }  // namespace vkl
 

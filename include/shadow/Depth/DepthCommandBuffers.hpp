@@ -12,7 +12,7 @@ namespace vkl { class DescriptorSets; }
 namespace vkl { class Device; }
 namespace vkl { class GraphicsPipeline; }
 namespace vkl { class IBuffer; }
-namespace vkl { class IRenderPass; }
+namespace vkl { class RenderPass; }
 namespace vkl { class SwapChain; }
 // clang-format on
 
@@ -21,7 +21,7 @@ namespace vkl {
   class DepthCommandBuffers : public CommandBuffers {
   public:
     DepthCommandBuffers(const Device& device,
-                        const IRenderPass& renderPass,
+                        const RenderPass& renderPass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
@@ -31,20 +31,19 @@ namespace vkl {
       createCommandBuffers();
     }
 
-    void recreate();
     void recordCommandBuffers(uint32_t bufferIdx);
 
     float& depthBiasConstant() { return m_depthBiasConstant; }
     float& depthBiasSlope() { return m_depthBiasSlope; }
 
   private:
-    void createCommandBuffers();
-
     // Depth bias (and slope) are used to avoid shadowing artifacts
     // Constant depth bias factor (always applied)
     float m_depthBiasConstant = 1.25f;
     // Slope depth bias factor, applied depending on polygon's slope
     float m_depthBiasSlope = 1.75f;
+
+    void createCommandBuffers() final;
   };
 
 }  // namespace vkl

@@ -3,12 +3,12 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkCommandBuffer, VkCommandBuffer_T
-#include <NoCopy.hpp>       // for NoCopy
+#include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class CommandPool; }
 namespace vkl { class ComputePipeline; }
 namespace vkl { class DescriptorSets; }
 namespace vkl { class Device; }
-namespace vkl { class IRenderPass; }
+namespace vkl { class RenderPass; }
 namespace vkl { class StorageBuffer; }
 namespace vkl { class SwapChain; }
 // clang-format on
@@ -18,7 +18,7 @@ namespace vkl {
   class ComputeCommandBuffer : public NoCopy {
   public:
     ComputeCommandBuffer(const Device& device,
-                         const IRenderPass& renderPass,
+                         const RenderPass& renderPass,
                          const SwapChain& swapChain,
                          const ComputePipeline& computePipeline,
                          const StorageBuffer& storageBuffer,
@@ -33,7 +33,7 @@ namespace vkl {
     VkCommandBuffer m_commandBuffer;
 
     const Device& m_device;
-    const IRenderPass& m_renderPass;
+    const RenderPass& m_renderPass;
     const SwapChain& m_swapChain;
     const ComputePipeline& m_computePipeline;
     const StorageBuffer& m_storageBuffer;

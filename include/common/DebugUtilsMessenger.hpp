@@ -8,7 +8,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include <NoCopy.hpp>
+#include <common/NoCopy.hpp>
 
 namespace vkl {
 

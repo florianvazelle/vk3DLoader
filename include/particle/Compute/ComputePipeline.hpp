@@ -19,6 +19,9 @@ namespace vkl {
                     const SwapChain& swapChain,
                     const RenderPass& renderPass,
                     const DescriptorSetLayout& descriptorSetLayout);
+    ~ComputePipeline();
+
+    void recreate() final;
 
     inline const VkPipeline& pipelineCalculate() const { return m_pipelineCalculate; }
     inline const VkPipeline& pipelineIntegrate() const { return m_pipelineIntegrate; }
@@ -26,7 +29,8 @@ namespace vkl {
   private:
     VkPipeline m_pipelineCalculate, m_pipelineIntegrate;
 
-    void createPipeline();
+    void createPipeline() final;
+    void destroyComputePipeline();
   };
 }  // namespace vkl
 

@@ -16,7 +16,7 @@ DescriptorSets::DescriptorSets(const Device& device,
                                const SwapChain& swapChain,
                                const DescriptorSetLayout& descriptorSetLayout,
                                const DescriptorPool& descriptorPool,
-                               const std::vector<const IRenderPass*>& renderPasses,
+                               const std::vector<const RenderPass*>& renderPasses,
                                const std::vector<const IBuffer*>& buffers,
                                const std::vector<const IUniformBuffers*>& uniformBuffers)
     : m_device(device),
@@ -31,7 +31,6 @@ void DescriptorSets::recreate() { createDescriptorSets(); }
 
 void DescriptorSets::allocateDescriptorSets() {
   /* Allocate */
-
   const size_t size = m_swapChain.numImages();
 
   const std::vector<VkDescriptorSetLayout> layouts(size, m_descriptorSetLayout.handle());

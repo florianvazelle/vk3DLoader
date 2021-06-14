@@ -5,11 +5,13 @@
 
 using namespace vkl;
 
-CommandPool::CommandPool(const Device& device, const VkCommandPoolCreateFlags& flags, std::optional<uint32_t> queueFamilyIndex)
+CommandPool::CommandPool(const Device& device,
+                         const VkCommandPoolCreateFlags& flags,
+                         std::optional<uint32_t> queueFamilyIndex)
     : m_device(device) {
-      if (!queueFamilyIndex.has_value()) {
-          queueFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
-      }
+  if (!queueFamilyIndex.has_value()) {
+    queueFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
+  }
 
   const VkCommandPoolCreateInfo poolInfo = {
       .sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,

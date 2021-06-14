@@ -36,7 +36,7 @@
 #include <shadow/Depth/DepthGraphicsPipeline.hpp>  // for DepthGraphicsPipeline
 #include <shadow/Depth/DepthRenderPass.hpp>        // for DepthRenderPass
 #include <common/buffer/IBuffer.hpp>               // for IBuffer
-#include <common/RenderPass.hpp>                   // for IRenderPass
+#include <common/RenderPass.hpp>                   // for RenderPass
 #include <common/buffer/IBuffer.hpp>               // for IUniformBuffers
 // clang-format on
 

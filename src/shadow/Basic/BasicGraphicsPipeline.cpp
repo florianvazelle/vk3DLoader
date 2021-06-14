@@ -24,6 +24,8 @@ BasicGraphicsPipeline::BasicGraphicsPipeline(const Device& device,
   createPipeline();
 }
 
+BasicGraphicsPipeline::~BasicGraphicsPipeline() { destroyPipeline(); }
+
 void BasicGraphicsPipeline::createPipeline() {
   {
     const VkDescriptorSetLayout layouts[]               = {m_descriptorSetLayout.handle()};

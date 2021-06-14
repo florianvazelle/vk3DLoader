@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <stdexcept>                         // for runtime_error
 #include <map>
+#include <iostream>
 // clang-format on
 
 using namespace vkl;
@@ -21,6 +22,20 @@ ComputePipeline::ComputePipeline(const Device& device,
                                  const DescriptorSetLayout& descriptorSetLayout)
     : GraphicsPipeline(device, swapChain, renderPass, descriptorSetLayout) {
   createPipeline();
+}
+
+ComputePipeline::~ComputePipeline() { destroyComputePipeline(); }
+
+void ComputePipeline::recreate() {
+  destroyComputePipeline();
+  createPipeline();
+}
+
+void ComputePipeline::destroyComputePipeline() {
+  vkDestroyPipeline(m_device.logical(), m_pipelineCalculate, nullptr);
+  vkDestroyPipeline(m_device.logical(), m_pipelineIntegrate, nullptr);
+
+  destroyPipeline();
 }
 
 void ComputePipeline::createPipeline() {
@@ -79,12 +94,13 @@ void ComputePipeline::createPipeline() {
 
   VkSpecializationInfo specializationInfo
       = misc::specializationInfo(static_cast<uint32_t>(specializationMapEntries.size()),
-                                  specializationMapEntries.data(), sizeof(specializationData), &specializationData);
+                                 specializationMapEntries.data(), sizeof(specializationData), &specializationData);
 
   computePipelineCreateInfo.stage.pSpecializationInfo = &specializationInfo;
 
   if (vkCreateComputePipelines(m_device.logical(), VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr,
-                               &m_pipelineCalculate) != VK_SUCCESS) {
+                               &m_pipelineCalculate)
+      != VK_SUCCESS) {
     throw std::runtime_error("Compute Pipeline Calculate creation failed");
   }
 

@@ -10,7 +10,7 @@
 using namespace vkl;
 
 CommandBuffers::CommandBuffers(const Device& device,
-                               const IRenderPass& renderPass,
+                               const RenderPass& renderPass,
                                const SwapChain& swapChain,
                                const GraphicsPipeline& graphicsPipeline,
                                const CommandPool& commandPool,
@@ -25,6 +25,11 @@ CommandBuffers::CommandBuffers(const Device& device,
       m_buffers(buffers) {}
 
 CommandBuffers::~CommandBuffers() { destroyCommandBuffers(); }
+
+void CommandBuffers::recreate() {
+  destroyCommandBuffers();
+  createCommandBuffers();
+}
 
 void CommandBuffers::destroyCommandBuffers() {
   vkFreeCommandBuffers(m_device.logical(), m_commandPool.handle(), static_cast<uint32_t>(m_commandBuffers.size()),

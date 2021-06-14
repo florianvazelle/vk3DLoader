@@ -26,7 +26,8 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
   m_indices  = QueueFamily::FindQueueFamilies(m_physical, m_window.surface());
 
   // Setup queue families for device
-  std::set<uint32_t> uniqueQueueFamilies = {m_indices.graphicsFamily.value(), m_indices.computeFamily.value(), m_indices.transferFamily.value(), m_indices.presentFamily.value()};
+  std::set<uint32_t> uniqueQueueFamilies = {m_indices.graphicsFamily.value(), m_indices.computeFamily.value(),
+                                            m_indices.transferFamily.value(), m_indices.presentFamily.value()};
   std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
   float priority = 1.0f;

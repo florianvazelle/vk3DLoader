@@ -22,12 +22,12 @@ FrameBufferAttachment::FrameBufferAttachment(const Device& device,
   // VkImageLayout imageLayout;
 
   if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) {
-    aspectMask  = VK_IMAGE_ASPECT_COLOR_BIT;
+    aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     // imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   }
 
   if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) {
-    aspectMask  = VK_IMAGE_ASPECT_DEPTH_BIT;
+    aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     // imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
   }
 
@@ -125,7 +125,6 @@ FrameBufferAttachment ::~FrameBufferAttachment() {
   vkDestroyImage(m_device.logical(), m_image, nullptr);
   vkDestroyImageView(m_device.logical(), m_imageView, nullptr);
   vkFreeMemory(m_device.logical(), m_bufferMemory, nullptr);
-
 
   if (m_sampler != VK_NULL_HANDLE) vkDestroySampler(m_device.logical(), m_sampler, nullptr);
 }

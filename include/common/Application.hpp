@@ -7,8 +7,8 @@
 #define APPLICATION_HPP
 
 // clang-format off
-#include <NoCopy.hpp>                      // for NoCopy
-#include <NoMove.hpp>                      // for NoMove
+#include <common/NoCopy.hpp>                      // for NoCopy
+#include <common/NoMove.hpp>                      // for NoMove
 #include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
 #include <common/Device.hpp>               // for Device
 #include <common/Instance.hpp>             // for Instance
@@ -66,9 +66,7 @@ namespace vkl {
     VkResult prepareFrame(bool& framebufferResized, uint32_t& imageIndex);
     void submitFrame(bool& framebufferResized, const uint32_t& imageIndex);
 
-    virtual void recreateSwapChain(bool& framebufferResized) {
-      std::cout << "warning: call base recreateSwapChain" << std::endl;
-    };
+    virtual void recreateSwapChain(bool& framebufferResized) = 0;
   };
 }  // namespace vkl
 

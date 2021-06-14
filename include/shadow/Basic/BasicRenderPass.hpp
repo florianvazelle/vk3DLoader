@@ -13,8 +13,8 @@ namespace vkl {
     BasicRenderPass(const Device& device, const SwapChain& swapChain);
 
   private:
-    void createRenderPass();
-    void createFrameBuffers();
+    void createRenderPass() final;
+    void createFrameBuffers() final;
   };
 }  // namespace vkl
 

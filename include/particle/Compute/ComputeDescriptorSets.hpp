@@ -8,7 +8,7 @@ namespace vkl { class DescriptorPool; }
 namespace vkl { class DescriptorSetLayout; }
 namespace vkl { class Device; }
 namespace vkl { class IBuffer; }
-namespace vkl { class IRenderPass; }
+namespace vkl { class RenderPass; }
 namespace vkl { class IUniformBuffers; }
 namespace vkl { class SwapChain; }
 // clang-format on
@@ -21,7 +21,7 @@ namespace vkl {
                           const SwapChain& swapChain,
                           const DescriptorSetLayout& descriptorSetLayout,
                           const DescriptorPool& descriptorPool,
-                          const std::vector<const IRenderPass*>& renderPasses,
+                          const std::vector<const RenderPass*>& renderPasses,
                           const std::vector<const IBuffer*>& buffers,
                           const std::vector<const IUniformBuffers*>& uniformBuffers)
         : DescriptorSets(device,
@@ -35,7 +35,7 @@ namespace vkl {
     }
 
   private:
-    void createDescriptorSets();
+    void createDescriptorSets() final;
   };
 }  // namespace vkl
 

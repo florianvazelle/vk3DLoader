@@ -9,7 +9,7 @@
 // clang-format off
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VkFence, VkSemaphore
-#include <NoCopy.hpp>       // for NoCopy
+#include <common/NoCopy.hpp>       // for NoCopy
 #include <vector>                // for vector
 namespace vkl { class Device; }
 // clang-format on

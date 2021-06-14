@@ -9,7 +9,7 @@
 // clang-format off
 #include <stdint.h>              // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VK_FALSE, VkPipelineLayout, VK_TRUE
-#include <NoCopy.hpp>       // for NoCopy
+#include <common/NoCopy.hpp>       // for NoCopy
 #include <common/SwapChain.hpp>  // for SwapChain
 #include <vector>                // for vector
 namespace vkl { class DescriptorSetLayout; }
@@ -25,9 +25,9 @@ namespace vkl {
                      const SwapChain& swapChain,
                      const RenderPass& renderPass,
                      const DescriptorSetLayout& descriptorSetLayout);
-    ~GraphicsPipeline();
+    virtual ~GraphicsPipeline() = default;
 
-    void recreate();
+    virtual void recreate();
 
     inline const VkPipeline& pipeline() const { return m_pipeline; }
     inline const VkPipelineLayout& layout() const { return m_layout; }
@@ -174,6 +174,7 @@ namespace vkl {
         };
     }
     virtual void createPipeline() = 0;
+    void destroyPipeline();
 
     VkShaderModule createShaderModule(const std::vector<unsigned char>& code);
     void deleteShaderModule(const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages);

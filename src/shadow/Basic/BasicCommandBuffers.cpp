@@ -8,18 +8,13 @@
 #include <common/DescriptorSets.hpp>    // for DescriptorSets
 #include <common/Device.hpp>            // for Device
 #include <common/GraphicsPipeline.hpp>  // for GraphicsPipeline
-#include <common/RenderPass.hpp>        // for IRenderPass
+#include <common/RenderPass.hpp>        // for RenderPass
 #include <common/SwapChain.hpp>         // for SwapChain
 #include <common/buffer/Buffer.hpp>     // for Buffer
 #include <common/struct/Vertex.hpp>     // for Vertex
 // clang-format on
 
 using namespace vkl;
-
-void BasicCommandBuffers::recreate() {
-  destroyCommandBuffers();
-  createCommandBuffers();
-}
 
 void BasicCommandBuffers::createCommandBuffers() {
   m_commandBuffers.resize(m_renderPass.size());

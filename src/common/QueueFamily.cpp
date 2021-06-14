@@ -32,8 +32,9 @@ QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device
     }
 
     // Dedicated queue for transfer
-		// Try to find a queue family index that supports transfer but not graphics and compute
-    if ((family.queueFlags & VK_QUEUE_TRANSFER_BIT) && ((family.queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0) && ((family.queueFlags & VK_QUEUE_COMPUTE_BIT) == 0)) {
+    // Try to find a queue family index that supports transfer but not graphics and compute
+    if ((family.queueFlags & VK_QUEUE_TRANSFER_BIT) && ((family.queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0)
+        && ((family.queueFlags & VK_QUEUE_COMPUTE_BIT) == 0)) {
       indices.transferFamily = i;
     }
 
@@ -48,16 +49,16 @@ QueueFamilyIndices QueueFamily::FindQueueFamilies(const VkPhysicalDevice& device
   }
 
   if (!indices.graphicsFamily.has_value()) {
-      std::cout << "graphicsFamily: " << indices.graphicsFamily.value() << std::endl;
-      indices.graphicsFamily = VK_NULL_HANDLE;
+    std::cout << "graphicsFamily: " << indices.graphicsFamily.value() << std::endl;
+    indices.graphicsFamily = VK_NULL_HANDLE;
   }
 
   if (!indices.computeFamily.has_value()) {
-      indices.computeFamily = indices.graphicsFamily;
+    indices.computeFamily = indices.graphicsFamily;
   }
 
   if (!indices.transferFamily.has_value()) {
-      indices.transferFamily = indices.graphicsFamily;
+    indices.transferFamily = indices.graphicsFamily;
   }
 
   return indices;

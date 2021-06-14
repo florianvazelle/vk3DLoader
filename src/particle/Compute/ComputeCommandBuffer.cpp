@@ -7,7 +7,7 @@
 #include <common/buffer/StorageBuffer.hpp>       // for StorageBuffer
 #include <common/struct/Particle.hpp>            // for Particle
 #include <particle/Compute/ComputePipeline.hpp>  // for ComputePipeline
-#include <common/RenderPass.hpp>                 // for IRenderPass
+#include <common/RenderPass.hpp>                 // for RenderPass
 #include <common/SwapChain.hpp>                  // for SwapChain
 #include <common/Device.hpp>
 // clang-format on
@@ -21,7 +21,7 @@
 using namespace vkl;
 
 ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
-                                           const IRenderPass& renderPass,
+                                           const RenderPass& renderPass,
                                            const SwapChain& swapChain,
                                            const ComputePipeline& computePipeline,
                                            const StorageBuffer& storageBuffer,

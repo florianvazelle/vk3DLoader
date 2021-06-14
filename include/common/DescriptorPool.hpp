@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <vulkan/vulkan_core.h>  // for VkDescriptorPool, VkDescriptorPoolCr...
-#include <NoCopy.hpp>       // for NoCopy
+#include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on
 

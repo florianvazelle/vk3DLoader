@@ -14,12 +14,12 @@ RenderPass::RenderPass(const Device& device, const SwapChain& swapChain)
 
 RenderPass::~RenderPass() {
   destroyFrameBuffers();
-  vkDestroyRenderPass(m_device.logical(), m_renderPass, nullptr);
+  destroyRenderPass();
 }
 
 void RenderPass::recreate() {
   destroyFrameBuffers();
-  vkDestroyRenderPass(m_device.logical(), m_renderPass, nullptr);
+  destroyRenderPass();
 
   createRenderPass();
   createFrameBuffers();
@@ -50,8 +50,12 @@ void RenderPass::createFrameBuffers() {
   }
 }
 
+void RenderPass::destroyRenderPass() { vkDestroyRenderPass(m_device.logical(), m_renderPass, nullptr); }
+
 void RenderPass::destroyFrameBuffers() {
   for (VkFramebuffer& fb : m_frameBuffers) {
     vkDestroyFramebuffer(m_device.logical(), fb, nullptr);
   }
+
+  m_depthAttachments.clear();
 }

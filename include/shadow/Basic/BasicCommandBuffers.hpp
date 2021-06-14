@@ -9,7 +9,7 @@ namespace vkl { class DescriptorSets; }
 namespace vkl { class Device; }
 namespace vkl { class GraphicsPipeline; }
 namespace vkl { class IBuffer; }
-namespace vkl { class IRenderPass; }
+namespace vkl { class RenderPass; }
 namespace vkl { class SwapChain; }
 // clang-format on
 
@@ -18,7 +18,7 @@ namespace vkl {
   class BasicCommandBuffers : public CommandBuffers {
   public:
     BasicCommandBuffers(const Device& device,
-                        const IRenderPass& renderPass,
+                        const RenderPass& renderPass,
                         const SwapChain& swapChain,
                         const GraphicsPipeline& graphicsPipeline,
                         const CommandPool& commandPool,
@@ -28,10 +28,8 @@ namespace vkl {
       createCommandBuffers();
     }
 
-    void recreate();
-
   private:
-    void createCommandBuffers();
+    void createCommandBuffers() final;
   };
 
 }  // namespace vkl
