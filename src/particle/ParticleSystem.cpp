@@ -162,8 +162,6 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       semaphoreCompute(device),
 
-      // signal semaphore
-
       cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
 
       /* ImGui */
@@ -200,13 +198,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   if (result != VK_SUCCESS) return;
 
   /* Buffer */
-
   interface.recordCommandBuffers(imageIndex);
-
-  std::vector<VkCommandBuffer> cmdBuffers = {
-      cbGraphic.command(imageIndex),
-      interface.command(imageIndex),
-  };
 
   /* Update Uniform Buffers */
 
@@ -220,6 +212,11 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
 
   /* Submit graphics commands */
   {
+    const std::vector<VkCommandBuffer> cmdBuffers = {
+        cbGraphic.command(imageIndex),
+        interface.command(imageIndex),
+    };
+
     const VkPipelineStageFlags waitStageMasks[] = {
         VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
@@ -239,16 +236,22 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
     };
 
     vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
+    std::cout << "vkQueueSubmit Graphics start" << std::endl;
 
     if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, syncObjects.inFlightFence(currentFrame)) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
+    std::cout << "vkQueueSubmit Graphics start" << std::endl;
   }
 
   submitFrame(framebufferResized, imageIndex);
 
   /* Submit compute commands */
   {
+    const std::vector<VkCommandBuffer> cmdBuffers = {
+        cbCompute.command(),
+    };
+
     const VkPipelineStageFlags waitStageMasks[] = {VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT};
     const VkSemaphore waitSemaphores[]          = {semaphoreGraphic.handle()};
     const VkSemaphore signalSemaphores[]        = {semaphoreCompute.handle()};
@@ -258,15 +261,17 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
         .waitSemaphoreCount   = 1,
         .pWaitSemaphores      = waitSemaphores,
         .pWaitDstStageMask    = waitStageMasks,
-        .commandBufferCount   = 1,
-        .pCommandBuffers      = &cbCompute.command(),
+        .commandBufferCount   = static_cast<uint32_t>(cmdBuffers.size()),
+        .pCommandBuffers      = cmdBuffers.data(),
         .signalSemaphoreCount = 1,
         .pSignalSemaphores    = signalSemaphores,
     };
 
+    std::cout << "vkQueueSubmit Compute start" << std::endl;
     if (vkQueueSubmit(device.computeQueue(), 1, &computeSubmitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
+    std::cout << "vkQueueSubmit Compute end" << std::endl;
   }
 
   currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
