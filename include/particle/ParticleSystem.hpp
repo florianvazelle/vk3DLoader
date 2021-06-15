@@ -27,6 +27,7 @@
 #include <cstdlib>                                       // for size_t
 #include <functional>                                    // for function
 #include <particle/Compute/ComputeCommandBuffer.hpp>     // for ComputeComma...
+#include <particle/Compute/ParticleStorageBuffer.hpp>
 #include <particle/Compute/ComputeDescriptorSets.hpp>    // for ComputeDescr...
 #include <particle/Compute/ComputePipeline.hpp>          // for ComputePipeline
 #include <particle/Graphic/GraphicCommandBuffers.hpp>    // for GraphicComma...
@@ -36,8 +37,6 @@
 #include <string>                                        // for string
 #include <vector>                                        // for vector
 // clang-format on
-
-#define NUM_PARTICLE 10
 
 namespace vkl {
   class ParticleSystem : public Application {
@@ -55,9 +54,8 @@ namespace vkl {
     DescriptorPool dp;
 
     // Buffers
-    Buffer<Particle> particleBuffer;
     UniformBuffers<MVP> uniformBuffersGraphic;
-    StorageBuffer storageBuffer;
+    ParticleStorageBuffer storageBuffer;
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 
     // Vector Buffer
@@ -72,7 +70,6 @@ namespace vkl {
     DescriptorSetLayout dslGraphic;
     GraphicGraphicsPipeline gpGraphic;
     GraphicDescriptorSets dsGraphic;
-    GraphicCommandBuffers cbGraphic;
     Semaphore semaphoreGraphic;
 
     // Compute
@@ -81,7 +78,9 @@ namespace vkl {
     ComputeDescriptorSets dsCompute;
     ComputePipeline gpCompute;
     Semaphore semaphoreCompute;
+
     ComputeCommandBuffer cbCompute;
+    GraphicCommandBuffers cbGraphic;
 
     ImGuiApp interface;
 

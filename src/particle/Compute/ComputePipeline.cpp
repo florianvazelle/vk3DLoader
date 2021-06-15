@@ -104,6 +104,8 @@ void ComputePipeline::createPipeline() {
     throw std::runtime_error("Compute Pipeline Calculate creation failed");
   }
 
+  deleteShaderModule({computePipelineCreateInfo.stage});
+
   // 2nd pass
   compShaderModule                = createShaderModule(PARTICLE_INTEGRATE_COMP);
   computePipelineCreateInfo.stage = misc::pipelineShaderStageCreateInfo(compShaderModule, VK_SHADER_STAGE_COMPUTE_BIT);
@@ -113,4 +115,6 @@ void ComputePipeline::createPipeline() {
       != VK_SUCCESS) {
     throw std::runtime_error("Compute Pipeline Integrate creation failed");
   }
+
+  deleteShaderModule({computePipelineCreateInfo.stage});
 }

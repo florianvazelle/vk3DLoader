@@ -36,6 +36,7 @@ namespace vkl {
     void recreate();
     static void SingleTimeCommands(const Device& device,
                                    const CommandPool& cmdPool,
+                                   const VkQueue& queue,
                                    const std::function<void(const VkCommandBuffer&)>& func);
 
   protected:

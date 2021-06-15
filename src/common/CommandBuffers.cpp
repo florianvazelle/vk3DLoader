@@ -7,6 +7,8 @@
 
 #include <stdexcept>
 
+#define DEFAULT_FENCE_TIMEOUT 100000000000
+
 using namespace vkl;
 
 CommandBuffers::CommandBuffers(const Device& device,
@@ -38,6 +40,7 @@ void CommandBuffers::destroyCommandBuffers() {
 
 void CommandBuffers::SingleTimeCommands(const Device& device,
                                         const CommandPool& cmdPool,
+                                        const VkQueue& queue,
                                         const std::function<void(const VkCommandBuffer&)>& func) {
   const VkCommandBufferAllocateInfo allocInfo = {
       .sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
@@ -72,8 +75,19 @@ void CommandBuffers::SingleTimeCommands(const Device& device,
       .pCommandBuffers    = &commandBuffer,
   };
 
-  vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-  vkQueueWaitIdle(device.graphicsQueue());
+  VkFenceCreateInfo fenceInfo = {
+      .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+  };
+  VkFence fence;
+  vkCreateFence(device.logical(), &fenceInfo, nullptr, &fence);
+
+  // Submit to the queue
+  vkQueueSubmit(queue, 1, &submitInfo, fence);
+  // vkQueueWaitIdle(queue);
+
+  // Wait for the fence to signal that command buffer has finished executing
+  vkWaitForFences(device.logical(), 1, &fence, VK_TRUE, DEFAULT_FENCE_TIMEOUT);
+  vkDestroyFence(device.logical(), fence, nullptr);
 
   vkFreeCommandBuffers(device.logical(), cmdPool.handle(), 1, &commandBuffer);
 }

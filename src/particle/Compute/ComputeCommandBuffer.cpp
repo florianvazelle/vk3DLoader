@@ -9,7 +9,9 @@
 #include <particle/Compute/ComputePipeline.hpp>  // for ComputePipeline
 #include <common/RenderPass.hpp>                 // for RenderPass
 #include <common/SwapChain.hpp>                  // for SwapChain
+#include <common/CommandBuffers.hpp>
 #include <common/Device.hpp>
+#include <common/Semaphore.hpp>
 // clang-format on
 
 #ifndef NUM_PARTICLE
@@ -26,6 +28,7 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
                                            const ComputePipeline& computePipeline,
                                            const StorageBuffer& storageBuffer,
                                            const CommandPool& commandPool,
+                                           const Semaphore& semaphoreCompute,
                                            const DescriptorSets& descriptorSets)
     : m_device(device),
       m_renderPass(renderPass),
@@ -34,6 +37,21 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
       m_storageBuffer(storageBuffer),
       m_commandPool(commandPool),
       m_descriptorSets(descriptorSets) {
+  // Trigger compute semaphore, to start by compute queue
+  {
+    const VkSubmitInfo submitInfo = {
+        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .signalSemaphoreCount = 1,
+        .pSignalSemaphores    = &semaphoreCompute.handle(),
+    };
+
+    // maybe graphics queue
+    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+      throw std::runtime_error("failed to submit signal semaphore!");
+    }
+    vkQueueWaitIdle(device.graphicsQueue());
+  }
+
   createCommandBuffers();
 }
 
@@ -77,8 +95,8 @@ VkCommandBuffer ComputeCommandBuffer::allocCommandBuffer(VkCommandBufferLevel le
 }
 
 void ComputeCommandBuffer::createCommandBuffers() {
-  const std::optional<uint32_t>& queueGraphicFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
-  const std::optional<uint32_t>& queueComputeFamilyIndex = m_device.queueFamilyIndices().computeFamily;
+  const std::optional<uint32_t>& graphicsFamily = m_device.queueFamilyIndices().graphicsFamily;
+  const std::optional<uint32_t>& computeFamily  = m_device.queueFamilyIndices().computeFamily;
 
   // Build a single command buffer containing the compute dispatch commands
   m_commandBuffer = allocCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, m_commandPool.handle(), true);
@@ -86,17 +104,16 @@ void ComputeCommandBuffer::createCommandBuffers() {
   // Here, we need barrier if we doen't have graphic and compute on the same queue
 
   // Acquire barrier
-  if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
+  if (graphicsFamily.value() != computeFamily.value()) {
     const VkBufferMemoryBarrier acquire_barrier = {
-        VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-        nullptr,
-        0,
-        VK_ACCESS_SHADER_WRITE_BIT,
-        queueGraphicFamilyIndex.value(),
-        queueComputeFamilyIndex.value(),
-        m_storageBuffer.buffer(),
-        0,
-        m_storageBuffer.size(),
+        .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+        .srcAccessMask       = 0,
+        .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
+        .srcQueueFamilyIndex = graphicsFamily.value(),
+        .dstQueueFamilyIndex = computeFamily.value(),
+        .buffer              = m_storageBuffer.buffer(),
+        .offset              = 0,
+        .size                = m_storageBuffer.size(),
     };
 
     vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
@@ -131,13 +148,13 @@ void ComputeCommandBuffer::createCommandBuffers() {
   vkCmdDispatch(m_commandBuffer, NUM_PARTICLE / 256, 1, 1);
 
   // Release barrier
-  if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
+  if (graphicsFamily.value() != computeFamily.value()) {
     const VkBufferMemoryBarrier release_barrier = {
         .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
         .srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
         .dstAccessMask       = 0,
-        .srcQueueFamilyIndex = queueComputeFamilyIndex.value(),
-        .dstQueueFamilyIndex = queueGraphicFamilyIndex.value(),
+        .srcQueueFamilyIndex = computeFamily.value(),
+        .dstQueueFamilyIndex = graphicsFamily.value(),
         .buffer              = m_storageBuffer.buffer(),
         .offset              = 0,
         .size                = m_storageBuffer.size(),
@@ -149,5 +166,39 @@ void ComputeCommandBuffer::createCommandBuffers() {
 
   if (vkEndCommandBuffer(m_commandBuffer) != VK_SUCCESS) {
     throw std::runtime_error("failed to record command buffer!");
+  }
+
+  // Transfer
+  if (graphicsFamily.value() != computeFamily.value()) {
+    CommandBuffers::SingleTimeCommands(
+        m_device, m_commandPool, m_device.computeQueue(), [&](const VkCommandBuffer& cmdBuffer) {
+          const VkBufferMemoryBarrier acquire_buffer_barrier = {
+              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+              .srcAccessMask       = 0,
+              .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
+              .srcQueueFamilyIndex = graphicsFamily.value(),
+              .dstQueueFamilyIndex = computeFamily.value(),
+              .buffer              = m_storageBuffer.buffer(),
+              .offset              = 0,
+              .size                = m_storageBuffer.size(),
+          };
+
+          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
+                               0, nullptr, 1, &acquire_buffer_barrier, 0, nullptr);
+
+          const VkBufferMemoryBarrier release_buffer_barrier = {
+              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+              .srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
+              .dstAccessMask       = 0,
+              .srcQueueFamilyIndex = computeFamily.value(),
+              .dstQueueFamilyIndex = graphicsFamily.value(),
+              .buffer              = m_storageBuffer.buffer(),
+              .offset              = 0,
+              .size                = m_storageBuffer.size(),
+          };
+
+          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,
+                               0, nullptr, 1, &release_buffer_barrier, 0, nullptr);
+        });
   }
 }

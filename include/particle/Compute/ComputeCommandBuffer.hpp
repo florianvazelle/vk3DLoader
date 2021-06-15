@@ -11,6 +11,7 @@ namespace vkl { class Device; }
 namespace vkl { class RenderPass; }
 namespace vkl { class StorageBuffer; }
 namespace vkl { class SwapChain; }
+namespace vkl { class Semaphore; }
 // clang-format on
 
 namespace vkl {
@@ -23,6 +24,7 @@ namespace vkl {
                          const ComputePipeline& computePipeline,
                          const StorageBuffer& storageBuffer,
                          const CommandPool& commandPool,
+                         const Semaphore& semaphoreCompute,
                          const DescriptorSets& descriptorSets);
     void recreate();
 

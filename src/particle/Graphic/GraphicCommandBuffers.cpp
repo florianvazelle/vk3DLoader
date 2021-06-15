@@ -62,21 +62,20 @@ void GraphicCommandBuffers::createCommandBuffers() {
 
     const StorageBuffer* storageBuffer = dynamic_cast<const StorageBuffer*>(m_buffers[0]);
 
-    const std::optional<uint32_t>& queueGraphicFamilyIndex = m_device.queueFamilyIndices().graphicsFamily;
-    const std::optional<uint32_t>& queueComputeFamilyIndex = m_device.queueFamilyIndices().computeFamily;
+    const std::optional<uint32_t>& graphicsFamily = m_device.queueFamilyIndices().graphicsFamily;
+    const std::optional<uint32_t>& computeFamily = m_device.queueFamilyIndices().computeFamily;
 
     // Acquire barrier
-    if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-      VkBufferMemoryBarrier buffer_barrier = {
-          VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-          nullptr,
-          0,
-          VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-          queueComputeFamilyIndex.value(),
-          queueGraphicFamilyIndex.value(),
-          storageBuffer->buffer(),
-          0,
-          storageBuffer->size(),
+    if (graphicsFamily.value() != computeFamily.value()) {
+      const VkBufferMemoryBarrier buffer_barrier = {
+          .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+          .srcAccessMask       = 0,
+          .dstAccessMask       = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+          .srcQueueFamilyIndex = computeFamily.value(),
+          .dstQueueFamilyIndex = graphicsFamily.value(),
+          .buffer              = storageBuffer->buffer(),
+          .offset              = 0,
+          .size                = storageBuffer->size(),
       };
 
       vkCmdPipelineBarrier(m_commandBuffers[i], VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
@@ -97,17 +96,16 @@ void GraphicCommandBuffers::createCommandBuffers() {
     vkCmdEndRenderPass(m_commandBuffers[i]);
 
     // Release barrier
-    if (queueGraphicFamilyIndex.value() != queueComputeFamilyIndex.value()) {
-      VkBufferMemoryBarrier buffer_barrier = {
-          VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-          nullptr,
-          VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-          0,
-          queueGraphicFamilyIndex.value(),
-          queueComputeFamilyIndex.value(),
-          storageBuffer->buffer(),
-          0,
-          storageBuffer->size(),
+    if (graphicsFamily.value() != computeFamily.value()) {
+      const VkBufferMemoryBarrier buffer_barrier = {
+          .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+          .srcAccessMask       = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+          .dstAccessMask       = 0,
+          .srcQueueFamilyIndex = graphicsFamily.value(),
+          .dstQueueFamilyIndex = computeFamily.value(),
+          .buffer              = storageBuffer->buffer(),
+          .offset              = 0,
+          .size                = storageBuffer->size(),
       };
 
       vkCmdPipelineBarrier(m_commandBuffers[i], VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,

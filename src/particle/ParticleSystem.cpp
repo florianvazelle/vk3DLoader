@@ -36,8 +36,6 @@
 
 using namespace vkl;
 
-const std::vector<Particle> particles(NUM_PARTICLE, {{1, 1, 1, 1}, {1, 1, 1, 1}});
-
 void updateGraphicsUniformBuffers(const Device& device,
                                   const SwapChain& swapChain,
                                   std::deque<Buffer<MVP>>& uniformBuffers,
@@ -66,6 +64,7 @@ void updateComputeUniformBuffers(const Device& device,
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
   ubo.deltaT = time * 0.05f;
+  ubo.particleCount = 6 * NUM_PARTICLE;
 
   void* data;
   vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
@@ -94,16 +93,12 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       // Buffer
       // Graphic
-      particleBuffer(device,
-                     particles,
-                     VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
       uniformBuffersGraphic(device, swapChain, &updateGraphicsUniformBuffers),
 
       // Compute
       storageBuffer(
           device,
-          NUM_PARTICLE * sizeof(Particle),
+          commandPool,
           VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
       uniformBuffersCompute(device, swapChain, &updateComputeUniformBuffers),
@@ -135,8 +130,6 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
       // 5. Descriptor Sets
       dsGraphic(device, swapChain, dslGraphic, dp, vecRPGraphic, {}, vecUBGraphic),
 
-      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute),
-
       // Semaphore for compute & graphics sync
       semaphoreGraphic(device),
 
@@ -162,28 +155,22 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       semaphoreCompute(device),
 
-      cbCompute(device, rpGraphic, swapChain, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
+      cbCompute(device,
+                rpGraphic,
+                swapChain,
+                gpCompute,
+                storageBuffer,
+                commandPoolCompute,
+                semaphoreCompute,
+                dsCompute),
+
+      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute),
 
       /* ImGui */
       interface(instance, window, device, swapChain, gpGraphic) {}
 
 void ParticleSystem::run() {
-  // Trigger compute semaphore, to start by compute queue
-  {
-    const VkSubmitInfo submitInfo = {
-        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-        .signalSemaphoreCount = 1,
-        .pSignalSemaphores    = &semaphoreCompute.handle(),
-    };
-
-    // maybe graphics queue
-    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
-      throw std::runtime_error("failed to submit signal semaphore!");
-    }
-    vkQueueWaitIdle(device.graphicsQueue());
-  }
-
-  window.setDrawFrameFunc([this](bool& framebufferResized) {
+   window.setDrawFrameFunc([this](bool& framebufferResized) {
     drawImGui();
     drawFrame(framebufferResized);
   });
