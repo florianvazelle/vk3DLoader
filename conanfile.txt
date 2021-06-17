@@ -6,6 +6,7 @@ glslang/8.13.3559
 doctest/2.4.0 
 cxxopts/2.2.1
 tinyobjloader/1.0.6
+stb/20200203
 
 [generators]
 cmake
