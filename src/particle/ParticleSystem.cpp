@@ -201,7 +201,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   {
     const std::vector<VkCommandBuffer> cmdBuffers = {
         cbGraphic.command(imageIndex),
-        interface.command(imageIndex),
+        // interface.command(imageIndex),
     };
 
     const VkPipelineStageFlags waitStageMasks[] = {
@@ -222,10 +222,10 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
         .pSignalSemaphores    = signalSemaphores,
     };
 
-    vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
+    // vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
     std::cout << "vkQueueSubmit Graphics start" << std::endl;
 
-    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, syncObjects.inFlightFence(currentFrame)) != VK_SUCCESS) {
+    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
     std::cout << "vkQueueSubmit Graphics start" << std::endl;
