@@ -10,7 +10,6 @@ namespace vkl { class DescriptorSets; }
 namespace vkl { class Device; }
 namespace vkl { class RenderPass; }
 namespace vkl { class StorageBuffer; }
-namespace vkl { class SwapChain; }
 namespace vkl { class Semaphore; }
 // clang-format on
 
@@ -20,11 +19,9 @@ namespace vkl {
   public:
     ComputeCommandBuffer(const Device& device,
                          const RenderPass& renderPass,
-                         const SwapChain& swapChain,
                          const ComputePipeline& computePipeline,
                          const StorageBuffer& storageBuffer,
                          const CommandPool& commandPool,
-                         const Semaphore& semaphoreCompute,
                          const DescriptorSets& descriptorSets);
     void recreate();
 
@@ -36,7 +33,6 @@ namespace vkl {
 
     const Device& m_device;
     const RenderPass& m_renderPass;
-    const SwapChain& m_swapChain;
     const ComputePipeline& m_computePipeline;
     const StorageBuffer& m_storageBuffer;
     const CommandPool& m_commandPool;

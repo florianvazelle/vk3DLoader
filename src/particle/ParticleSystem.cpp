@@ -63,7 +63,7 @@ void updateComputeUniformBuffers(const Device& device,
                                  uint32_t currentImage) {
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
-  ubo.deltaT = time * 0.05f;
+  ubo.deltaT        = time * 0.05f;
   ubo.particleCount = 6 * NUM_PARTICLE;
 
   void* data;
@@ -157,20 +157,33 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       cbCompute(device,
                 rpGraphic,
-                swapChain,
                 gpCompute,
                 storageBuffer,
                 commandPoolCompute,
-                semaphoreCompute,
                 dsCompute),
 
       cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute),
 
       /* ImGui */
-      interface(instance, window, device, swapChain, gpGraphic) {}
+      interface(instance, window, device, swapChain, gpGraphic) {
+  // Trigger compute semaphore, to start by compute queue
+  {
+    const VkSubmitInfo submitInfo = {
+        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .signalSemaphoreCount = 1,
+        .pSignalSemaphores    = &semaphoreCompute.handle(),
+    };
+
+    // maybe graphics queue
+    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+      throw std::runtime_error("failed to submit signal semaphore!");
+    }
+    vkQueueWaitIdle(device.graphicsQueue());
+  }
+}
 
 void ParticleSystem::run() {
-   window.setDrawFrameFunc([this](bool& framebufferResized) {
+  window.setDrawFrameFunc([this](bool& framebufferResized) {
     drawImGui();
     drawFrame(framebufferResized);
   });
@@ -201,7 +214,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   {
     const std::vector<VkCommandBuffer> cmdBuffers = {
         cbGraphic.command(imageIndex),
-        // interface.command(imageIndex),
+        interface.command(imageIndex),
     };
 
     const VkPipelineStageFlags waitStageMasks[] = {
@@ -223,12 +236,10 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
     };
 
     // vkResetFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame));
-    std::cout << "vkQueueSubmit Graphics start" << std::endl;
 
     if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
-    std::cout << "vkQueueSubmit Graphics start" << std::endl;
   }
 
   submitFrame(framebufferResized, imageIndex);
@@ -254,11 +265,9 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
         .pSignalSemaphores    = signalSemaphores,
     };
 
-    std::cout << "vkQueueSubmit Compute start" << std::endl;
     if (vkQueueSubmit(device.computeQueue(), 1, &computeSubmitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
-    std::cout << "vkQueueSubmit Compute end" << std::endl;
   }
 
   currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;

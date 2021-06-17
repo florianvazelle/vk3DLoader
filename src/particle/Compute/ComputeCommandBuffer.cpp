@@ -8,7 +8,6 @@
 #include <common/struct/Particle.hpp>            // for Particle
 #include <particle/Compute/ComputePipeline.hpp>  // for ComputePipeline
 #include <common/RenderPass.hpp>                 // for RenderPass
-#include <common/SwapChain.hpp>                  // for SwapChain
 #include <common/CommandBuffers.hpp>
 #include <common/Device.hpp>
 #include <common/Semaphore.hpp>
@@ -24,35 +23,57 @@ using namespace vkl;
 
 ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
                                            const RenderPass& renderPass,
-                                           const SwapChain& swapChain,
                                            const ComputePipeline& computePipeline,
                                            const StorageBuffer& storageBuffer,
                                            const CommandPool& commandPool,
-                                           const Semaphore& semaphoreCompute,
                                            const DescriptorSets& descriptorSets)
     : m_device(device),
       m_renderPass(renderPass),
-      m_swapChain(swapChain),
       m_computePipeline(computePipeline),
       m_storageBuffer(storageBuffer),
       m_commandPool(commandPool),
       m_descriptorSets(descriptorSets) {
-  // Trigger compute semaphore, to start by compute queue
-  {
-    const VkSubmitInfo submitInfo = {
-        .sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-        .signalSemaphoreCount = 1,
-        .pSignalSemaphores    = &semaphoreCompute.handle(),
-    };
 
-    // maybe graphics queue
-    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
-      throw std::runtime_error("failed to submit signal semaphore!");
-    }
-    vkQueueWaitIdle(device.graphicsQueue());
-  }
 
   createCommandBuffers();
+
+  const std::optional<uint32_t>& graphicsFamily = device.queueFamilyIndices().graphicsFamily;
+  const std::optional<uint32_t>& computeFamily  = device.queueFamilyIndices().computeFamily;
+
+
+  // Transfer
+  if (graphicsFamily.value() != computeFamily.value()) {
+    CommandBuffers::SingleTimeCommands(
+        m_device, m_commandPool, m_device.computeQueue(), [&](const VkCommandBuffer& cmdBuffer) {
+          const VkBufferMemoryBarrier acquire_buffer_barrier = {
+              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+              .srcAccessMask       = 0,
+              .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
+              .srcQueueFamilyIndex = graphicsFamily.value(),
+              .dstQueueFamilyIndex = computeFamily.value(),
+              .buffer              = m_storageBuffer.buffer(),
+              .offset              = 0,
+              .size                = m_storageBuffer.size(),
+          };
+
+          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
+                               0, nullptr, 1, &acquire_buffer_barrier, 0, nullptr);
+
+          const VkBufferMemoryBarrier release_buffer_barrier = {
+              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+              .srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
+              .dstAccessMask       = 0,
+              .srcQueueFamilyIndex = computeFamily.value(),
+              .dstQueueFamilyIndex = graphicsFamily.value(),
+              .buffer              = m_storageBuffer.buffer(),
+              .offset              = 0,
+              .size                = m_storageBuffer.size(),
+          };
+
+          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,
+                               0, nullptr, 1, &release_buffer_barrier, 0, nullptr);
+        });
+  }
 }
 
 void ComputeCommandBuffer::recreate() {
@@ -166,39 +187,5 @@ void ComputeCommandBuffer::createCommandBuffers() {
 
   if (vkEndCommandBuffer(m_commandBuffer) != VK_SUCCESS) {
     throw std::runtime_error("failed to record command buffer!");
-  }
-
-  // Transfer
-  if (graphicsFamily.value() != computeFamily.value()) {
-    CommandBuffers::SingleTimeCommands(
-        m_device, m_commandPool, m_device.computeQueue(), [&](const VkCommandBuffer& cmdBuffer) {
-          const VkBufferMemoryBarrier acquire_buffer_barrier = {
-              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-              .srcAccessMask       = 0,
-              .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
-              .srcQueueFamilyIndex = graphicsFamily.value(),
-              .dstQueueFamilyIndex = computeFamily.value(),
-              .buffer              = m_storageBuffer.buffer(),
-              .offset              = 0,
-              .size                = m_storageBuffer.size(),
-          };
-
-          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
-                               0, nullptr, 1, &acquire_buffer_barrier, 0, nullptr);
-
-          const VkBufferMemoryBarrier release_buffer_barrier = {
-              .sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-              .srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
-              .dstAccessMask       = 0,
-              .srcQueueFamilyIndex = computeFamily.value(),
-              .dstQueueFamilyIndex = graphicsFamily.value(),
-              .buffer              = m_storageBuffer.buffer(),
-              .offset              = 0,
-              .size                = m_storageBuffer.size(),
-          };
-
-          vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,
-                               0, nullptr, 1, &release_buffer_barrier, 0, nullptr);
-        });
   }
 }

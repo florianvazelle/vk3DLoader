@@ -21,7 +21,7 @@ namespace vkl {
                           VkBufferUsageFlags usage,
                           VkMemoryPropertyFlags properties)
         : StorageBuffer(device, NUM_PARTICLE * sizeof(Particle), usage, properties) {
-      //
+      // TODO : replace here to fill particleBuffer with correct initial value
 
       std::vector<glm::vec3> attractors = {
           glm::vec3(5.0f, 0.0f, 0.0f),  glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 5.0f),
@@ -67,8 +67,6 @@ namespace vkl {
       Buffer<Particle> stagingBuffer(device, particleBuffer, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-      std::cout << "SingleTimeCommands Copy Buffer start" << std::endl;
-
       CommandBuffers::SingleTimeCommands(
           device, commandPool, device.graphicsQueue(), [&](const VkCommandBuffer& cmdBuffer) {
             VkBufferCopy copyRegion = {
@@ -95,7 +93,6 @@ namespace vkl {
                                    0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
             }
           });
-      std::cout << "SingleTimeCommands Copy Buffer end" << std::endl;
     }
   };
 }
