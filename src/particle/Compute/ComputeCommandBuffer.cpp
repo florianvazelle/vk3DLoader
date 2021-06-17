@@ -11,11 +11,8 @@
 #include <common/CommandBuffers.hpp>
 #include <common/Device.hpp>
 #include <common/Semaphore.hpp>
+#include <particle/Compute/ParticleStorageBuffer.hpp>
 // clang-format on
-
-#ifndef NUM_PARTICLE
-#  define NUM_PARTICLE 10
-#endif
 
 // https://community.khronos.org/t/why-i-am-getting-this-validator-message-memory-buffer-barrier/106638
 
@@ -33,8 +30,6 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
       m_storageBuffer(storageBuffer),
       m_commandPool(commandPool),
       m_descriptorSets(descriptorSets) {
-
-
   createCommandBuffers();
 
   const std::optional<uint32_t>& graphicsFamily = device.queueFamilyIndices().graphicsFamily;

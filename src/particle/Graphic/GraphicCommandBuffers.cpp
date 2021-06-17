@@ -11,13 +11,10 @@
 #include <common/RenderPass.hpp>            // for RenderPass
 #include <common/SwapChain.hpp>             // for SwapChain
 #include <common/buffer/StorageBuffer.hpp>  // for StorageBuffer
+#include <particle/Compute/ParticleStorageBuffer.hpp>
 // clang-format on
 
 using namespace vkl;
-
-#ifndef NUM_PARTICLE
-#  define NUM_PARTICLE 10
-#endif
 
 void GraphicCommandBuffers::createCommandBuffers() {
   m_commandBuffers.resize(m_renderPass.size());
@@ -38,7 +35,7 @@ void GraphicCommandBuffers::createCommandBuffers() {
   };
 
   VkClearValue clearValues[2];
-  clearValues[0].color        = {{0.0f, 0.0f, 0.0f, 1.0f}};
+  clearValues[0].color        = {{0.0f, 0.0f, 1.0f, 1.0f}};
   clearValues[1].depthStencil = {1.0f, 0};
 
   VkRenderPassBeginInfo renderPassBeginInfo = {

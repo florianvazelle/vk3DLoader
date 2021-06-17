@@ -64,7 +64,7 @@ void updateComputeUniformBuffers(const Device& device,
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
   ubo.deltaT        = time * 0.05f;
-  ubo.particleCount = 6 * NUM_PARTICLE;
+  ubo.particleCount = NUM_PARTICLE;
 
   void* data;
   vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);

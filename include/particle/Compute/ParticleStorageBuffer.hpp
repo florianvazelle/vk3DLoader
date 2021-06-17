@@ -10,7 +10,9 @@
 #include <random>
 #include <vector>
 
-#define NUM_PARTICLE 10
+#define PARTICLES_PER_ATTRACTOR 4 * 1024
+#define ATTRACTORS 6
+#define NUM_PARTICLE (ATTRACTORS * PARTICLES_PER_ATTRACTOR)
 
 namespace vkl {
 
@@ -30,14 +32,14 @@ namespace vkl {
       };
 
       // Initial particle positions
-      std::vector<Particle> particleBuffer(static_cast<uint32_t>(attractors.size()) * NUM_PARTICLE);
+      std::vector<Particle> particleBuffer(NUM_PARTICLE);
 
       std::default_random_engine rndEngine((unsigned)time(nullptr));
       std::normal_distribution<float> rndDist(0.0f, 1.0f);
 
       for (uint32_t i = 0; i < static_cast<uint32_t>(attractors.size()); i++) {
-        for (uint32_t j = 0; j < NUM_PARTICLE; j++) {
-          Particle& particle = particleBuffer[i * NUM_PARTICLE + j];
+        for (uint32_t j = 0; j < PARTICLES_PER_ATTRACTOR; j++) {
+          Particle& particle = particleBuffer[i * PARTICLES_PER_ATTRACTOR + j];
 
           // First particle in group as heavy center of gravity
           if (j == 0) {
