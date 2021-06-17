@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Singleton class | vkCommon</title>
+  <title>vkl::ParticleMVP struct | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,70 +43,36 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="Singleton_8hpp.html">&lt;Singleton.hpp&gt;</a></div>
-          <div class="m-doc-template">template&lt;typename T&gt;</div>
-          Singleton <span class="m-thin">class</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>ParticleMVP <span class="m-thin">struct</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="ParticleMVP_8hpp.html">&lt;common/struct/ParticleMVP.hpp&gt;</a></div>
         </h1>
-        <p>Thread-safe <a href="classSingleton.html" class="m-doc">Singleton</a>.</p>
+        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#pub-static-methods">Public static functions</a></li>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pro-methods">Protected functions</a></li>
-                <li><a href="#pro-static-attribs">Protected static variables</a></li>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#pub-attribs">Public variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
-<p><a href="https://stackoverflow.com/questions/34519073/inherit-singleton">https:/<wbr />/<wbr />stackoverflow.com/<wbr />questions/<wbr />34519073/<wbr />inherit-singleton</a></p>
-        <section id="pub-static-methods">
-          <h2><a href="#pub-static-methods">Public static functions</a></h2>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
-            <dt id="ad5e0decda6c67c28368820452bc93e39">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ad5e0decda6c67c28368820452bc93e39" class="m-doc-self">GetInstance</a>(</span><span class="m-doc-wrap">) -&gt; T* <span class="m-label m-flat m-success">noexcept(…)</span></span>
-            </dt>
-            <dd>Retourne une unique instance de T (double-check locking)</dd>
-          </dl>
-        </section>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
-          <dl class="m-doc">
-            <dt id="af10479295eca935267590097fdec3e20">
-              <span class="m-doc-wrap-bumper"><a href="#af10479295eca935267590097fdec3e20" class="m-doc-self">Singleton</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a23b2407170cc04f6746874704b928044">
-              <span class="m-doc-wrap-bumper"><a href="#a23b2407170cc04f6746874704b928044" class="m-doc-self">Singleton</a>(</span><span class="m-doc-wrap">const <a href="classSingleton.html" class="m-doc">Singleton</a>&amp;) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-danger">deleted</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a9349b42bad14a8e86c56229175acfba4">
-              <span class="m-doc-wrap-bumper"><a href="#a9349b42bad14a8e86c56229175acfba4" class="m-doc-self">~Singleton</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt>
+              struct <a href="structvkl_1_1MVP.html" class="m-doc">MVP</a>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="pro-methods">
-          <h2><a href="#pro-methods">Protected functions</a></h2>
+        <section id="pub-attribs">
+          <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
-            <dt id="a0765f17c275d65bacc1aae955e9bfc95">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0765f17c275d65bacc1aae955e9bfc95" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="classSingleton.html" class="m-doc">Singleton</a>&amp;) -&gt; <a href="classSingleton.html" class="m-doc">Singleton</a>&amp; <span class="m-label m-flat m-danger">deleted</span></span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pro-static-attribs">
-          <h2><a href="#pro-static-attribs">Protected static variables</a></h2>
-          <dl class="m-doc">
-            <dt id="afe9bb436f1d63fba413ac7cebaa988b9">
-              static std::atomic&lt;T*&gt; <a href="#afe9bb436f1d63fba413ac7cebaa988b9" class="m-doc-self">s_instance</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a85ff1b122985930fd546baab34ba2256">
-              static std::mutex <a href="#a85ff1b122985930fd546baab34ba2256" class="m-doc-self">s_mutex</a>
+            <dt id="a6dc3d1e81e9033e285baa8476e5b4ccb">
+              glm::vec2 <a href="#a6dc3d1e81e9033e285baa8476e5b4ccb" class="m-doc-self">screenDim</a>
             </dt>
             <dd><span></span></dd>
           </dl>

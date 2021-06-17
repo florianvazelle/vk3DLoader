@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::ComputePipeline class | vkCommon</title>
+  <title>particle/Compute/ParticleStorageBuffer.hpp file | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>ComputePipeline <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="ComputePipeline_8hpp.html">&lt;particle/Compute/ComputePipeline.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="dir_0707dbb66d1b2649f3f4e64719d1c2a3.html">particle</a>/</span><span class="m-breadcrumb"><a href="dir_4cca763f47657497dd4ad7f441d24d6a.html">Compute</a>/</span>ParticleStorageBuffer.hpp <span class="m-thin">file</span>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -53,61 +52,42 @@
             <li>
               Reference
               <ul>
-                <li><a href="#base-classes">Base classes</a></li>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
-                <li><a href="#pri-methods">Private functions</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#define-members">Defines</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="base-classes">
-          <h2><a href="#base-classes">Base classes</a></h2>
+        <section id="namespaces">
+          <h2><a href="#namespaces">Namespaces</a></h2>
+          <dl class="m-doc">
+            <dt>namespace <a href="namespacevkl.html" class="m-doc">vkl</a></dt>
+            <dd>Vulkan Loader.</dd>
+          </dl>
+        </section>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>
+              class <a href="classvkl_1_1ParticleStorageBuffer.html" class="m-doc">vkl::ParticleStorageBuffer</a>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+        <section id="define-members">
+          <h2><a href="#define-members">Defines</a></h2>
           <dl class="m-doc">
-            <dt id="a07a2812744b2bb626c470d59613c80e6">
-              <span class="m-doc-wrap-bumper"><a href="#a07a2812744b2bb626c470d59613c80e6" class="m-doc-self">ComputePipeline</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
-              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; renderPass,
-              const <a href="classvkl_1_1DescriptorSetLayout.html" class="m-doc">DescriptorSetLayout</a>&amp; descriptorSetLayout)</span>
+            <dt id="a0caf3b8718757c1b2766698c8153ad4b">
+              <span class="m-doc-wrap-bumper">#define <a href="#a0caf3b8718757c1b2766698c8153ad4b" class="m-doc-self">PARTICLES_PER_ATTRACTOR</a></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a68b86be87ae7a60e064a37212e6f3370">
-              <span class="m-doc-wrap-bumper"><a href="#a68b86be87ae7a60e064a37212e6f3370" class="m-doc-self">~ComputePipeline</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a366f355a16f1d44e4219dbb4c9d568ce">
+              <span class="m-doc-wrap-bumper">#define <a href="#a366f355a16f1d44e4219dbb4c9d568ce" class="m-doc-self">ATTRACTORS</a></span>
             </dt>
             <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a6a40384091777169d1c4669e0d01c787">
-              <span class="m-doc-wrap-bumper">void <a href="#a6a40384091777169d1c4669e0d01c787" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a2a184bf050c230ca1a7c6414a2f272c4">
-              <span class="m-doc-wrap-bumper">auto <a href="#a2a184bf050c230ca1a7c6414a2f272c4" class="m-doc-self">pipelineCalculate</a>(</span><span class="m-doc-wrap">) const -&gt; const VkPipeline&amp;</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a29feb2426f0884467290a1a30bfd4453">
-              <span class="m-doc-wrap-bumper">auto <a href="#a29feb2426f0884467290a1a30bfd4453" class="m-doc-self">pipelineIntegrate</a>(</span><span class="m-doc-wrap">) const -&gt; const VkPipeline&amp;</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pri-methods">
-          <h2><a href="#pri-methods">Private functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a68df65945de353a1e8f2b2a475542680">
-              <span class="m-doc-wrap-bumper">void <a href="#a68df65945de353a1e8f2b2a475542680" class="m-doc-self">createPipeline</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
+            <dt id="a79e218ac28e5bd79b72c266e1b60e008">
+              <span class="m-doc-wrap-bumper">#define <a href="#a79e218ac28e5bd79b72c266e1b60e008" class="m-doc-self">NUM_PARTICLE</a></span>
             </dt>
             <dd><span></span></dd>
           </dl>
