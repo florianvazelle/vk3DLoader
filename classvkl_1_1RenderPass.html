@@ -67,9 +67,9 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              struct <a href="structNoCopy.html" class="m-doc">NoCopy</a>
+              class <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>
             </dt>
-            <dd>A class to prohibit copying.</dd>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="derived-classes">
@@ -107,23 +107,23 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt id="aa007a068ff393c9d1af301a08e03cc66">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa007a068ff393c9d1af301a08e03cc66" class="m-doc-self">handle</a>(</span><span class="m-doc-wrap">) const -&gt; const VkRenderPass&amp;</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aa007a068ff393c9d1af301a08e03cc66" class="m-doc-self">handle</a>(</span><span class="m-doc-wrap">) const -&gt; const VkRenderPass&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="af5c6e3b93a109a9b055cdbad1502d0b9">
-              <span class="m-doc-wrap-bumper">auto <a href="#af5c6e3b93a109a9b055cdbad1502d0b9" class="m-doc-self">frameBuffer</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkFramebuffer&amp;</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#af5c6e3b93a109a9b055cdbad1502d0b9" class="m-doc-self">frameBuffer</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkFramebuffer&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="adb0df7fbc52c175af52d978bd4585e24">
-              <span class="m-doc-wrap-bumper">auto <a href="#adb0df7fbc52c175af52d978bd4585e24" class="m-doc-self">depthAttachment</a>(</span><span class="m-doc-wrap">int i) const -&gt; const <a href="classvkl_1_1FrameBufferAttachment.html" class="m-doc">FrameBufferAttachment</a>&amp;</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#adb0df7fbc52c175af52d978bd4585e24" class="m-doc-self">depthAttachment</a>(</span><span class="m-doc-wrap">int i) const -&gt; const <a href="classvkl_1_1FrameBufferAttachment.html" class="m-doc">FrameBufferAttachment</a>&amp; <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="a35e2699fe000a1bc73c00d453fba554c">
-              <span class="m-doc-wrap-bumper">auto <a href="#a35e2699fe000a1bc73c00d453fba554c" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a35e2699fe000a1bc73c00d453fba554c" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="a68f0059d652edc5d012e04743f87a343">
-              <span class="m-doc-wrap-bumper">void <a href="#a68f0059d652edc5d012e04743f87a343" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">)</span>
+              <span class="m-doc-wrap-bumper">void <a href="#a68f0059d652edc5d012e04743f87a343" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -131,20 +131,16 @@
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="ae4f631ccfe644853fd9482ac936f88a4">
-              <span class="m-doc-wrap-bumper">void <a href="#ae4f631ccfe644853fd9482ac936f88a4" class="m-doc-self">createRenderPass</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt id="addcf77125582892425ad044e2ae4eaa6">
+              <span class="m-doc-wrap-bumper">void <a href="#addcf77125582892425ad044e2ae4eaa6" class="m-doc-self">createRenderPass</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a41df2a5b9561d951a4939d709ee04235">
-              <span class="m-doc-wrap-bumper">void <a href="#a41df2a5b9561d951a4939d709ee04235" class="m-doc-self">createFrameBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ab0647e15cc86a0f8fd7f2ffd924ebd21">
-              <span class="m-doc-wrap-bumper">void <a href="#ab0647e15cc86a0f8fd7f2ffd924ebd21" class="m-doc-self">destroyRenderPass</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a074cc02d73b660d6515e2a025b6b9d55">
+              <span class="m-doc-wrap-bumper">void <a href="#a074cc02d73b660d6515e2a025b6b9d55" class="m-doc-self">createFrameBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="a0678ff1c87cdc85195861fd04b406997">
-              <span class="m-doc-wrap-bumper">void <a href="#a0678ff1c87cdc85195861fd04b406997" class="m-doc-self">destroyFrameBuffers</a>(</span><span class="m-doc-wrap">)</span>
+              <span class="m-doc-wrap-bumper">void <a href="#a0678ff1c87cdc85195861fd04b406997" class="m-doc-self">destroyFrameBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>particle/Compute/ParticleStorageBuffer.hpp file | vkCommon</title>
+  <title>Singleton class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,43 +43,70 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_0707dbb66d1b2649f3f4e64719d1c2a3.html">particle</a>/</span><span class="m-breadcrumb"><a href="dir_4cca763f47657497dd4ad7f441d24d6a.html">Compute</a>/</span>ParticleStorageBuffer.hpp <span class="m-thin">file</span>
+          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="Singleton_8hpp.html">&lt;Singleton.hpp&gt;</a></div>
+          <div class="m-doc-template">template&lt;typename T&gt;</div>
+          Singleton <span class="m-thin">class</span>
         </h1>
-        <p><span></span></p>
+        <p>Thread-safe <a href="classSingleton.html" class="m-doc">Singleton</a>.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#namespaces">Namespaces</a></li>
-                <li><a href="#nested-classes">Classes</a></li>
-                <li><a href="#define-members">Defines</a></li>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pro-methods">Protected functions</a></li>
+                <li><a href="#pro-static-attribs">Protected static variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="namespaces">
-          <h2><a href="#namespaces">Namespaces</a></h2>
+<p><a href="https://stackoverflow.com/questions/34519073/inherit-singleton">https:/<wbr />/<wbr />stackoverflow.com/<wbr />questions/<wbr />34519073/<wbr />inherit-singleton</a></p>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt>namespace <a href="namespacevkl.html" class="m-doc">vkl</a></dt>
-            <dd>Vulkan Loader.</dd>
+            <dt id="ad5e0decda6c67c28368820452bc93e39">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ad5e0decda6c67c28368820452bc93e39" class="m-doc-self">GetInstance</a>(</span><span class="m-doc-wrap">) -&gt; T* <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Retourne une unique instance de T (double-check locking)</dd>
           </dl>
         </section>
-        <section id="nested-classes">
-          <h2><a href="#nested-classes">Classes</a></h2>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt>
-              class <a href="classvkl_1_1ParticleStorageBuffer.html" class="m-doc">vkl::ParticleStorageBuffer</a>
+            <dt id="af10479295eca935267590097fdec3e20">
+              <span class="m-doc-wrap-bumper"><a href="#af10479295eca935267590097fdec3e20" class="m-doc-self">Singleton</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a23b2407170cc04f6746874704b928044">
+              <span class="m-doc-wrap-bumper"><a href="#a23b2407170cc04f6746874704b928044" class="m-doc-self">Singleton</a>(</span><span class="m-doc-wrap">const <a href="classSingleton.html" class="m-doc">Singleton</a>&amp;) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-danger">deleted</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a9349b42bad14a8e86c56229175acfba4">
+              <span class="m-doc-wrap-bumper"><a href="#a9349b42bad14a8e86c56229175acfba4" class="m-doc-self">~Singleton</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">protected</span> <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="define-members">
-          <h2><a href="#define-members">Defines</a></h2>
+        <section id="pro-methods">
+          <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="a79e218ac28e5bd79b72c266e1b60e008">
-              <span class="m-doc-wrap-bumper">#define <a href="#a79e218ac28e5bd79b72c266e1b60e008" class="m-doc-self">NUM_PARTICLE</a></span>
+            <dt id="a0765f17c275d65bacc1aae955e9bfc95">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0765f17c275d65bacc1aae955e9bfc95" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="classSingleton.html" class="m-doc">Singleton</a>&amp;) -&gt; <a href="classSingleton.html" class="m-doc">Singleton</a>&amp; <span class="m-label m-flat m-danger">deleted</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-static-attribs">
+          <h2><a href="#pro-static-attribs">Protected static variables</a></h2>
+          <dl class="m-doc">
+            <dt id="afe9bb436f1d63fba413ac7cebaa988b9">
+              static std::atomic&lt;T*&gt; <a href="#afe9bb436f1d63fba413ac7cebaa988b9" class="m-doc-self">s_instance</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a85ff1b122985930fd546baab34ba2256">
+              static std::mutex <a href="#a85ff1b122985930fd546baab34ba2256" class="m-doc-self">s_mutex</a>
             </dt>
             <dd><span></span></dd>
           </dl>

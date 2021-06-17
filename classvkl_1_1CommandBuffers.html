@@ -97,10 +97,9 @@
         <section id="pub-static-methods">
           <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt id="a25fdfd2e2ed86a2e54c54ceed4d91d4f">
-              <span class="m-doc-wrap-bumper">static void <a href="#a25fdfd2e2ed86a2e54c54ceed4d91d4f" class="m-doc-self">SingleTimeCommands</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+            <dt id="a225136da7546640b7dd78cdf4e366904">
+              <span class="m-doc-wrap-bumper">static void <a href="#a225136da7546640b7dd78cdf4e366904" class="m-doc-self">SingleTimeCommands</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; cmdPool,
-              const VkQueue&amp; queue,
               const std::function&lt;void(const VkCommandBuffer&amp;)&gt;&amp; func)</span>
             </dt>
             <dd><span></span></dd>
@@ -109,9 +108,9 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="ad7899f948bf386bcf8858f85fe478288">
-              <span class="m-doc-wrap-bumper"><a href="#ad7899f948bf386bcf8858f85fe478288" class="m-doc-self">CommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; renderpass,
+            <dt id="ad3a6e1ae996e275cbec5aa5c0b0a70ce">
+              <span class="m-doc-wrap-bumper"><a href="#ad3a6e1ae996e275cbec5aa5c0b0a70ce" class="m-doc-self">CommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; renderpass,
               const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
               const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; graphicsPipeline,
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
@@ -136,8 +135,8 @@
               <span class="m-doc-wrap-bumper">auto <a href="#adfe2eec15d1815e308b3e5be9e5bb6b9" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkCommandBuffer&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a2690ca9e787480e2f1d9fd0f1b3c5bf7">
-              <span class="m-doc-wrap-bumper">void <a href="#a2690ca9e787480e2f1d9fd0f1b3c5bf7" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="adeb8d7d7766c9ef7aee407718f2d16ee">
+              <span class="m-doc-wrap-bumper">void <a href="#adeb8d7d7766c9ef7aee407718f2d16ee" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -166,8 +165,8 @@
               const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a603d1f7d70b2662b4ce37e4a484f3f4a" class="m-doc-self">m_device</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="acfb6b57a8c0babe36eb0de926d402fcb">
-              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; <a href="#acfb6b57a8c0babe36eb0de926d402fcb" class="m-doc-self">m_renderPass</a>
+            <dt id="a7e8916b515d752dd33e7c0a3475bebe7">
+              const <a href="classvkl_1_1IRenderPass.html" class="m-doc">IRenderPass</a>&amp; <a href="#a7e8916b515d752dd33e7c0a3475bebe7" class="m-doc-self">m_renderPass</a>
             </dt>
             <dd><span></span></dd>
             <dt id="a4f96501aca711b72791e106a05cbce04">
