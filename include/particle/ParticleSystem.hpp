@@ -22,7 +22,7 @@
 #include <common/buffer/StorageBuffer.hpp>               // for StorageBuffer
 #include <common/buffer/UniformBuffers.hpp>              // for UniformBuffers
 #include <common/struct/ComputeParticle.hpp>             // for ComputeParticle
-#include <common/struct/MVP.hpp>                         // for MVP
+#include <common/struct/ParticleMVP.hpp>                 // for ParticleMVP
 #include <common/struct/Particle.hpp>                    // for Particle
 #include <cstdlib>                                       // for size_t
 #include <functional>                                    // for function
@@ -54,7 +54,7 @@ namespace vkl {
     DescriptorPool dp;
 
     // Buffers
-    UniformBuffers<MVP> uniformBuffersGraphic;
+    UniformBuffers<ParticleMVP> uniformBuffersGraphic;
     ParticleStorageBuffer storageBuffer;
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 

@@ -19,7 +19,7 @@
 #include <common/buffer/Buffer.hpp>                      // for Buffer
 #include <common/buffer/UniformBuffers.hpp>              // for UniformBuffers
 #include <common/struct/ComputeParticle.hpp>             // for ComputeParticle
-#include <common/struct/MVP.hpp>                         // for MVP
+#include <common/struct/ParticleMVP.hpp>                 // for ParticleMVP
 #include <common/struct/Particle.hpp>                    // for Particle
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -32,23 +32,34 @@
 #include <particle/Graphic/GraphicGraphicsPipeline.hpp>  // for GraphicGraph...
 #include <shadow/Basic/BasicRenderPass.hpp>              // for BasicRenderPass
 #include <common/buffer/IBuffer.hpp>                     // for IBuffer
+#include <glm/gtc/matrix_transform.hpp>
 // clang-format on
 
 using namespace vkl;
 
+static bool isPause = true;
+
 void updateGraphicsUniformBuffers(const Device& device,
                                   const SwapChain& swapChain,
-                                  std::deque<Buffer<MVP>>& uniformBuffers,
+                                  std::deque<Buffer<ParticleMVP>>& uniformBuffers,
                                   float time,
                                   uint32_t currentImage) {
-  MVP& ubo = uniformBuffers.at(currentImage).data().at(0);
+  ParticleMVP& ubo = uniformBuffers.at(currentImage).data().at(0);
 
   ubo.model = glm::mat4(1.0f);
-  ubo.view  = glm::lookAt(glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+  glm::mat4 rotM = glm::mat4(1.0f);
+  rotM = glm::rotate(rotM, glm::radians(-26.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  rotM = glm::rotate(rotM, glm::radians(75.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+  rotM = glm::rotate(rotM, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+  ubo.view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -14.0f)) * rotM;
 
   const float aspect = swapChain.extent().width / (float)swapChain.extent().height;
-  ubo.proj           = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+  ubo.proj           = glm::perspective(60.0f, aspect, 0.1f, 512.0f);
   ubo.proj[1][1] *= -1;
+
+  ubo.screenDim = glm::vec2(swapChain.extent().width, swapChain.extent().height);
 
   void* data;
   vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
@@ -63,7 +74,7 @@ void updateComputeUniformBuffers(const Device& device,
                                  uint32_t currentImage) {
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
-  ubo.deltaT        = time * 0.05f;
+  ubo.deltaT        = isPause ? 0.0f : time * 0.0005f;
   ubo.particleCount = NUM_PARTICLE;
 
   void* data;
@@ -292,6 +303,10 @@ void ParticleSystem::drawImGui() {
     ImGui::Text("frame: %d", ++frame);
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
+
+    if (ImGui::Button("Pause")) {
+      isPause = !isPause;
+    }
   }
 
   ImGui::End();
