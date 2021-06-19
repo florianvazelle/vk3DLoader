@@ -27,7 +27,6 @@ matrix:
           key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
         packages: 
         - clang-10
-        - ninja-build
     android:
       components:
       # Android API level 24 is the first with Vulkan support, but the crap
@@ -68,9 +67,8 @@ script:
     -DWITH_INTERCONNECT=OFF \
     -DWITH_PLUGINMANAGER=OFF \
     -DWITH_TESTSUITE=OFF \
-    -DWITH_UTILITY=OFF \
-    -G Ninja
-- ninja install
+    -DWITH_UTILITY=OFF
+- cmake --install . 
 - cd ..
 
 # Crosscompile Corrade
@@ -86,9 +84,8 @@ script:
     -DCMAKE_BUILD_TYPE=Release \
     -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
     -DCMAKE_INSTALL_PREFIX=$HOME/deps \
-    -DWITH_INTERCONNECT=OFF \
-    -G Ninja
-- ninja install
+    -DWITH_INTERCONNECT=OFF
+- cmake --install . 
 - cd ..
 
 - cd ..
@@ -125,9 +122,8 @@ script:
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_TESTING=ON \
     -DBUILD_DOCS=ON \
-    -DINSTALL_APPS=ON \
-    -G Ninja
-- ninja
+    -DINSTALL_APPS=ON
+- cmake --build . --config Release
 
 # Start simulator and run tests
 - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
@@ -136,7 +132,7 @@ script:
 - ctest --timeout 10 -C Release -j4
 
 # Test install, after running the tests as for them it shouldn't be needed
-- ninja install
+- cmake --install . 
 
 # Travis somehow is not able to gather all output, try to force it using this
 - sync
