@@ -1,3 +1,5 @@
+dist: xenial
+
 addons:
   apt:
     packages:
@@ -7,16 +9,25 @@ addons:
     - libvulkan-dev
 
 matrix:
+  fast_finish: true
   include:
   - language: android
     os: linux
-    dist: xenial
     env:
     - JOBID=android-vulkan
     - TARGET=android-vulkan
+    compiler: clang++-10
     addons:
       apt:
-        packages:
+        sources:
+        - ubuntu-toolchain-r-test
+        - sourceline: 'deb https://packagecloud.io/github/git-lfs/ubuntu/ xenial main'
+          key_url: 'https://packagecloud.io/github/git-lfs/gpgkey'
+        - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
+          key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+        packages: 
+        - clang-10
+        - libllvm10
         - ninja-build
     android:
       components:
@@ -26,8 +37,20 @@ matrix:
       - android-22
       - sys-img-armeabi-v7a-android-22
 
+cache:
+  apt: true
+  directories:
+    - $HOME/.cache/cmake-3.16.3
+
 install:
-- wget -nc https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip && unzip -q android-*.zip
+- wget -nc https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip 
+- unzip -q android-*.zip
+
+- wget -O cmake.sh https://cmake.org/files/v3.16/cmake-3.16.3-Linux-x86_64.sh
+- mkdir -p $HOME/.cache/cmake-3.16.3
+- sh cmake.sh --skip-license --exclude-subdir --prefix=$HOME/.cache/cmake-3.16.3
+- rm cmake.sh
+- sudo ln -sf $HOME/.cache/cmake-3.16.3/bin/cmake /usr/bin/cmake
 
 before_script:
   - cmake --version
@@ -80,14 +103,14 @@ script:
 # https://github.com/googlemaps/android-maps-utils/issues/371
 # So don't even bother there, use some ass-old version that works, and link to
 # our own library, which is the fastest Vulkan implementation IN THE WORLD.
-- $TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=armv7-none-linux-androideabi --gcc-toolchain=$TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=$TRAVIS_BUILD_DIR/android-ndk-r16b/platforms/android-22/arch-arm  -march=armv7-a -mthumb -mfpu=vfpv3-d16 -mfloat-abi=softfp -funwind-tables -no-canonical-prefixes -D__ANDROID_API__=22 -fexceptions -frtti -O3 -DNDEBUG  -Wl,--fix-cortex-a8  -fPIE -pie -Wl,--gc-sections -Wl,-z,nocopyreloc package/ci/libvulkan.cpp -std=c++11 -c -o vulkan.o
+- $TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=armv7-none-linux-androideabi --gcc-toolchain=$TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=$TRAVIS_BUILD_DIR/android-ndk-r16b/platforms/android-22/arch-arm  -march=armv7-a -mthumb -mfpu=vfpv3-d16 -mfloat-abi=softfp -funwind-tables -no-canonical-prefixes -D__ANDROID_API__=22 -fexceptions -frtti -O3 -DNDEBUG  -Wl,--fix-cortex-a8  -fPIE -pie -Wl,--gc-sections -Wl,-z,nocopyreloc ci/libvulkan.cpp -std=c++11 -c -o vulkan.o
 - $TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/arm-linux-androideabi/bin/ar rcs $HOME/libvulkan.a vulkan.o
 - $TRAVIS_BUILD_DIR/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/arm-linux-androideabi/bin/ranlib $HOME/libvulkan.a
 
 # Crosscompile
 - mkdir build-android-arm && cd build-android-arm
 - |
-  cmake .. \
+  CXX=clang++-9 cmake .. \
     -DANDROID_SDK=/usr/local/android-sdk \
     -DCMAKE_ANDROID_NDK=$TRAVIS_BUILD_DIR/android-ndk-r16b \
     -DCMAKE_SYSTEM_NAME=Android \
@@ -101,39 +124,9 @@ script:
     -DCMAKE_PREFIX_PATH=$HOME/deps \
     -DCMAKE_FIND_ROOT_PATH=$HOME/deps \
     -DCMAKE_BUILD_TYPE=Release \
-    -DWITH_AUDIO=OFF \
-    -DWITH_DEBUGTOOLS=OFF \
-    -DWITH_GL=OFF \
-    -DWITH_MESHTOOLS=OFF \
-    -DWITH_PRIMITIVES=OFF \
-    -DWITH_SCENEGRAPH=OFF \
-    -DWITH_SHADERS=OFF \
-    -DWITH_TEXT=OFF \
-    -DWITH_TEXTURETOOLS=OFF \
-    -DWITH_TRADE=ON \
-    -DWITH_VK=ON \
-    -DWITH_AL_INFO=OFF \
-    -DWITH_VK_INFO=ON \
-    -DWITH_GL_INFO=OFF \
-    -DWITH_ANYAUDIOIMPORTER=OFF \
-    -DWITH_ANYIMAGECONVERTER=OFF \
-    -DWITH_ANYIMAGEIMPORTER=OFF \
-    -DWITH_ANYSCENECONVERTER=OFF \
-    -DWITH_ANYSCENEIMPORTER=OFF \
-    -DWITH_MAGNUMFONT=OFF \
-    -DWITH_MAGNUMFONTCONVERTER=OFF \
-    -DWITH_OBJIMPORTER=OFF \
-    -DWITH_TGAIMAGECONVERTER=OFF \
-    -DWITH_TGAIMPORTER=OFF \
-    -DWITH_WAVAUDIOIMPORTER=OFF \
-    -DWITH_DISTANCEFIELDCONVERTER=OFF \
-    -DWITH_FONTCONVERTER=OFF \
-    -DWITH_IMAGECONVERTER=OFF \
-    -DWITH_SCENECONVERTER=OFF \
-    -DWITH_ANDROIDAPPLICATION=ON \
-    -DBUILD_TESTS=ON \
-    -DBUILD_GL_TESTS=OFF \
-    -DBUILD_VK_TESTS=ON \
+    -DBUILD_TESTING=ON \
+    -DBUILD_DOCS=ON \
+    -DINSTALL_APPS=ON \
     -G Ninja
 - ninja
 
@@ -141,7 +134,7 @@ script:
 - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
 - emulator -avd test -no-audio -no-window &
 - android-wait-for-emulator
-- CORRADE_TEST_COLOR=ON ctest -V -E VkTest
+- ctest --timeout 10 -C Release -j4
 
 # Test install, after running the tests as for them it shouldn't be needed
 - ninja install
