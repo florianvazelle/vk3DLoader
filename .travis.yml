@@ -2,18 +2,11 @@ dist: focal
 
 addons:
   apt:
-    sources:
-    - sourceline: 'deb https://packagecloud.io/github/git-lfs/ubuntu/ focal main'
-      key_url: 'https://packagecloud.io/github/git-lfs/gpgkey'
-    - sourceline: 'deb https://apt.llvm.org/focal/ llvm-toolchain-focal-10 main'
-      key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
     packages:
     - libgl1-mesa-dev
     - libglfw3-dev
     - libopenal-dev
     - libvulkan-dev
-    - clang-10
-    - libllvm10
 
 matrix:
   fast_finish: true
@@ -24,6 +17,16 @@ matrix:
     - JOBID=android-vulkan
     - TARGET=android-vulkan
     compiler: clang++-10
+    addons:
+      apt:
+        sources:
+        - sourceline: 'deb https://packagecloud.io/github/git-lfs/ubuntu/ focal main'
+          key_url: 'https://packagecloud.io/github/git-lfs/gpgkey'
+        - sourceline: 'deb https://apt.llvm.org/focal/ llvm-toolchain-focal-10 main'
+          key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+        packages: 
+        - clang-10
+        - libllvm10
     android:
       components:
       # Android API level 24 is the first with Vulkan support, but the crap
