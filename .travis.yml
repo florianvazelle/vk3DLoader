@@ -1,28 +1,31 @@
-dist: focal
+language: android
+os: linux
+dist: xenial
 
 addons:
   apt:
+    update: true
     packages:
     - libgl1-mesa-dev
     - libglfw3-dev
     - libvulkan-dev
 
-matrix:
+env:
+- JOBID=android-vulkan
+- TARGET=android-vulkan
+
+compiler: clang++
+
+android:
+  components:
+  # Android API level 24 is the first with Vulkan support, but the crap
+  # emulator doesn't even start, so it's useless.
+  - build-tools-22.0.1
+  - android-22
+  - sys-img-armeabi-v7a-android-22
+
+jobs:
   fast_finish: true
-  include:
-  - language: android
-    os: linux
-    env:
-    - JOBID=android-vulkan
-    - TARGET=android-vulkan
-    compiler: clang++
-    android:
-      components:
-      # Android API level 24 is the first with Vulkan support, but the crap
-      # emulator doesn't even start, so it's useless.
-      - build-tools-22.0.1
-      - android-22
-      - sys-img-armeabi-v7a-android-22
 
 cache:
   apt: true
