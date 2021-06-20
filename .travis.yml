@@ -16,17 +16,17 @@ matrix:
     env:
     - JOBID=android-vulkan
     - TARGET=android-vulkan
-    compiler: clang++-10
+    compiler: clang++-9
     addons:
       apt:
         sources:
         - sourceline: 'deb https://packagecloud.io/github/git-lfs/ubuntu/ focal main'
           key_url: 'https://packagecloud.io/github/git-lfs/gpgkey'
-        - sourceline: 'deb https://apt.llvm.org/focal/ llvm-toolchain-focal-10 main'
+        - sourceline: 'deb https://apt.llvm.org/focal/ llvm-toolchain-focal-9 main'
           key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
         packages: 
-        - clang-10
-        - libllvm10
+        - clang-9
+        - libllvm9
     android:
       components:
       # Android API level 24 is the first with Vulkan support, but the crap
@@ -54,42 +54,6 @@ before_script:
   - cmake --version
 
 script:
-# Corrade
-- git clone --depth 1 git://github.com/mosra/corrade.git
-- cd corrade
-
-# Build native corrade-rc
-- mkdir build && cd build
-- |
-  cmake .. \
-    -DCMAKE_INSTALL_PREFIX=$HOME/deps-native \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DWITH_INTERCONNECT=OFF \
-    -DWITH_PLUGINMANAGER=OFF \
-    -DWITH_TESTSUITE=OFF \
-    -DWITH_UTILITY=OFF
-- cmake --install . 
-- cd ..
-
-# Crosscompile Corrade
-- mkdir build-android-arm && cd build-android-arm
-- |
-  cmake .. \
-    -DCMAKE_ANDROID_NDK=$TRAVIS_BUILD_DIR/android-ndk-r16b \
-    -DCMAKE_SYSTEM_NAME=Android \
-    -DCMAKE_SYSTEM_VERSION=22 \
-    -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a \
-    -DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang \
-    -DCMAKE_ANDROID_STL_TYPE=c++_static \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
-    -DCMAKE_INSTALL_PREFIX=$HOME/deps \
-    -DWITH_INTERCONNECT=OFF
-- cmake --install . 
-- cd ..
-
-- cd ..
-
 # Generate debug keystore for APK signing
 - keytool -genkeypair -keystore $HOME/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -validity 10000 -dname CN=,OU=,O=,L=,S=,C=
 
@@ -114,7 +78,6 @@ script:
     -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a \
     -DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang \
     -DCMAKE_ANDROID_STL_TYPE=c++_static \
-    -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
     -DVulkan_LIBRARY=$HOME/libvulkan.a \
     -DCMAKE_INSTALL_PREFIX=$HOME/deps \
     -DCMAKE_PREFIX_PATH=$HOME/deps \
