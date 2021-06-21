@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::ImGuiCommandBuffers class | vkCommon</title>
+  <title>vkl::CommandBuffersBase class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>ImGuiCommandBuffers <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="ImGuiCommandBuffers_8hpp.html">&lt;common/ImGui/ImGuiCommandBuffers.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>CommandBuffersBase <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="CommandBuffers_8hpp.html">&lt;common/CommandBuffers.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -54,8 +54,11 @@
               Reference
               <ul>
                 <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#derived-classes">Derived classes</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pro-methods">Protected functions</a></li>
+                <li><a href="#pro-attribs">Protected variables</a></li>
               </ul>
             </li>
           </ul>
@@ -64,7 +67,20 @@
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classvkl_1_1CommandBuffersBase.html" class="m-doc">CommandBuffersBase</a>
+              struct <a href="structNoCopy.html" class="m-doc">NoCopy</a>
+            </dt>
+            <dd>A class to prohibit copying.</dd>
+          </dl>
+        </section>
+        <section id="derived-classes">
+          <h2><a href="#derived-classes">Derived classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classvkl_1_1CommandBuffers.html" class="m-doc">CommandBuffers</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              class <a href="classvkl_1_1ImGuiCommandBuffers.html" class="m-doc">ImGuiCommandBuffers</a>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -72,12 +88,16 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a2757c4911535b98a159b63434316f582">
-              <span class="m-doc-wrap-bumper"><a href="#a2757c4911535b98a159b63434316f582" class="m-doc-self">ImGuiCommandBuffers</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; renderPass,
+            <dt id="a286487256e8217ed158cb8becc00e088">
+              <span class="m-doc-wrap-bumper"><a href="#a286487256e8217ed158cb8becc00e088" class="m-doc-self">CommandBuffersBase</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; renderpass,
               const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
               const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; graphicsPipeline,
               const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a6a836a7040026c6b165557e78447fec4">
+              <span class="m-doc-wrap-bumper"><a href="#a6a836a7040026c6b165557e78447fec4" class="m-doc-self">~CommandBuffersBase</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -85,12 +105,50 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="af42ff102b3e67281d789ce036d48b564">
-              <span class="m-doc-wrap-bumper">void <a href="#af42ff102b3e67281d789ce036d48b564" class="m-doc-self">recordCommandBuffers</a>(</span><span class="m-doc-wrap">uint32_t bufferIdx)</span>
+            <dt id="a9a43879f1559699407d9526c62be1e2d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a9a43879f1559699407d9526c62be1e2d" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) -&gt; VkCommandBuffer&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="acefdde7d69638d81efbe81496dbebe4c">
-              <span class="m-doc-wrap-bumper">void <a href="#acefdde7d69638d81efbe81496dbebe4c" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a719f5599ca76d2039f11885adbd48e28">
+              <span class="m-doc-wrap-bumper">auto <a href="#a719f5599ca76d2039f11885adbd48e28" class="m-doc-self">command</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkCommandBuffer&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-methods">
+          <h2><a href="#pro-methods">Protected functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a3c41572d47c70426e03ca61f5399bc93">
+              <span class="m-doc-wrap-bumper">void <a href="#a3c41572d47c70426e03ca61f5399bc93" class="m-doc-self">destroyCommandBuffers</a>(</span><span class="m-doc-wrap">)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-attribs">
+          <h2><a href="#pro-attribs">Protected variables</a></h2>
+          <dl class="m-doc">
+            <dt id="a46f503d620c7b6da2f69e45eda294101">
+              std::vector&lt;VkCommandBuffer&gt; <a href="#a46f503d620c7b6da2f69e45eda294101" class="m-doc-self">m_commandBuffers</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a7cc0f895c2af19340c4004054a2540ad">
+              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a7cc0f895c2af19340c4004054a2540ad" class="m-doc-self">m_device</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aae77861284070fc2e420e029b1aa1ea2">
+              const <a href="classvkl_1_1RenderPass.html" class="m-doc">RenderPass</a>&amp; <a href="#aae77861284070fc2e420e029b1aa1ea2" class="m-doc-self">m_renderPass</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a3f76c7361e9f0de806c5be574826d974">
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; <a href="#a3f76c7361e9f0de806c5be574826d974" class="m-doc-self">m_swapChain</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="adbf3fb4c93585b9beb2874f7a59cf731">
+              const <a href="classvkl_1_1GraphicsPipeline.html" class="m-doc">GraphicsPipeline</a>&amp; <a href="#adbf3fb4c93585b9beb2874f7a59cf731" class="m-doc-self">m_graphicsPipeline</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2925d3ff5094653672f6d014e58aed12">
+              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#a2925d3ff5094653672f6d014e58aed12" class="m-doc-self">m_commandPool</a>
             </dt>
             <dd><span></span></dd>
           </dl>
