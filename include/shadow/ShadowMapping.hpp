@@ -35,6 +35,7 @@
 #include <common/CommandPool.hpp>                  // for CommandPool
 #include <common/struct/Material.hpp>              // for Material
 #include <common/struct/Vertex.hpp>                // for Vertex
+#include <common/Texture.hpp>                      // for Texture
 // clang-format on
 
 namespace vkl {

@@ -201,6 +201,9 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
                                                     1),
                    // Binding 2 : Fragment shader uniform buffer (Material)
                    misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
+
+                    // Binding 3 : Fragment shader uniform buffer (Texture)
+                   misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3),
                })),
 
       // 3. Graphic Pipeline
@@ -209,7 +212,7 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       // 4. Descriptor Pool
       psBasic({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages()),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, swapChain.numImages() * 2),
       }),
       dpiBasic(misc::descriptorPoolCreateInfo(psBasic, swapChain.numImages())),
       dpBasic(device, dpiBasic),
@@ -220,7 +223,7 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       vecBBasic({&materialUniformBuffer}),
 
       // 5. Descriptor Sets
-      dsBasic(device, swapChain, dslBasic, dpBasic, vecRPBasic, vecBBasic, vecUBBasic),
+      dsBasic(device, swapChain, dslBasic, dpBasic, vecRPBasic, vecBBasic, vecUBBasic, commandPool),
 
       // 6. Command Buffers
       cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, dsBasic, vecVertexBuffer),

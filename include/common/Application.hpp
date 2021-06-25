@@ -21,8 +21,8 @@
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 800
+#define HEIGHT 600
 
 #define ENGINE_NAME "No Engine"
 

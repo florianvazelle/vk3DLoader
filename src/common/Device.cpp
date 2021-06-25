@@ -52,6 +52,7 @@ Device::Device(const Instance& instance, const Window& window, const std::vector
       .enabledExtensionCount   = static_cast<uint32_t>(extensions.size()),
       .ppEnabledExtensionNames = extensions.data(),
       .pEnabledFeatures        = &deviceFeatures,
+      //.samplerAnisotropy       = VK_TRUE,
   };
 
   if (m_instance.validationLayersEnabled()) {
@@ -115,13 +116,15 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
     std::cout << "- " << deviceProperties.deviceName << '\n';
   }
 
+ int indice = 0;
   for (const auto& device : devices) {
-    if (IsDeviceSuitable(device, surface)) {
+    if (IsDeviceSuitable(device, surface) && indice == 1) {
       VkPhysicalDeviceProperties deviceProperties;
       vkGetPhysicalDeviceProperties(device, &deviceProperties);
       std::cout << "Pick: " << deviceProperties.deviceName << "\n\n";
       return device;
     }
+    indice++;
   }
 
   throw std::runtime_error("failed to find a suitable GPU!");
@@ -138,5 +141,8 @@ bool Device::IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR
     swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
   }
 
-  return indices.isComplete() && extensionsSupported && swapChainAdequate;
+  VkPhysicalDeviceFeatures supportedFeatures;
+  vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+  
+  return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }

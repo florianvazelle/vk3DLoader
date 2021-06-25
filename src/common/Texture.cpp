@@ -3,11 +3,16 @@
 #include <iostream>
 #include <stdexcept>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 using namespace vkl;
 
 
 Texture::Texture(const Device &device,const CommandPool &commandePool):m_device(device),m_commandePool(commandePool){
-
+    createTextureImage();
+    createTextureImageView();
+    createTextureSampler();
 }
 
 Texture::~Texture(){
@@ -58,7 +63,7 @@ void Texture::createImage(uint32_t width, uint32_t height, VkFormat format, VkIm
 //Charger une image - Step 1.
 void Texture::createTextureImage() {
         int texWidth, texHeight, texChannels;
-        stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+        stbi_uc* pixels = stbi_load("D:/GitHubKraken/Clone/vk3DLoader/assets/textures/viking_room.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
         VkDeviceSize imageSize = texWidth * texHeight * 4;
 
         if (!pixels) {
@@ -198,7 +203,7 @@ void Texture::createTextureSampler() {
         samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
         samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
         samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        samplerInfo.anisotropyEnable = VK_TRUE;
+        samplerInfo.anisotropyEnable = VK_FALSE;
         samplerInfo.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
         samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
         samplerInfo.unnormalizedCoordinates = VK_FALSE;

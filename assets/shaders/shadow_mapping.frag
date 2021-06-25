@@ -4,6 +4,7 @@
 /**
  * in
  */
+layout(binding = 3) uniform sampler2D texturename;
 
 layout(location = 0) in vec3 inPosition;
 layout(location = 1) in vec3 inNormal;
@@ -11,6 +12,7 @@ layout(location = 2) in vec4 inShadowCoord;
 layout(location = 3) in vec3 inLightPos;
 layout(location = 4) in vec3 inLightVec;
 layout(location = 5) in vec3 inViewVec;
+layout(location = 6) in vec2 inTexCoords;
 
 // layout(constant_id = 0) const bool enabledShadowMap = true;
 
@@ -102,7 +104,8 @@ void main() {
   vec3 directColor   = (diffuseColor + specularColor) * lightColor * attenuation;
 
   vec3 indirectColor = u_Material.AmbientColor;
-  vec3 color         = directColor + indirectColor;
+ // vec3 color         = directColor + indirectColor;
+  vec3 color = texture(texturename, inTexCoords).xyz;
 
   // Apply shadow mapping
   float visibility = filterPCF(inShadowCoord / inShadowCoord.w);
@@ -111,5 +114,6 @@ void main() {
   // correction gamma
   color = pow(color, vec3(1.0 / 2.2));
 
-  outColor = vec4(color, 1.0);
+  outColor =  vec4(color, 1.0);
+  // outColor =  texture(texturename, inTexCoords); 
 }

@@ -11,6 +11,8 @@ namespace vkl { class IBuffer; }
 namespace vkl { class RenderPass; }
 namespace vkl { class IUniformBuffers; }
 namespace vkl { class SwapChain; }
+#include <common/CommandPool.hpp>
+#include <common/Texture.hpp> 
 // clang-format on
 
 namespace vkl {
@@ -23,18 +25,21 @@ namespace vkl {
                         const DescriptorPool& descriptorPool,
                         const std::vector<const RenderPass*>& renderPasses,
                         const std::vector<const IBuffer*>& buffers,
-                        const std::vector<const IUniformBuffers*>& uniformBuffers)
+                        const std::vector<const IUniformBuffers*>& uniformBuffers,
+                        const CommandPool& commandePool)
         : DescriptorSets(device,
                          swapChain,
                          descriptorSetLayout,
                          descriptorPool,
                          renderPasses,
                          buffers,
-                         uniformBuffers) {
+                         uniformBuffers), texture(m_device, commandePool) {
       createDescriptorSets();
     }
 
   private:
+    Texture texture;
+
     void createDescriptorSets() final;
   };
 }  // namespace vkl

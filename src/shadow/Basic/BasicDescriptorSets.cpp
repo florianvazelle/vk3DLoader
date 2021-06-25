@@ -10,6 +10,7 @@
 #include <common/QueueFamily.hpp>            // for vkl
 #include <common/RenderPass.hpp>             // for RenderPass
 #include <common/buffer/IBuffer.hpp>         // for IBuffer, IUniformBuffers
+#include <common/Texture.hpp>                // for Texture;
 // clang-format on
 
 using namespace vkl;
@@ -43,6 +44,12 @@ void BasicDescriptorSets::createDescriptorSets() {
         .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
     };
 
+    // Texture Descriptor
+    VkDescriptorImageInfo imageInfo{};
+    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    imageInfo.imageView =  texture.textureImageView; //textureImageView;
+    imageInfo.sampler = texture.textureSampler; //textureSampler;
+
     writeDescriptorSets = {
         // Binding 0 : Vertex shader uniform buffer
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
@@ -51,6 +58,9 @@ void BasicDescriptorSets::createDescriptorSets() {
                                  &depthDescriptor),
         // Binding 2 : Fragment shader uniform buffer
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &materialBufferInfo),
+        
+        //Binding 3 : 
+        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3, &imageInfo),
     };
 
     vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
