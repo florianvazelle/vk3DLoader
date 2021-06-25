@@ -1,7 +1,7 @@
 #ifndef STORAGEBUFFER_HPP
 #define STORAGEBUFFER_HPP
 
-#include <vulkan/vulkan.h>
+#include <common/VulkanHeader.hpp>
 #include <stdexcept>
 
 #include <common/Device.hpp>

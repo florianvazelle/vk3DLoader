@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <stdint.h>              // for uint32_t
-#include <vulkan/vulkan_core.h>  // for VK_FALSE, VkPipelineLayout, VK_TRUE
+#include <common/VulkanHeader.hpp>  // for VK_FALSE, VkPipelineLayout, VK_TRUE
 #include <common/NoCopy.hpp>       // for NoCopy
 #include <common/SwapChain.hpp>  // for SwapChain
 #include <vector>                // for vector

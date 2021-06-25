@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <stdint.h>              // for uint32_t
-#include <vulkan/vulkan_core.h>  // for VkPhysicalDevice, VkSurfaceKHR
+#include <common/VulkanHeader.hpp>  // for VkPhysicalDevice, VkSurfaceKHR
 #include <optional>              // for optional
 // clang-format on
 

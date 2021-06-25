@@ -209,6 +209,10 @@ SwapChainSupportDetails SwapChain::QuerySwapChainSupport(const VkPhysicalDevice&
 }
 
 VkExtent2D SwapChain::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, const Window& window) {
+#ifdef __ANDROID__
+  return capabilities.currentExtent;
+#endif
+
   // Vulkan uses uint32 max value to signify window resolution should be used
   if (capabilities.currentExtent.width != UINT32_MAX) {
     return capabilities.currentExtent;

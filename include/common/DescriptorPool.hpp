@@ -7,7 +7,7 @@
 #define DESCRIPTORPOOL_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkDescriptorPool, VkDescriptorPoolCr...
+#include <common/VulkanHeader.hpp>  // for VkDescriptorPool, VkDescriptorPoolCr...
 #include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on

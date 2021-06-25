@@ -6,8 +6,8 @@
 #ifndef COMMANDPOOL_HPP
 #define COMMANDPOOL_HPP
 
-#include <vulkan/vulkan.h>
 #include <common/NoCopy.hpp>
+#include <common/VulkanHeader.hpp>
 #include <optional>
 
 namespace vkl {

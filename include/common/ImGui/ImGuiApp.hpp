@@ -4,7 +4,7 @@
 
 // clang-format off
 #include <stdint.h>                              // for uint32_t
-#include <vulkan/vulkan_core.h>                  // for VkCommandBuffer, VkD...
+#include <common/VulkanHeader.hpp>                  // for VkCommandBuffer, VkD...
 #include <common/CommandPool.hpp>                // for CommandPool
 #include <common/ImGui/ImGuiCommandBuffers.hpp>  // for ImGuiCommandBuffers
 #include <common/ImGui/ImGuiRenderPass.hpp>      // for ImGuiRenderPass

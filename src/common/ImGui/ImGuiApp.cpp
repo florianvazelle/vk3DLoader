@@ -59,11 +59,11 @@ ImGuiApp::ImGuiApp(const Instance& instance,
   };
   ImGui_ImplVulkan_Init(&init_info, renderPass.handle());
 
-  CommandBuffers::SingleTimeCommands(
-      m_device, commandPool, m_device.graphicsQueue(), [](const VkCommandBuffer& commandBuffer) {
-        // Upload the fonts for DearImgui
-        ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
-      });
+  CommandBuffers::SingleTimeCommands(m_device, commandPool, m_device.graphicsQueue(),
+                                     [](const VkCommandBuffer& commandBuffer) {
+                                       // Upload the fonts for DearImgui
+                                       ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
+                                     });
   ImGui_ImplVulkan_DestroyFontUploadObjects();
 }
 

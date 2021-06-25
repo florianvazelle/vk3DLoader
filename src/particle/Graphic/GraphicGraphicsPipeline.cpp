@@ -2,7 +2,7 @@
 #include <particle/Graphic/GraphicGraphicsPipeline.hpp>
 #include <particle_frag.h>                   // for PARTICLE_FRAG
 #include <particle_vert.h>                   // for PARTICLE_VERT
-#include <vulkan/vulkan_core.h>              // for VkPipelineShaderStageCre...
+#include <common/VulkanHeader.hpp>              // for VkPipelineShaderStageCre...
 #include <common/DescriptorSetLayout.hpp>    // for DescriptorSetLayout
 #include <common/Device.hpp>                 // for Device
 #include <common/RenderPass.hpp>             // for RenderPass

@@ -29,14 +29,14 @@ function(compile_shaders)
 		string(REPLACE "." "_" HEADER_NAME ${SHADER_NAME})
 		string(TOUPPER ${HEADER_NAME} GLOBAL_SHADER_VAR)
 
-		set(SHADER_HEADER "${PROJECT_SOURCE_DIR}/include/${HEADER_NAME}.h")
+		set(SHADER_HEADER "${ROOT_DIR}/include/${HEADER_NAME}.h")
 
 		add_custom_target(
 			${HEADER_NAME}
 			# Compile any GLSL shader into SPIR-V shader
 			COMMAND ${glslCompiler} -V ${SHADER} -o ${SHADER}.spv
 			# Make a C header file with the SPIR-V shader
-			COMMAND ${CMAKE_COMMAND} -DPATH="${SHADER}.spv" -DHEADER="${SHADER_HEADER}" -DGLOBAL="${GLOBAL_SHADER_VAR}" -P "${CMAKE_SOURCE_DIR}/cmake/scripts/embed-data.cmake"
+			COMMAND ${CMAKE_COMMAND} -DPATH="${SHADER}.spv" -DHEADER="${SHADER_HEADER}" -DGLOBAL="${GLOBAL_SHADER_VAR}" -P "${ROOT_DIR}/cmake/scripts/embed-data.cmake"
 			# Rebuild the header file if the shader is updated
 			DEPENDS ${SHADER}
 			COMMENT "Building ${SHADER}.spv and embedding it into ${SHADER_HEADER}"

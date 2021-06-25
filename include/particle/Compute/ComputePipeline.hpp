@@ -3,7 +3,7 @@
 #define COMPUTEPIPELINE_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>         // for VkPipeline, VkPipeline_T
+#include <common/VulkanHeader.hpp>         // for VkPipeline, VkPipeline_T
 #include <common/GraphicsPipeline.hpp>  // for GraphicsPipeline
 namespace vkl { class DescriptorSetLayout; }
 namespace vkl { class Device; }

@@ -35,7 +35,6 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
   const std::optional<uint32_t>& graphicsFamily = device.queueFamilyIndices().graphicsFamily;
   const std::optional<uint32_t>& computeFamily  = device.queueFamilyIndices().computeFamily;
 
-
   // Transfer
   if (graphicsFamily.value() != computeFamily.value()) {
     CommandBuffers::SingleTimeCommands(

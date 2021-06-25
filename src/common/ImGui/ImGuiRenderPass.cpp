@@ -1,6 +1,6 @@
 // clang-format off
 #include <common/ImGui/ImGuiRenderPass.hpp>
-#include <vulkan/vulkan_core.h>    // for vkCreateRenderPass, VK_ACCESS_COLO...
+#include <common/VulkanHeader.hpp>    // for vkCreateRenderPass, VK_ACCESS_COLO...
 #include <common/Device.hpp>       // for Device
 #include <common/SwapChain.hpp>    // for SwapChain
 #include <stdexcept>               // for runtime_error

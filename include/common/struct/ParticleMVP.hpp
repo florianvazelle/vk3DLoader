@@ -1,8 +1,8 @@
 #ifndef PARTICLEMVP_HPP
 #define PARTICLEMVP_HPP
 
-#include <glm/glm.hpp>
 #include <common/struct/MVP.hpp>
+#include <glm/glm.hpp>
 
 namespace vkl {
 

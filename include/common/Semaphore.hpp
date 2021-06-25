@@ -2,7 +2,7 @@
 #define SEMAPHORE_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkSemaphore, VkSemaphore_T
+#include <common/VulkanHeader.hpp>  // for VkSemaphore, VkSemaphore_T
 #include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on

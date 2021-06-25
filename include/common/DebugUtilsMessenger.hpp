@@ -6,7 +6,7 @@
 #ifndef DEBUGUTILSMESSENGER_HPP
 #define DEBUGUTILSMESSENGER_HPP
 
-#include <vulkan/vulkan.h>
+#include <common/VulkanHeader.hpp>
 
 #include <common/NoCopy.hpp>
 

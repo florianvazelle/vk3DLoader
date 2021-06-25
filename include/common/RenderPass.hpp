@@ -9,7 +9,7 @@
 // clang-format off
 #include <stddef.h>              // for size_t
 #include <stdint.h>              // for uint32_t
-#include <vulkan/vulkan_core.h>  // for VkFramebuffer, VkRenderPass, VkRende...
+#include <common/VulkanHeader.hpp>  // for VkFramebuffer, VkRenderPass, VkRende...
 #include <common/NoCopy.hpp>       // for NoCopy
 #include <iostream>              // for operator<<, cout, ostream
 #include <memory>                // for unique_ptr

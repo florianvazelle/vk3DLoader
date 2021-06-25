@@ -3,7 +3,7 @@
 #include <stddef.h>                          // for size_t
 #include <stdint.h>                          // for uint32_t
 #include <array>                             // for array
-#include <vulkan/vulkan_core.h>              // for VkAttachmentDescription
+#include <common/VulkanHeader.hpp>              // for VkAttachmentDescription
 #include <common/Device.hpp>                 // for Device
 #include <common/SwapChain.hpp>              // for SwapChain
 #include <common/misc/Device.hpp>            // for findDepthFormat

@@ -55,7 +55,7 @@ cmake --build build 2> iwyu.log
 - C++20 compiler :
   - Visual Studio 2019
   - GCC 9+ or Clang 10+
-- [CMake](https://cmake.org/) for build system creation (>= 3.8)
+- [CMake](https://cmake.org/) for build system creation (>= 3.16.3)
 - [Conan](https://conan.io/) for install packages (>= 1.0)
 - [Doxygen](https://doxygen.org/) for generate documentation (>= 1.8, optional)
 

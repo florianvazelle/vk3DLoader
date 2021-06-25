@@ -1,7 +1,7 @@
 #ifndef IBUFFER_HPP
 #define IBUFFER_HPP
 
-#include <vulkan/vulkan.h>
+#include <common/VulkanHeader.hpp>
 
 #include <common/NoCopy.hpp>
 

@@ -7,7 +7,7 @@
 #define FRAMEBUFFERATTACHMENT_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkImage, VkImageView, VkSampler, VkF...
+#include <common/VulkanHeader.hpp>  // for VkImage, VkImageView, VkSampler, VkF...
 namespace vkl { class Device; }
 namespace vkl { class SwapChain; }
 // clang-format on

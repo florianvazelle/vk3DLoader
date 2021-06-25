@@ -2,7 +2,7 @@
 #include <shadow/Depth/DepthRenderPass.hpp>
 #include <stddef.h>                          // for size_t
 #include <stdint.h>                          // for uint32_t
-#include <vulkan/vulkan_core.h>              // for VkSubpassDependency, VkF...
+#include <common/VulkanHeader.hpp>              // for VkSubpassDependency, VkF...
 #include <array>                             // for array
 #include <common/Device.hpp>                 // for Device
 #include <common/SwapChain.hpp>              // for SwapChain

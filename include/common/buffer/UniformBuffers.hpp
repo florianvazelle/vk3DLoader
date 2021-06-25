@@ -1,7 +1,7 @@
 #ifndef UNIFORMBUFFER_HPP
 #define UNIFORMBUFFER_HPP
 
-#include <vulkan/vulkan.h>
+#include <common/VulkanHeader.hpp>
 #include <deque>
 #include <stdexcept>
 

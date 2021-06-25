@@ -1,6 +1,6 @@
 // clang-format off
 #include <shadow/Depth/DepthCommandBuffers.hpp>
-#include <vulkan/vulkan_core.h>         // for VkCommandBuffer, VkCommandBuf...
+#include <common/VulkanHeader.hpp>         // for VkCommandBuffer, VkCommandBuf...
 #include <stdexcept>                    // for runtime_error
 #include <common/CommandPool.hpp>       // for CommandPool, vkl
 #include <common/DescriptorSets.hpp>    // for DescriptorSets

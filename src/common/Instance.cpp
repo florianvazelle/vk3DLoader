@@ -14,6 +14,15 @@ const std::vector<const char*> Instance::DeviceExtensions = {VK_KHR_SWAPCHAIN_EX
 
 Instance::Instance(const std::string& appName, const std::string& engineName, bool validationLayers)
     : m_instance(VK_NULL_HANDLE), m_enableValidationLayers(validationLayers) {
+#ifdef __ANDROID__
+  // This place is the first place for samples to use Vulkan APIs.
+  // Here, we are going to open Vulkan.so on the device and retrieve function pointers using
+  // vulkan_wrapper helper.
+  if (!InitVulkan()) {
+    throw std::runtime_error("Error initialization failed!");
+  }
+#endif
+
   if (validationLayers && !CheckValidationLayerSupport()) {
     throw std::runtime_error("validation layers requested, but not available!");
   }

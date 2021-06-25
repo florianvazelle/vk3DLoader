@@ -7,7 +7,7 @@
 #define DEVICE_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>    // for VkPhysicalDevice, VkQueue, VkDevice
+#include <common/VulkanHeader.hpp>    // for VkPhysicalDevice, VkQueue, VkDevice
 #include <common/NoCopy.hpp>         // for NoCopy
 #include <common/QueueFamily.hpp>  // for QueueFamilyIndices
 #include <vector>                  // for vector

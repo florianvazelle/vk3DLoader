@@ -13,7 +13,7 @@ namespace vkl { class SwapChain; }
 
 namespace vkl {
 
-  class ImGuiCommandBuffers : public CommandBuffers {
+  class ImGuiCommandBuffers : public CommandBuffersBase {
   public:
     ImGuiCommandBuffers(const Device& device,
                         const RenderPass& renderPass,

@@ -7,7 +7,7 @@
 #define DESCRIPTORSETS_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkDescriptorSet, VkDescriptorSet_T
+#include <common/VulkanHeader.hpp>  // for VkDescriptorSet, VkDescriptorSet_T
 #include <common/NoCopy.hpp>       // for NoCopy
 #include <vector>                // for vector
 namespace vkl { class DescriptorPool; }

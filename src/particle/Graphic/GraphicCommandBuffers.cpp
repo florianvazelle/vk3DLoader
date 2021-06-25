@@ -2,7 +2,7 @@
 #include <particle/Graphic/GraphicCommandBuffers.hpp>
 #include <stddef.h>                         // for size_t
 #include <stdint.h>                         // for uint32_t
-#include <vulkan/vulkan_core.h>             // for VkCommandBuffer, VkComman...
+#include <common/VulkanHeader.hpp>             // for VkCommandBuffer, VkComman...
 #include <stdexcept>                        // for runtime_error
 #include <common/CommandPool.hpp>           // for CommandPool, vkl
 #include <common/DescriptorSets.hpp>        // for DescriptorSets
@@ -60,7 +60,7 @@ void GraphicCommandBuffers::createCommandBuffers() {
     const StorageBuffer* storageBuffer = dynamic_cast<const StorageBuffer*>(m_buffers[0]);
 
     const std::optional<uint32_t>& graphicsFamily = m_device.queueFamilyIndices().graphicsFamily;
-    const std::optional<uint32_t>& computeFamily = m_device.queueFamilyIndices().computeFamily;
+    const std::optional<uint32_t>& computeFamily  = m_device.queueFamilyIndices().computeFamily;
 
     // Acquire barrier
     if (graphicsFamily.value() != computeFamily.value()) {

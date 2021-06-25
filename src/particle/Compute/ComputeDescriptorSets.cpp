@@ -1,7 +1,7 @@
 // clang-format off
 #include <particle/Compute/ComputeDescriptorSets.hpp>
 #include <stddef.h>                           // for size_t
-#include <vulkan/vulkan_core.h>               // for VkWriteDescriptorSet
+#include <common/VulkanHeader.hpp>               // for VkWriteDescriptorSet
 #include <common/misc/DescriptorSet.hpp>      // for writeDescriptorSet
 #include <common/struct/ComputeParticle.hpp>  // for ComputeParticle
 #include <common/struct/Particle.hpp>         // for Particle

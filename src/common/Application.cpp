@@ -8,13 +8,25 @@
 
 using namespace vkl;
 
-Application::Application(const std::string& appName, const DebugOption& debugOption)
+Application::Application(
+#ifdef __ANDROID__
+    android_app* androidApp,
+#endif
+    const std::string& appName,
+    const DebugOption& debugOption)
     : instance(appName, ENGINE_NAME, (debugOption.debugLevel > 0)),
       debugMessenger(instance, debugOption.exitOnError),
-      window({WIDTH, HEIGHT}, appName, instance),
+      window(
+#ifdef __ANDROID__
+          androidApp,
+#endif
+          {WIDTH, HEIGHT},
+          appName,
+          instance),
       device(instance, window, Instance::DeviceExtensions),
       swapChain(device, window),
-      syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT) {}
+      syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT) {
+}
 
 VkResult Application::prepareFrame(bool& framebufferResized, uint32_t& imageIndex) {
   // vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE, UINT64_MAX);

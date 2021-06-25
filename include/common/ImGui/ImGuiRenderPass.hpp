@@ -1,8 +1,8 @@
 #ifndef IMGUIRENDERPASS_HPP
 #define IMGUIRENDERPASS_HPP
 
-#include <vulkan/vulkan.h>
 #include <common/RenderPass.hpp>
+#include <common/VulkanHeader.hpp>
 #include <stdexcept>
 
 namespace vkl {

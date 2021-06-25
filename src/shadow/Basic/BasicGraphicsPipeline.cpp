@@ -2,7 +2,7 @@
 #include <shadow/Basic/BasicGraphicsPipeline.hpp>
 #include <shadow_mapping_frag.h>             // for SHADOW_MAPPING_FRAG
 #include <shadow_mapping_vert.h>             // for SHADOW_MAPPING_VERT
-#include <vulkan/vulkan_core.h>              // for VkPipelineShaderStageCre...
+#include <common/VulkanHeader.hpp>              // for VkPipelineShaderStageCre...
 #include <common/DescriptorSetLayout.hpp>    // for DescriptorSetLayout
 #include <common/Device.hpp>                 // for Device
 #include <common/RenderPass.hpp>             // for RenderPass

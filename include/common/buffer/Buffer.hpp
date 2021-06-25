@@ -7,7 +7,7 @@
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
 
-#include <vulkan/vulkan.h>
+#include <common/VulkanHeader.hpp>
 #include <cstring>  // memcpy
 #include <stdexcept>
 

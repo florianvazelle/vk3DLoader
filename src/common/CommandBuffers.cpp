@@ -11,6 +11,17 @@
 
 using namespace vkl;
 
+CommandBuffersBase::CommandBuffersBase(const Device& device,
+                                       const RenderPass& renderPass,
+                                       const SwapChain& swapChain,
+                                       const GraphicsPipeline& graphicsPipeline,
+                                       const CommandPool& commandPool)
+    : m_device(device),
+      m_renderPass(renderPass),
+      m_swapChain(swapChain),
+      m_graphicsPipeline(graphicsPipeline),
+      m_commandPool(commandPool) {}
+
 CommandBuffers::CommandBuffers(const Device& device,
                                const RenderPass& renderPass,
                                const SwapChain& swapChain,
@@ -18,22 +29,18 @@ CommandBuffers::CommandBuffers(const Device& device,
                                const CommandPool& commandPool,
                                const DescriptorSets& descriptorSets,
                                const std::vector<const IBuffer*>& buffers)
-    : m_device(device),
-      m_renderPass(renderPass),
-      m_swapChain(swapChain),
-      m_graphicsPipeline(graphicsPipeline),
-      m_commandPool(commandPool),
+    : CommandBuffersBase(device, renderPass, swapChain, graphicsPipeline, commandPool),
       m_descriptorSets(descriptorSets),
       m_buffers(buffers) {}
 
-CommandBuffers::~CommandBuffers() { destroyCommandBuffers(); }
+CommandBuffersBase::~CommandBuffersBase() { destroyCommandBuffers(); }
 
 void CommandBuffers::recreate() {
   destroyCommandBuffers();
   createCommandBuffers();
 }
 
-void CommandBuffers::destroyCommandBuffers() {
+void CommandBuffersBase::destroyCommandBuffers() {
   vkFreeCommandBuffers(m_device.logical(), m_commandPool.handle(), static_cast<uint32_t>(m_commandBuffers.size()),
                        m_commandBuffers.data());
 }

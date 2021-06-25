@@ -2,7 +2,7 @@
 #include <common/ImGui/ImGuiCommandBuffers.hpp>
 #include <imgui.h>                    // for GetDrawData
 #include <imgui_impl_vulkan.h>        // for ImGui_ImplVulkan_RenderDrawData
-#include <vulkan/vulkan_core.h>       // for VkCommandBuffer, VkCommandBuffer_T
+#include <common/VulkanHeader.hpp>       // for VkCommandBuffer, VkCommandBuffer_T
 #include <common/CommandBuffers.hpp>  // for CommandBuffers
 #include <common/CommandPool.hpp>     // for CommandPool, vkl
 #include <common/DescriptorSets.hpp>  // for DescriptorSets
@@ -20,7 +20,7 @@ ImGuiCommandBuffers::ImGuiCommandBuffers(const Device& device,
                                          const SwapChain& swapChain,
                                          const GraphicsPipeline& graphicsPipeline,
                                          const CommandPool& commandPool)
-    : CommandBuffers(device, renderPass, swapChain, graphicsPipeline, commandPool, *((DescriptorSets*)nullptr), {}) {
+    : CommandBuffersBase(device, renderPass, swapChain, graphicsPipeline, commandPool) {
   createCommandBuffers();
 }
 

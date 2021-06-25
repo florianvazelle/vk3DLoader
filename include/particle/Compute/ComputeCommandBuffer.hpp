@@ -2,7 +2,7 @@
 #define COMPUTECOMMANDBUFFER_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkCommandBuffer, VkCommandBuffer_T
+#include <common/VulkanHeader.hpp>  // for VkCommandBuffer, VkCommandBuffer_T
 #include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class CommandPool; }
 namespace vkl { class ComputePipeline; }

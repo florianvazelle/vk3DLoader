@@ -8,14 +8,13 @@
 #pragma once
 
 // clang-format off
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
-#include <vulkan/vulkan_core.h>                          // for VkDescriptor...
+#include <common/VulkanHeader.hpp>                          // for VkDescriptor...
 #include <common/Application.hpp>                        // for Application
 #include <common/CommandPool.hpp>                        // for CommandPool
 #include <common/DescriptorPool.hpp>                     // for DescriptorPool
+#ifndef __ANDROID__
 #include <common/ImGui/ImGuiApp.hpp>                     // for ImGuiApp
+#endif
 #include <common/DescriptorSetLayout.hpp>                // for DescriptorSe...
 #include <common/Semaphore.hpp>                          // for Semaphore
 #include <common/buffer/Buffer.hpp>                      // for Buffer
@@ -41,9 +40,18 @@
 namespace vkl {
   class ParticleSystem : public Application {
   public:
-    ParticleSystem(const std::string& appName, const DebugOption& debugOption);
+    ParticleSystem(
+#ifdef __ANDROID__
+        android_app* androidApp,
+#endif
+        const std::string& appName,
+        const DebugOption& debugOption);
 
     void run();
+
+#ifdef __ANDROID__
+    void togglePause() const;
+#endif
 
   private:
     CommandPool commandPool, commandPoolCompute;
@@ -82,7 +90,9 @@ namespace vkl {
     ComputeCommandBuffer cbCompute;
     GraphicCommandBuffers cbGraphic;
 
+#ifndef __ANDROID__
     ImGuiApp interface;
+#endif
 
     void drawFrame(bool& framebufferResized);
     void drawImGui();

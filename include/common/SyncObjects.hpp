@@ -8,7 +8,7 @@
 
 // clang-format off
 #include <stdint.h>              // for uint32_t
-#include <vulkan/vulkan_core.h>  // for VkFence, VkSemaphore
+#include <common/VulkanHeader.hpp>  // for VkFence, VkSemaphore
 #include <common/NoCopy.hpp>       // for NoCopy
 #include <vector>                // for vector
 namespace vkl { class Device; }

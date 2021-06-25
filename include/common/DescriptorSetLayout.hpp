@@ -7,7 +7,7 @@
 #define DESCRIPTORSETLAYOUT_HPP
 
 // clang-format off
-#include <vulkan/vulkan_core.h>  // for VkDescriptorSetLayout, VkDescriptorS...
+#include <common/VulkanHeader.hpp>  // for VkDescriptorSetLayout, VkDescriptorS...
 #include <common/NoCopy.hpp>       // for NoCopy
 namespace vkl { class Device; }
 // clang-format on

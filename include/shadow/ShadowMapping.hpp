@@ -11,7 +11,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include <vulkan/vulkan_core.h>                    // for VkDescriptorPoolSize
+#include <common/VulkanHeader.hpp>                    // for VkDescriptorPoolSize
 #include <common/Application.hpp>                  // for Application
 #include <common/DescriptorPool.hpp>               // for DescriptorPool
 #include <common/DescriptorSetLayout.hpp>          // for DescriptorSetLayout

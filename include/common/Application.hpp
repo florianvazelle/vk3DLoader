@@ -7,8 +7,8 @@
 #define APPLICATION_HPP
 
 // clang-format off
-#include <common/NoCopy.hpp>                      // for NoCopy
-#include <common/NoMove.hpp>                      // for NoMove
+#include <common/NoCopy.hpp>               // for NoCopy
+#include <common/NoMove.hpp>               // for NoMove
 #include <common/DebugUtilsMessenger.hpp>  // for DebugUtilsMessenger
 #include <common/Device.hpp>               // for Device
 #include <common/Instance.hpp>             // for Instance
@@ -40,8 +40,14 @@ namespace vkl {
 
   class Application : public NoCopy, NoMove {
   public:
-    Application(const std::string& appName, const DebugOption& debugOption);
+    Application(
+#ifdef __ANDROID__
+        android_app* androidApp,
+#endif
+        const std::string& appName,
+        const DebugOption& debugOption);
 
+#ifndef __ANDROID__
     static void initialize() {
       // need to init glfw first, to get the suitable glfw extension for the vkinstance
       glfwInit();
@@ -52,6 +58,7 @@ namespace vkl {
     }
 
     static void terminate() { glfwTerminate(); }
+#endif
 
   protected:
     Instance instance;

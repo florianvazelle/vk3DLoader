@@ -1,7 +1,7 @@
 // clang-format off
 #include <shadow/Depth/DepthDescriptorSets.hpp>
 #include <stddef.h>                       // for size_t
-#include <vulkan/vulkan_core.h>           // for VkWriteDescriptorSet, vkUpd...
+#include <common/VulkanHeader.hpp>           // for VkWriteDescriptorSet, vkUpd...
 #include <common/misc/DescriptorSet.hpp>  // for writeDescriptorSet
 #include <common/struct/Depth.hpp>        // for Depth
 #include <common/Device.hpp>              // for Device

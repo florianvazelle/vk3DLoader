@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
 #include <common/GraphicsPipeline.hpp>
+#include <common/VulkanHeader.hpp>
 #include <vector>
 
 namespace vkl {

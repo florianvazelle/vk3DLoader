@@ -8,7 +8,6 @@
 #include <deque>                                         // for deque
 #include <memory>                                        // for allocator_tr...
 #include <stdexcept>                                     // for runtime_error
-#include <GLFW/glfw3.h>                                  // for glfwWaitEvents
 #include <common/Application.hpp>                        // for Application
 #include <common/DebugUtilsMessenger.hpp>                // for vkl
 #include <common/Device.hpp>                             // for Device
@@ -23,9 +22,11 @@
 #include <common/struct/Particle.hpp>                    // for Particle
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#ifndef __ANDROID__
 #include <imgui.h>                                       // for Text, Begin
 #include <imgui_impl_glfw.h>                             // for ImGui_ImplGl...
 #include <imgui_impl_vulkan.h>                           // for ImGui_ImplVu...
+#endif
 #include <particle/Compute/ComputeCommandBuffer.hpp>     // for ComputeComma...
 #include <particle/Compute/ComputeDescriptorSets.hpp>    // for ComputeDescr...
 #include <particle/Graphic/GraphicDescriptorSets.hpp>    // for GraphicDescr...
@@ -49,11 +50,11 @@ void updateGraphicsUniformBuffers(const Device& device,
   ubo.model = glm::mat4(1.0f);
 
   glm::mat4 rotM = glm::mat4(1.0f);
-  rotM = glm::rotate(rotM, glm::radians(-26.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-  rotM = glm::rotate(rotM, glm::radians(75.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-  rotM = glm::rotate(rotM, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  rotM           = glm::rotate(rotM, glm::radians(-26.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  rotM           = glm::rotate(rotM, glm::radians(75.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+  rotM           = glm::rotate(rotM, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  ubo.view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -14.0f)) * rotM;
+  ubo.view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -14.0f)) * rotM;
 
   const float aspect = swapChain.extent().width / (float)swapChain.extent().height;
   ubo.proj           = glm::perspective(60.0f, aspect, 0.1f, 512.0f);
@@ -83,8 +84,18 @@ void updateComputeUniformBuffers(const Device& device,
   vkUnmapMemory(device.logical(), uniformBuffers[currentImage].memory());
 }
 
-ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& debugOption)
-    : Application(appName, debugOption),
+ParticleSystem::ParticleSystem(
+#ifdef __ANDROID__
+    android_app* androidApp,
+#endif
+    const std::string& appName,
+    const DebugOption& debugOption)
+    : Application(
+#ifdef __ANDROID__
+        androidApp,
+#endif
+        appName,
+        debugOption),
 
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
       // Use a separate command pool (queue family may differ from the one used for graphics)
@@ -166,17 +177,15 @@ ParticleSystem::ParticleSystem(const std::string& appName, const DebugOption& de
 
       semaphoreCompute(device),
 
-      cbCompute(device,
-                rpGraphic,
-                gpCompute,
-                storageBuffer,
-                commandPoolCompute,
-                dsCompute),
+      cbCompute(device, rpGraphic, gpCompute, storageBuffer, commandPoolCompute, dsCompute),
 
-      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute),
-
+      cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute)
+#ifndef __ANDROID__
       /* ImGui */
-      interface(instance, window, device, swapChain, gpGraphic) {
+      ,
+      interface(instance, window, device, swapChain, gpGraphic)
+#endif
+{
   // Trigger compute semaphore, to start by compute queue
   {
     const VkSubmitInfo submitInfo = {
@@ -208,8 +217,10 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   VkResult result = prepareFrame(framebufferResized, imageIndex);
   if (result != VK_SUCCESS) return;
 
-  /* Buffer */
+    /* Buffer */
+#ifndef __ANDROID__
   interface.recordCommandBuffers(imageIndex);
+#endif
 
   /* Update Uniform Buffers */
 
@@ -225,7 +236,9 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
   {
     const std::vector<VkCommandBuffer> cmdBuffers = {
         cbGraphic.command(imageIndex),
+#ifndef __ANDROID__
         interface.command(imageIndex),
+#endif
     };
 
     const VkPipelineStageFlags waitStageMasks[] = {
@@ -285,6 +298,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
 }
 
 void ParticleSystem::drawImGui() {
+#ifndef __ANDROID__
   // Start the Dear ImGui frame
   ImGui_ImplVulkan_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -311,6 +325,7 @@ void ParticleSystem::drawImGui() {
 
   ImGui::End();
   ImGui::Render();
+#endif
 }
 
 // for resize window
@@ -319,7 +334,9 @@ void ParticleSystem::recreateSwapChain(bool& framebufferResized) {
   window.framebufferSize(size);
   while (size[0] == 0 || size[1] == 0) {
     window.framebufferSize(size);
+#ifndef __ANDROID__
     glfwWaitEvents();
+#endif
   }
 
   vkDeviceWaitIdle(device.logical());
@@ -346,7 +363,13 @@ void ParticleSystem::recreateSwapChain(bool& framebufferResized) {
   dsCompute.recreate();
   cbCompute.recreate();
 
+#ifndef __ANDROID__
   interface.recreate();
+#endif
 
   swapChain.cleanupOld();
 }
+
+#ifdef __ANDROID__
+void ParticleSystem::togglePause() const { isPause = !isPause; }
+#endif

@@ -2,7 +2,7 @@
 #include <shadow/Depth/DepthGraphicsPipeline.hpp>
 #include <depth_basic_vert.h>                // for DEPTH_BASIC_VERT
 #include <stdint.h>                          // for uint32_t
-#include <vulkan/vulkan_core.h>              // for VkDynamicState, VkPipeli...
+#include <common/VulkanHeader.hpp>              // for VkDynamicState, VkPipeli...
 #include <common/DescriptorSetLayout.hpp>    // for DescriptorSetLayout
 #include <common/Device.hpp>                 // for Device
 #include <common/RenderPass.hpp>             // for RenderPass

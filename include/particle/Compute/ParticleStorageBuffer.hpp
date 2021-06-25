@@ -1,11 +1,12 @@
 #pragma once
 
+#include <time.h>
+#include <common/CommandBuffers.hpp>
 #include <common/CommandPool.hpp>
 #include <common/Device.hpp>
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/StorageBuffer.hpp>
 #include <common/struct/Particle.hpp>
-#include <time.h>
 
 #include <random>
 #include <vector>
@@ -17,8 +18,7 @@
 namespace vkl {
 
   class ParticleStorageBuffer : public StorageBuffer {
-
-    public:
+  public:
     ParticleStorageBuffer(const Device& device,
                           const CommandPool& commandPool,
                           VkBufferUsageFlags usage,
@@ -98,4 +98,4 @@ namespace vkl {
           });
     }
   };
-}
+}  // namespace vkl

@@ -7,10 +7,7 @@
 #define INSTANCE_HPP
 
 // clang-format off
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
-#include <vulkan/vulkan_core.h>  // for VkInstance, VkInstance_T
+#include <common/VulkanHeader.hpp>  // for VkInstance, VkInstance_T
 #include <common/NoCopy.hpp>       // for NoCopy
 #include <string>                // for string
 #include <vector>                // for vector
