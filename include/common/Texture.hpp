@@ -6,23 +6,17 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
-#include <vulkan/vulkan.h>
 #include <common/Device.hpp>
 #include <common/VulkanHeader.hpp>
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/StorageBuffer.hpp>
 #include <common/misc/Device.hpp>
+#include <common/CommandPool.hpp>
+#include <common/CommandBuffers.hpp>
 
 namespace vkl {
 
   class Texture {
-  private:
-    const Device& m_device;
-    VkImage textureImage;
-    VkDeviceMemory textureImageMemory;
-    VkImageView textureImageView;
-    VkSampler textureSampler;
-    const CommandPool& m_commandePool;
 
         private:
 
@@ -46,4 +40,10 @@ namespace vkl {
             void endSingleTimeCommands(VkCommandBuffer commandBuffer);
             void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
+            void createTextureImageView();
+            VkImageView createImageView(VkImage image,VkFormat format);
+            void createTextureSampler();
+
+  };
+}
 #endif
