@@ -128,7 +128,6 @@ ParticleSystem::ParticleSystem(
       // ~ My Vectors
       // Utile car sinon les pointeurs change, donc on copie d'abord par valeur
       // et on passe le vecteur qui sera concervé dans la class Application
-      vecRPGraphic({&rpGraphic}),
       vecUBGraphic({&uniformBuffersGraphic}),
       vecUBCompute({&uniformBuffersCompute}),
       vecSBCompute({&storageBuffer}),
@@ -150,7 +149,7 @@ ParticleSystem::ParticleSystem(
       gpGraphic(device, swapChain, rpGraphic, dslGraphic),
 
       // 5. Descriptor Sets
-      dsGraphic(device, swapChain, dslGraphic, dp, vecRPGraphic, {}, vecUBGraphic),
+      dsGraphic(device, swapChain, dslGraphic, dp, {}, {}, vecUBGraphic),
 
       // Semaphore for compute & graphics sync
       semaphoreGraphic(device),
@@ -170,7 +169,7 @@ ParticleSystem::ParticleSystem(
           })),
 
       // 5. Descriptor Sets
-      dsCompute(device, swapChain, dslCompute, dp, vecRPGraphic, vecSBCompute, vecUBCompute),
+      dsCompute(device, swapChain, dslCompute, dp, {}, vecSBCompute, vecUBCompute),
 
       // 3. Compute Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),

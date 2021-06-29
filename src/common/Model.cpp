@@ -21,7 +21,7 @@ bool hasEnding(std::string const& fullString, std::string const& ending) {
   }
 }
 
-Model::Model(const std::string& modelPath) {
+Model::Model(const Device& device, const CommandPool& commandPool, const std::string& modelPath) {
   if (hasEnding(modelPath, ".obj")) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -82,7 +82,16 @@ Model::Model(const std::string& modelPath) {
           {material.specular[0], material.specular[1], material.specular[2]},
           material.shininess,
       };
+
       m_materials.push_back(m);
+
+      // if (material.diffuse_texname.length() > 0) {
+      //     Texture t(device, commandPool, material.diffuse_texname);
+      //     m_textures.push_back(t);
+      // }
     }
+
+    Texture t(device, commandPool, ASSETS_PATH "textures/viking_room.png");
+    m_textures.push_back(t);
   }
 }

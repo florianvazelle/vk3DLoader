@@ -132,8 +132,8 @@ void updateDepthUniformBuffers(const Device& device,
 ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debugOption, const std::string& modelPath)
     : Application(appName, debugOption),
 
-      model(modelPath),
       commandPool(device, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT),
+      model(device, commandPool, modelPath),
 
       // Buffer
       vertexBuffer(device,
@@ -173,12 +173,11 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       // ~ My Vectors
       // Utile car sinon les pointeurs change, donc on copie d'abord par valeur
       // et on passe le vecteur qui sera concervé dans la class Application
-      vecRPDepth({&rpDepth}),
       vecUBDepth({&depthUniformBuffer}),
       vecVertexBuffer({&vertexBuffer}),
 
       // 5. Descriptor Sets
-      dsDepth(device, swapChain, dslDepth, dpDepth, vecRPDepth, {}, vecUBDepth),
+      dsDepth(device, swapChain, dslDepth, dpDepth, {}, {}, vecUBDepth),
 
       // 6. Command Buffers
       cbDepth(device, rpDepth, swapChain, gpDepth, commandPool, dsDepth, vecVertexBuffer),
@@ -218,12 +217,12 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       dpBasic(device, dpiBasic),
 
       // ~ My Vectors 2
-      vecRPBasic({&rpDepth}),
+      vecIBasic({&model.textures()[0]}),
       vecUBBasic({&uniformBuffers}),
       vecBBasic({&materialUniformBuffer}),
 
       // 5. Descriptor Sets
-      dsBasic(device, swapChain, dslBasic, dpBasic, vecRPBasic, vecBBasic, vecUBBasic, commandPool),
+      dsBasic(device, swapChain, dslBasic, dpBasic, vecIBasic, vecBBasic, vecUBBasic, rpDepth.attachments()),
 
       // 6. Command Buffers
       cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, dsBasic, vecVertexBuffer),

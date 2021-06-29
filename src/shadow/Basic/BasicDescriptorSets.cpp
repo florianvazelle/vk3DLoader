@@ -6,11 +6,11 @@
 #include <common/struct/DepthMVP.hpp>        // for DepthMVP
 #include <common/struct/Material.hpp>        // for Material
 #include <common/Device.hpp>                 // for Device
-#include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
+#include <common/image/Attachment.hpp>  // for Attachment
 #include <common/QueueFamily.hpp>            // for vkl
 #include <common/RenderPass.hpp>             // for RenderPass
 #include <common/buffer/IBuffer.hpp>         // for IBuffer, IUniformBuffers
-#include <common/Texture.hpp>                // for Texture;
+#include <common/image/Texture.hpp>                // for Texture;
 // clang-format on
 
 using namespace vkl;
@@ -30,25 +30,27 @@ void BasicDescriptorSets::createDescriptorSets() {
   const IBuffer* materialBuffer                    = m_buffers[0];
   const VkDescriptorBufferInfo& materialBufferInfo = materialBuffer->descriptor();
 
+  // Texture Descriptor
+  const Image* texture = m_images[0];
+  const VkDescriptorImageInfo imageInfo = {
+    .sampler = texture->sample(),
+    .imageView =  texture->view(),
+    .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+  };
+
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
   const IUniformBuffers* ubo   = m_uniformBuffers[0];
-  const RenderPass* renderPass = m_renderPasses[0];
   for (size_t i = 0; i < m_descriptorSets.size(); i++) {
     const VkDescriptorBufferInfo& bufferInfo = ubo->descriptor(i);
 
     // Image descriptor for the shadow map attachment
+    const std::unique_ptr<Attachment>& depth_map = m_attachments[i];
     const VkDescriptorImageInfo depthDescriptor = {
         // le shader va lire les valeurs écrits a cette position, juste avant
-        .sampler     = renderPass->depthAttachment(i).sample(),
-        .imageView   = renderPass->depthAttachment(i).view(),
+        .sampler     = depth_map->sample(),
+        .imageView   = depth_map->view(),
         .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
     };
-
-    // Texture Descriptor
-    VkDescriptorImageInfo imageInfo{};
-    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    imageInfo.imageView =  texture.textureImageView; //textureImageView;
-    imageInfo.sampler = texture.textureSampler; //textureSampler;
 
     writeDescriptorSets = {
         // Binding 0 : Vertex shader uniform buffer
@@ -58,8 +60,8 @@ void BasicDescriptorSets::createDescriptorSets() {
                                  &depthDescriptor),
         // Binding 2 : Fragment shader uniform buffer
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &materialBufferInfo),
-        
-        //Binding 3 : 
+
+        //Binding 3 :
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3, &imageInfo),
     };
 

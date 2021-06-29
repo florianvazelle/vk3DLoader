@@ -35,7 +35,7 @@
 #include <common/CommandPool.hpp>                  // for CommandPool
 #include <common/struct/Material.hpp>              // for Material
 #include <common/struct/Vertex.hpp>                // for Vertex
-#include <common/Texture.hpp>                      // for Texture
+#include <common/image/Texture.hpp>                      // for Texture
 // clang-format on
 
 namespace vkl {
@@ -49,9 +49,9 @@ namespace vkl {
   private:
     // Note : Order is taken into account
 
-    Model model;
-
     CommandPool commandPool;
+
+    Model model;
 
     Buffer<Vertex> vertexBuffer;
     UniformBuffers<DepthMVP> uniformBuffers;
@@ -69,7 +69,6 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpiDepth;
     DescriptorPool dpDepth;
 
-    std::vector<const RenderPass*> vecRPDepth;
     std::vector<const IUniformBuffers*> vecUBDepth;
     std::vector<const IBuffer*> vecVertexBuffer;
 
@@ -87,7 +86,7 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpiBasic;
     DescriptorPool dpBasic;
 
-    std::vector<const RenderPass*> vecRPBasic;
+    std::vector<const Image*> vecIBasic;
     std::vector<const IUniformBuffers*> vecUBBasic;
     std::vector<const IBuffer*> vecBBasic;
 

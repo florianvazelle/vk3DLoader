@@ -8,6 +8,8 @@
 #define MODEL_HPP
 
 #include <common/struct/Material.hpp>
+#include <common/image/Texture.hpp>
+#include <common/CommandPool.hpp>
 #include <common/struct/Vertex.hpp>
 #include <string>
 #include <vector>
@@ -16,14 +18,16 @@ namespace vkl {
 
   class Model {
   public:
-    Model(const std::string& modelPath);
+    Model(const Device& device, const CommandPool& commandPool, const std::string& modelPath);
 
     inline const std::vector<Vertex>& vertices() const { return m_vertices; }
     inline const std::vector<Material>& materials() const { return m_materials; }
+    inline const std::vector<Texture>& textures() const { return m_textures; }
 
   private:
     std::vector<Vertex> m_vertices;
     std::vector<Material> m_materials;
+    std::vector<Texture> m_textures;
   };
 
 }  // namespace vkl

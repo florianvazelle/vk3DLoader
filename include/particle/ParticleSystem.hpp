@@ -67,7 +67,6 @@ namespace vkl {
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 
     // Vector Buffer
-    std::vector<const RenderPass*> vecRPGraphic;
     std::vector<const IUniformBuffers*> vecUBGraphic;
     std::vector<const IUniformBuffers*> vecUBCompute;
     std::vector<const IBuffer*> vecSBCompute;

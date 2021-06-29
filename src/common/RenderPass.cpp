@@ -3,7 +3,6 @@
 #include <common/Device.hpp>                 // for Device
 #include <common/SwapChain.hpp>              // for SwapChain
 #include <stdexcept>                         // for runtime_error
-#include <common/FrameBufferAttachment.hpp>  // for FrameBufferAttachment
 #include <common/QueueFamily.hpp>            // for vkl
 // clang-format on
 

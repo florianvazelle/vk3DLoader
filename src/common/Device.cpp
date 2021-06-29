@@ -116,6 +116,8 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
     std::cout << "- " << deviceProperties.deviceName << '\n';
   }
 
+  return devices[0];
+
  int indice = 0;
   for (const auto& device : devices) {
     if (IsDeviceSuitable(device, surface) && indice == 1) {
@@ -143,6 +145,6 @@ bool Device::IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR
 
   VkPhysicalDeviceFeatures supportedFeatures;
   vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-  
+
   return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }

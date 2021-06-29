@@ -16,14 +16,14 @@ DescriptorSets::DescriptorSets(const Device& device,
                                const SwapChain& swapChain,
                                const DescriptorSetLayout& descriptorSetLayout,
                                const DescriptorPool& descriptorPool,
-                               const std::vector<const RenderPass*>& renderPasses,
+                               const std::vector<const Image*>& images,
                                const std::vector<const IBuffer*>& buffers,
                                const std::vector<const IUniformBuffers*>& uniformBuffers)
     : m_device(device),
       m_swapChain(swapChain),
       m_descriptorSetLayout(descriptorSetLayout),
       m_descriptorPool(descriptorPool),
-      m_renderPasses(renderPasses),
+      m_images(images),
       m_buffers(buffers),
       m_uniformBuffers(uniformBuffers) {}
 
