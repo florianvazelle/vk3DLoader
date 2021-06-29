@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>common/FrameBufferAttachment.hpp file | vkCommon</title>
+  <title>vkl::Attachment class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,33 +43,58 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html">common</a>/</span>FrameBufferAttachment.hpp <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Attachment <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Attachment_8hpp.html">&lt;common/image/Attachment.hpp&gt;</a></div>
         </h1>
-        <p>Define FrameBufferAttachment class.</p>
+        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#namespaces">Namespaces</a></li>
-                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pri-methods">Private functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="namespaces">
-          <h2><a href="#namespaces">Namespaces</a></h2>
-          <dl class="m-doc">
-            <dt>namespace <a href="namespacevkl.html" class="m-doc">vkl</a></dt>
-            <dd>Vulkan Loader.</dd>
-          </dl>
-        </section>
-        <section id="nested-classes">
-          <h2><a href="#nested-classes">Classes</a></h2>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classvkl_1_1FrameBufferAttachment.html" class="m-doc">vkl::FrameBufferAttachment</a>
+              class <a href="classvkl_1_1Image.html" class="m-doc">Image</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="a63daaace416a18fc214fc01ba60a7b22">
+              <span class="m-doc-wrap-bumper"><a href="#a63daaace416a18fc214fc01ba60a7b22" class="m-doc-self">Attachment</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
+              VkFormat format,
+              VkImageUsageFlags usage)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pri-methods">
+          <h2><a href="#pri-methods">Private functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a1396957c1d3be50bd33923faf456c088">
+              <span class="m-doc-wrap-bumper">void <a href="#a1396957c1d3be50bd33923faf456c088" class="m-doc-self">createImage</a>(</span><span class="m-doc-wrap">uint32_t width,
+              uint32_t height) <span class="m-label m-flat m-warning">final</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a81b8deb74e96872c796594b824092cf5">
+              <span class="m-doc-wrap-bumper">void <a href="#a81b8deb74e96872c796594b824092cf5" class="m-doc-self">createImageView</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2c12507e5b0561e86b0ed30dd21a6d14">
+              <span class="m-doc-wrap-bumper">void <a href="#a2c12507e5b0561e86b0ed30dd21a6d14" class="m-doc-self">createSampler</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
