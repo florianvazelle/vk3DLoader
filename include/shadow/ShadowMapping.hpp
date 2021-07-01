@@ -86,7 +86,6 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpiBasic;
     DescriptorPool dpBasic;
 
-    std::vector<const Image*> vecIBasic;
     std::vector<const IUniformBuffers*> vecUBBasic;
     std::vector<const IBuffer*> vecBBasic;
 

@@ -149,7 +149,7 @@ ParticleSystem::ParticleSystem(
       gpGraphic(device, swapChain, rpGraphic, dslGraphic),
 
       // 5. Descriptor Sets
-      dsGraphic(device, swapChain, dslGraphic, dp, {}, {}, vecUBGraphic),
+      dsGraphic(device, swapChain, dslGraphic, dp, {}, vecUBGraphic),
 
       // Semaphore for compute & graphics sync
       semaphoreGraphic(device),
@@ -169,7 +169,7 @@ ParticleSystem::ParticleSystem(
           })),
 
       // 5. Descriptor Sets
-      dsCompute(device, swapChain, dslCompute, dp, {}, vecSBCompute, vecUBCompute),
+      dsCompute(device, swapChain, dslCompute, dp, vecSBCompute, vecUBCompute),
 
       // 3. Compute Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),
@@ -213,7 +213,7 @@ void ParticleSystem::run() {
 
 void ParticleSystem::drawFrame(bool& framebufferResized) {
   uint32_t imageIndex;
-  VkResult result = prepareFrame(framebufferResized, imageIndex);
+  VkResult result = prepareFrame(false, framebufferResized, imageIndex);
   if (result != VK_SUCCESS) return;
 
     /* Buffer */
@@ -265,7 +265,7 @@ void ParticleSystem::drawFrame(bool& framebufferResized) {
     }
   }
 
-  submitFrame(framebufferResized, imageIndex);
+  submitFrame(false, framebufferResized, imageIndex);
 
   /* Submit compute commands */
   {

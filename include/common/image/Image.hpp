@@ -4,10 +4,11 @@
 #include <common/VulkanHeader.hpp>
 #include <common/Device.hpp>
 #include <common/misc/Device.hpp>
+#include <common/NoCopy.hpp>
 
 namespace vkl {
 
-  class Image {
+  class Image : public NoCopy {
   public:
     Image(const Device& device) : m_device(device) {};
 

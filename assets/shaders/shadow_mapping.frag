@@ -104,8 +104,9 @@ void main() {
   vec3 directColor   = (diffuseColor + specularColor) * lightColor * attenuation;
 
   vec3 indirectColor = u_Material.AmbientColor;
- // vec3 color         = directColor + indirectColor;
-  vec3 color = texture(texturename, inTexCoords).xyz;
+  vec3 color         = directColor + indirectColor;
+  vec4 texel = texture(texturename, inTexCoords);
+  color = mix(color, texel.xyz, texel.a);
 
   // Apply shadow mapping
   float visibility = filterPCF(inShadowCoord / inShadowCoord.w);
@@ -115,5 +116,5 @@ void main() {
   color = pow(color, vec3(1.0 / 2.2));
 
   outColor =  vec4(color, 1.0);
-  // outColor =  texture(texturename, inTexCoords); 
+  // outColor =  texture(texturename, inTexCoords);
 }

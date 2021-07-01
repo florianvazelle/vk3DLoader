@@ -116,6 +116,7 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
     std::cout << "- " << deviceProperties.deviceName << '\n';
   }
 
+
   return devices[0];
 
  int indice = 0;

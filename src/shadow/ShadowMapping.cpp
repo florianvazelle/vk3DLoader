@@ -177,7 +177,7 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       vecVertexBuffer({&vertexBuffer}),
 
       // 5. Descriptor Sets
-      dsDepth(device, swapChain, dslDepth, dpDepth, {}, {}, vecUBDepth),
+      dsDepth(device, swapChain, dslDepth, dpDepth, {}, vecUBDepth),
 
       // 6. Command Buffers
       cbDepth(device, rpDepth, swapChain, gpDepth, commandPool, dsDepth, vecVertexBuffer),
@@ -217,12 +217,11 @@ ShadowMapping::ShadowMapping(const std::string& appName, const DebugOption& debu
       dpBasic(device, dpiBasic),
 
       // ~ My Vectors 2
-      vecIBasic({&model.textures()[0]}),
       vecUBBasic({&uniformBuffers}),
       vecBBasic({&materialUniformBuffer}),
 
       // 5. Descriptor Sets
-      dsBasic(device, swapChain, dslBasic, dpBasic, vecIBasic, vecBBasic, vecUBBasic, rpDepth.attachments()),
+      dsBasic(device, swapChain, dslBasic, dpBasic, vecBBasic, vecUBBasic, model.textures(), rpDepth.attachments()),
 
       // 6. Command Buffers
       cbBasic(device, rpBasic, swapChain, gpBasic, commandPool, dsBasic, vecVertexBuffer),
@@ -256,7 +255,7 @@ void ShadowMapping::mainLoop() {
 
 void ShadowMapping::drawFrame(bool& framebufferResized) {
   uint32_t imageIndex;
-  VkResult result = prepareFrame(framebufferResized, imageIndex);
+  VkResult result = prepareFrame(true, framebufferResized, imageIndex);
   if (result != VK_SUCCESS) return;
 
   // Record UI draw data
@@ -305,7 +304,7 @@ void ShadowMapping::drawFrame(bool& framebufferResized) {
     throw std::runtime_error("failed to submit draw command buffer!");
   }
 
-  submitFrame(framebufferResized, imageIndex);
+  submitFrame(true, framebufferResized, imageIndex);
 
   currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

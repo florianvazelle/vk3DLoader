@@ -85,13 +85,13 @@ Model::Model(const Device& device, const CommandPool& commandPool, const std::st
 
       m_materials.push_back(m);
 
-      // if (material.diffuse_texname.length() > 0) {
-      //     Texture t(device, commandPool, material.diffuse_texname);
-      //     m_textures.push_back(t);
-      // }
+      if (material.diffuse_texname.length() > 0) {
+          m_textures.push_back(std::make_unique<Texture>(device, commandPool, material.diffuse_texname));
+      }
     }
 
-    Texture t(device, commandPool, ASSETS_PATH "textures/viking_room.png");
-    m_textures.push_back(t);
+    if (m_textures.size() == 0) {
+        m_textures.push_back(std::make_unique<Texture>(device, commandPool, "assets/textures/blank.png"));
+    }
   }
 }

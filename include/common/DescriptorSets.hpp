@@ -28,7 +28,6 @@ namespace vkl {
                    const SwapChain& swapChain,
                    const DescriptorSetLayout& descriptorSetLayout,
                    const DescriptorPool& descriptorPool,
-                   const std::vector<const Image*>& images,
                    const std::vector<const IBuffer*>& buffers,
                    const std::vector<const IUniformBuffers*>& uniformBuffers);
     // ~DescriptorSets(); no need destructor because VkDescriptorSet is deleted when pool is deleted
@@ -44,7 +43,6 @@ namespace vkl {
     const SwapChain& m_swapChain;
     const DescriptorSetLayout& m_descriptorSetLayout;
     const DescriptorPool& m_descriptorPool;
-    const std::vector<const Image*>& m_images;
     const std::vector<const IBuffer*>& m_buffers;
     const std::vector<const IUniformBuffers*>& m_uniformBuffers;
 

@@ -28,8 +28,10 @@ Application::Application(
       syncObjects(device, swapChain.numImages(), MAX_FRAMES_IN_FLIGHT) {
 }
 
-VkResult Application::prepareFrame(bool& framebufferResized, uint32_t& imageIndex) {
-  // vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE, UINT64_MAX);
+VkResult Application::prepareFrame(bool useFences, bool& framebufferResized, uint32_t& imageIndex) {
+  if (useFences) {
+    vkWaitForFences(device.logical(), 1, &syncObjects.inFlightFence(currentFrame), VK_TRUE, UINT64_MAX);
+  }
 
   // Get image from swap chain
   VkResult result = vkAcquireNextImageKHR(device.logical(), swapChain.handle(), UINT64_MAX,
@@ -42,15 +44,17 @@ VkResult Application::prepareFrame(bool& framebufferResized, uint32_t& imageInde
     throw std::runtime_error("Failed to acquire swapchain image");
   }
 
-  // if (syncObjects.imageInFlight(imageIndex) != VK_NULL_HANDLE) {
-  //   vkWaitForFences(device.logical(), 1, &syncObjects.imageInFlight(imageIndex), VK_TRUE, UINT64_MAX);
-  // }
-  // syncObjects.imageInFlight(imageIndex) = syncObjects.inFlightFence(currentFrame);
+  if (useFences) {
+    if (syncObjects.imageInFlight(imageIndex) != VK_NULL_HANDLE) {
+      vkWaitForFences(device.logical(), 1, &syncObjects.imageInFlight(imageIndex), VK_TRUE, UINT64_MAX);
+    }
+    syncObjects.imageInFlight(imageIndex) = syncObjects.inFlightFence(currentFrame);
+  }
 
   return VK_SUCCESS;
 }
 
-void Application::submitFrame(bool& framebufferResized, const uint32_t& imageIndex) {
+void Application::submitFrame(bool useFences, bool& framebufferResized, const uint32_t& imageIndex) {
   const VkPresentInfoKHR presentInfo = {
       .sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
       .waitSemaphoreCount = 1,
@@ -69,5 +73,7 @@ void Application::submitFrame(bool& framebufferResized, const uint32_t& imageInd
     throw std::runtime_error("Failed to present swap chain image");
   }
 
+  if (!useFences) {
   vkQueueWaitIdle(device.presentQueue());
+  }
 }

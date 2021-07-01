@@ -31,7 +31,7 @@ void BasicDescriptorSets::createDescriptorSets() {
   const VkDescriptorBufferInfo& materialBufferInfo = materialBuffer->descriptor();
 
   // Texture Descriptor
-  const Image* texture = m_images[0];
+  const std::unique_ptr<Texture>& texture = m_textures[0];
   const VkDescriptorImageInfo imageInfo = {
     .sampler = texture->sample(),
     .imageView =  texture->view(),

@@ -62,7 +62,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/ex
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CONAN_LIBS} Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_IMPL_VULKAN)
-target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${PROJECT_SOURCE_DIR}/assets/")
 
 target_set_warnings(
     ${PROJECT_NAME}

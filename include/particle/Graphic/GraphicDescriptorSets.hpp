@@ -21,14 +21,12 @@ namespace vkl {
                           const SwapChain& swapChain,
                           const DescriptorSetLayout& descriptorSetLayout,
                           const DescriptorPool& descriptorPool,
-                          const std::vector<const Image*>& images,
                           const std::vector<const IBuffer*>& buffers,
                           const std::vector<const IUniformBuffers*>& uniformBuffers)
         : DescriptorSets(device,
                          swapChain,
                          descriptorSetLayout,
                          descriptorPool,
-                         images,
                          buffers,
                          uniformBuffers) {
       createDescriptorSets();

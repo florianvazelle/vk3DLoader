@@ -70,8 +70,8 @@ namespace vkl {
 
     size_t currentFrame = 0;
 
-    VkResult prepareFrame(bool& framebufferResized, uint32_t& imageIndex);
-    void submitFrame(bool& framebufferResized, const uint32_t& imageIndex);
+    VkResult prepareFrame(bool useFences, bool& framebufferResized, uint32_t& imageIndex);
+    void submitFrame(bool useFences, bool& framebufferResized, const uint32_t& imageIndex);
 
     virtual void recreateSwapChain(bool& framebufferResized) = 0;
   };
