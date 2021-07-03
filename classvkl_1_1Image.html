@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::RenderPass class | vkCommon</title>
+  <title>vkl::Image class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,9 +43,10 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>RenderPass <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="RenderPass_8hpp.html">&lt;common/RenderPass.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Image <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Image_8hpp.html">&lt;common/image/Image.hpp&gt;</a></div>
         </h1>
+        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -62,7 +63,6 @@
             </li>
           </ul>
         </div>
-<p>Note Exposé : Le render pass permet d&#x27;indiquer combien chaque framebuffer aura de buffers de couleur et de profondeur, combien de samples il faudra utiliser avec chaque frambuffer et comment les utiliser tout au long des opérations de rendu.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
@@ -76,15 +76,11 @@
           <h2><a href="#derived-classes">Derived classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classvkl_1_1BasicRenderPass.html" class="m-doc">BasicRenderPass</a>
+              class <a href="classvkl_1_1Attachment.html" class="m-doc">Attachment</a>
             </dt>
             <dd><span></span></dd>
             <dt>
-              class <a href="classvkl_1_1DepthRenderPass.html" class="m-doc">DepthRenderPass</a>
-            </dt>
-            <dd></dd>
-            <dt>
-              class <a href="classvkl_1_1ImGuiRenderPass.html" class="m-doc">ImGuiRenderPass</a>
+              class <a href="classvkl_1_1Texture.html" class="m-doc">Texture</a>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -92,13 +88,12 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a6acd05bb82771cbcc6bf1863a828d962">
-              <span class="m-doc-wrap-bumper"><a href="#a6acd05bb82771cbcc6bf1863a828d962" class="m-doc-self">RenderPass</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain)</span>
+            <dt id="aa4e15622e18db7b5a2b7fdf423935a0b">
+              <span class="m-doc-wrap-bumper"><a href="#aa4e15622e18db7b5a2b7fdf423935a0b" class="m-doc-self">Image</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="aefd20aeae8829aa580c3197d98ee1996">
-              <span class="m-doc-wrap-bumper"><a href="#aefd20aeae8829aa580c3197d98ee1996" class="m-doc-self">~RenderPass</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a11b6bbcbf755f37ace940ba05ef1bf8a">
+              <span class="m-doc-wrap-bumper"><a href="#a11b6bbcbf755f37ace940ba05ef1bf8a" class="m-doc-self">~Image</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -106,24 +101,16 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="aa007a068ff393c9d1af301a08e03cc66">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa007a068ff393c9d1af301a08e03cc66" class="m-doc-self">handle</a>(</span><span class="m-doc-wrap">) const -&gt; const VkRenderPass&amp;</span>
+            <dt id="ae53775e3c627e83b827488b3f9073dfe">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae53775e3c627e83b827488b3f9073dfe" class="m-doc-self">image</a>(</span><span class="m-doc-wrap">) const -&gt; const VkImage&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af5c6e3b93a109a9b055cdbad1502d0b9">
-              <span class="m-doc-wrap-bumper">auto <a href="#af5c6e3b93a109a9b055cdbad1502d0b9" class="m-doc-self">frameBuffer</a>(</span><span class="m-doc-wrap">uint32_t index) const -&gt; const VkFramebuffer&amp;</span>
+            <dt id="a6ae8fc7942ae2df8b6e8bc70eaed211c">
+              <span class="m-doc-wrap-bumper">auto <a href="#a6ae8fc7942ae2df8b6e8bc70eaed211c" class="m-doc-self">view</a>(</span><span class="m-doc-wrap">) const -&gt; const VkImageView&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a1de0121b56c6d229f73d610a3d3c7489">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1de0121b56c6d229f73d610a3d3c7489" class="m-doc-self">attachments</a>(</span><span class="m-doc-wrap">) const -&gt; const std::vector&lt;std::unique_ptr&lt;<a href="classvkl_1_1Attachment.html" class="m-doc">Attachment</a>&gt;&gt;&amp;</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a35e2699fe000a1bc73c00d453fba554c">
-              <span class="m-doc-wrap-bumper">auto <a href="#a35e2699fe000a1bc73c00d453fba554c" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a68f0059d652edc5d012e04743f87a343">
-              <span class="m-doc-wrap-bumper">void <a href="#a68f0059d652edc5d012e04743f87a343" class="m-doc-self">recreate</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a8eda855dc05399d762a78d283c952412">
+              <span class="m-doc-wrap-bumper">auto <a href="#a8eda855dc05399d762a78d283c952412" class="m-doc-self">sample</a>(</span><span class="m-doc-wrap">) const -&gt; const VkSampler&amp;</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -131,20 +118,21 @@
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="ae4f631ccfe644853fd9482ac936f88a4">
-              <span class="m-doc-wrap-bumper">void <a href="#ae4f631ccfe644853fd9482ac936f88a4" class="m-doc-self">createRenderPass</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt id="ab331c1f7473641e2d19612860999805d">
+              <span class="m-doc-wrap-bumper">void <a href="#ab331c1f7473641e2d19612860999805d" class="m-doc-self">createImage</a>(</span><span class="m-doc-wrap">uint32_t width,
+              uint32_t height) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a41df2a5b9561d951a4939d709ee04235">
-              <span class="m-doc-wrap-bumper">void <a href="#a41df2a5b9561d951a4939d709ee04235" class="m-doc-self">createFrameBuffers</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt id="a60b094029c16635a2841a3782a308944">
+              <span class="m-doc-wrap-bumper">void <a href="#a60b094029c16635a2841a3782a308944" class="m-doc-self">allocateMemory</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ab0647e15cc86a0f8fd7f2ffd924ebd21">
-              <span class="m-doc-wrap-bumper">void <a href="#ab0647e15cc86a0f8fd7f2ffd924ebd21" class="m-doc-self">destroyRenderPass</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a8411cd1efb87ae003110aea8a2db1656">
+              <span class="m-doc-wrap-bumper">void <a href="#a8411cd1efb87ae003110aea8a2db1656" class="m-doc-self">createImageView</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a0678ff1c87cdc85195861fd04b406997">
-              <span class="m-doc-wrap-bumper">void <a href="#a0678ff1c87cdc85195861fd04b406997" class="m-doc-self">destroyFrameBuffers</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="adc2c88f5facf11aba2e2012bb06d5598">
+              <span class="m-doc-wrap-bumper">void <a href="#adc2c88f5facf11aba2e2012bb06d5598" class="m-doc-self">createSampler</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -152,24 +140,24 @@
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="aa12fdd4d6305350903f8701bae2e0774">
-              VkRenderPass <a href="#aa12fdd4d6305350903f8701bae2e0774" class="m-doc-self">m_renderPass</a>
+            <dt id="a1288f4e27df97d2d9961a8dffcbc0c6c">
+              VkImage <a href="#a1288f4e27df97d2d9961a8dffcbc0c6c" class="m-doc-self">m_image</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a9308ba7226b579237e4e392cc1afcfa5">
-              std::vector&lt;VkFramebuffer&gt; <a href="#a9308ba7226b579237e4e392cc1afcfa5" class="m-doc-self">m_frameBuffers</a>
+            <dt id="a2ca3cea62c2879ae81b95f02ecf44088">
+              VkDeviceMemory <a href="#a2ca3cea62c2879ae81b95f02ecf44088" class="m-doc-self">m_bufferMemory</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="ab06b10f9a39c954002f7c9046d713c0c">
-              std::vector&lt;std::unique_ptr&lt;<a href="classvkl_1_1Attachment.html" class="m-doc">Attachment</a>&gt;&gt; <a href="#ab06b10f9a39c954002f7c9046d713c0c" class="m-doc-self">m_depthAttachments</a>
+            <dt id="a85b10bfaa82ea1a99d6a7652ee349d6a">
+              VkImageView <a href="#a85b10bfaa82ea1a99d6a7652ee349d6a" class="m-doc-self">m_imageView</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a944ef02cd2ef43c83ee1b5b38b5e6cbf">
-              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a944ef02cd2ef43c83ee1b5b38b5e6cbf" class="m-doc-self">m_device</a>
+            <dt id="aa6e997954ffe6392d2a0883f6de688a6">
+              VkSampler <a href="#aa6e997954ffe6392d2a0883f6de688a6" class="m-doc-self">m_sampler</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7384265bd1df7ce4855da83a431d3195">
-              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; <a href="#a7384265bd1df7ce4855da83a431d3195" class="m-doc-self">m_swapChain</a>
+            <dt id="a8e39acd5c315b9ccf477acf8e00a331b">
+              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a8e39acd5c315b9ccf477acf8e00a331b" class="m-doc-self">m_device</a>
             </dt>
             <dd><span></span></dd>
           </dl>

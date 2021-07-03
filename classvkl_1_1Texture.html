@@ -44,7 +44,7 @@
       <div class="m-col-l-10 m-push-l-1">
         <h1>
           <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Texture <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Texture_8hpp.html">&lt;common/Texture.hpp&gt;</a></div>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Texture_8hpp.html">&lt;common/image/Texture.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -53,103 +53,47 @@
             <li>
               Reference
               <ul>
+                <li><a href="#base-classes">Base classes</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
-                <li><a href="#pub-attribs">Public variables</a></li>
+                <li><a href="#pri-methods">Private functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classvkl_1_1Image.html" class="m-doc">Image</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a23d054fd3f395a5f35e308e3ac0ff6ac">
-              <span class="m-doc-wrap-bumper"><a href="#a23d054fd3f395a5f35e308e3ac0ff6ac" class="m-doc-self">Texture</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; deivce,
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandePool)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ae330673b3e5c02c3fb7566645b7e5466">
-              <span class="m-doc-wrap-bumper"><a href="#ae330673b3e5c02c3fb7566645b7e5466" class="m-doc-self">~Texture</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a161f639231d2fee29dd207d8b505ac19">
+              <span class="m-doc-wrap-bumper"><a href="#a161f639231d2fee29dd207d8b505ac19" class="m-doc-self">Texture</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
+              const std::string&amp; filename)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
+        <section id="pri-methods">
+          <h2><a href="#pri-methods">Private functions</a></h2>
           <dl class="m-doc">
-            <dt id="adac428da51b69e503bb2b01918792c5a">
-              <span class="m-doc-wrap-bumper">void <a href="#adac428da51b69e503bb2b01918792c5a" class="m-doc-self">createImage</a>(</span><span class="m-doc-wrap">uint32_t width,
-              uint32_t height,
-              VkFormat format,
-              VkImageTiling tiling,
-              VkImageUsageFlags usage,
-              VkMemoryPropertyFlags properties,
-              VkImage&amp; image,
-              VkDeviceMemory&amp; imageMemory)</span>
+            <dt id="a59def603362cb6e85d1b14d66d869e42">
+              <span class="m-doc-wrap-bumper">void <a href="#a59def603362cb6e85d1b14d66d869e42" class="m-doc-self">createImage</a>(</span><span class="m-doc-wrap">uint32_t width,
+              uint32_t height) <span class="m-label m-flat m-warning">final</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ac950ab53224f880bf17a7e07bafd0d85">
-              <span class="m-doc-wrap-bumper">void <a href="#ac950ab53224f880bf17a7e07bafd0d85" class="m-doc-self">createTextureImage</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="a3cd1fdae297db63e258a9cb4ca8d1c56">
+              <span class="m-doc-wrap-bumper">void <a href="#a3cd1fdae297db63e258a9cb4ca8d1c56" class="m-doc-self">createImageView</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a65c87d2bd1aa1c4b1fca61dc6dff62c8">
-              <span class="m-doc-wrap-bumper">void <a href="#a65c87d2bd1aa1c4b1fca61dc6dff62c8" class="m-doc-self">transitionImageLayout</a>(</span><span class="m-doc-wrap">VkImage image,
-              VkFormat format,
-              VkImageLayout oldLayout,
-              VkImageLayout newLayout)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aa0e874eb6b68ea4e7675fd39d0f28221">
-              <span class="m-doc-wrap-bumper">void <a href="#aa0e874eb6b68ea4e7675fd39d0f28221" class="m-doc-self">endSingleTimeCommands</a>(</span><span class="m-doc-wrap">VkCommandBuffer commandBuffer)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ada551e7251e7d4f6127b22ef41c8f399">
-              <span class="m-doc-wrap-bumper">void <a href="#ada551e7251e7d4f6127b22ef41c8f399" class="m-doc-self">copyBufferToImage</a>(</span><span class="m-doc-wrap">VkBuffer buffer,
-              VkImage image,
-              uint32_t width,
-              uint32_t height)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a3ff215a760fdd6535bab637aad99ebc4">
-              <span class="m-doc-wrap-bumper">void <a href="#a3ff215a760fdd6535bab637aad99ebc4" class="m-doc-self">createTextureImageView</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a004bec0b410f5fdcf312042b77ed06a8">
-              <span class="m-doc-wrap-bumper">auto <a href="#a004bec0b410f5fdcf312042b77ed06a8" class="m-doc-self">createImageView</a>(</span><span class="m-doc-wrap">VkImage image,
-              VkFormat format) -&gt; VkImageView</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a0a43a8e9a608e4890f1aa55494b55f19">
-              <span class="m-doc-wrap-bumper">void <a href="#a0a43a8e9a608e4890f1aa55494b55f19" class="m-doc-self">createTextureSampler</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-attribs">
-          <h2><a href="#pub-attribs">Public variables</a></h2>
-          <dl class="m-doc">
-            <dt id="a5d9d2cf6f7817cfecd516a4f2ab45957">
-              const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; <a href="#a5d9d2cf6f7817cfecd516a4f2ab45957" class="m-doc-self">m_device</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a65f537fd9d1557635ff4d42590b8ad86">
-              VkImage <a href="#a65f537fd9d1557635ff4d42590b8ad86" class="m-doc-self">textureImage</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aede675354cefb042f34621679a9a4e3a">
-              VkDeviceMemory <a href="#aede675354cefb042f34621679a9a4e3a" class="m-doc-self">textureImageMemory</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a1e5f8ef4959b877f8988425b400581e6">
-              VkImageView <a href="#a1e5f8ef4959b877f8988425b400581e6" class="m-doc-self">textureImageView</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a5dceffd4233da012531cfe13fda6de1b">
-              VkSampler <a href="#a5dceffd4233da012531cfe13fda6de1b" class="m-doc-self">textureSampler</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a44de80d6fbdae80c3c36b67c4bc330fe">
-              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; <a href="#a44de80d6fbdae80c3c36b67c4bc330fe" class="m-doc-self">m_commandePool</a>
+            <dt id="ab43680a96f7977c7444e5b4387612668">
+              <span class="m-doc-wrap-bumper">void <a href="#ab43680a96f7977c7444e5b4387612668" class="m-doc-self">createSampler</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">final</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
