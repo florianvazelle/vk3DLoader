@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>particle/Compute/MPMStorageBuffer.hpp file | vkCommon</title>
+  <title>vkl::FrameBufferAttachment class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,7 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_0707dbb66d1b2649f3f4e64719d1c2a3.html">particle</a>/</span><span class="m-breadcrumb"><a href="dir_4cca763f47657497dd4ad7f441d24d6a.html">Compute</a>/</span>MPMStorageBuffer.hpp <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>FrameBufferAttachment <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="FrameBufferAttachment_8hpp.html">&lt;common/FrameBufferAttachment.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -52,54 +53,57 @@
             <li>
               Reference
               <ul>
-                <li><a href="#namespaces">Namespaces</a></li>
-                <li><a href="#nested-classes">Classes</a></li>
-                <li><a href="#define-members">Defines</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="namespaces">
-          <h2><a href="#namespaces">Namespaces</a></h2>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt>namespace <a href="namespacevkl.html" class="m-doc">vkl</a></dt>
-            <dd>Vulkan Loader.</dd>
+            <dt id="a934b99192c57f0b25a6910d437c26913">
+              <span class="m-doc-wrap-bumper"><a href="#a934b99192c57f0b25a6910d437c26913" class="m-doc-self">FrameBufferAttachment</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1SwapChain.html" class="m-doc">SwapChain</a>&amp; swapChain,
+              VkFormat format,
+              VkImageUsageFlags usage)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aad6cda7941e00b4d5e69bc6e15295cd2">
+              <span class="m-doc-wrap-bumper"><a href="#aad6cda7941e00b4d5e69bc6e15295cd2" class="m-doc-self">~FrameBufferAttachment</a>(</span><span class="m-doc-wrap">)</span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
-        <section id="nested-classes">
-          <h2><a href="#nested-classes">Classes</a></h2>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt>
-              class <a href="classvkl_1_1MPMStorageBuffer.html" class="m-doc">vkl::MPMStorageBuffer</a>
+            <dt id="ad93592ad5f9a1133fe25a7d161cb54fc">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad93592ad5f9a1133fe25a7d161cb54fc" class="m-doc-self">image</a>(</span><span class="m-doc-wrap">) const -&gt; const VkImage&amp;</span>
             </dt>
             <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="define-members">
-          <h2><a href="#define-members">Defines</a></h2>
-          <dl class="m-doc">
-            <dt id="a79e218ac28e5bd79b72c266e1b60e008">
-              <span class="m-doc-wrap-bumper">#define <a href="#a79e218ac28e5bd79b72c266e1b60e008" class="m-doc-self">NUM_PARTICLE</a></span>
+            <dt id="a7a9bfeebf675fd5b29399080847fef8a">
+              <span class="m-doc-wrap-bumper">auto <a href="#a7a9bfeebf675fd5b29399080847fef8a" class="m-doc-self">image</a>(</span><span class="m-doc-wrap">) -&gt; VkImage&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a5e57f9238530d04bc992595f4652e668">
-              <span class="m-doc-wrap-bumper">#define <a href="#a5e57f9238530d04bc992595f4652e668" class="m-doc-self">GRID_RESOLUTION</a></span>
+            <dt id="a7898321866d80c8d4f1c0de87360f071">
+              <span class="m-doc-wrap-bumper">auto <a href="#a7898321866d80c8d4f1c0de87360f071" class="m-doc-self">view</a>(</span><span class="m-doc-wrap">) const -&gt; const VkImageView&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4e0a9a72c12d3d6f6648b55b5f714583">
-              <span class="m-doc-wrap-bumper">#define <a href="#a4e0a9a72c12d3d6f6648b55b5f714583" class="m-doc-self">NUM_CELLS</a></span>
+            <dt id="ad74997d631e89d226a4b7723e91c05fe">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad74997d631e89d226a4b7723e91c05fe" class="m-doc-self">view</a>(</span><span class="m-doc-wrap">) -&gt; VkImageView&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7360b4c19e5f88d72a0c981a439c210d">
-              <span class="m-doc-wrap-bumper">#define <a href="#a7360b4c19e5f88d72a0c981a439c210d" class="m-doc-self">ELASTIC_LAMBDA</a></span>
+            <dt id="ad1abfbd2335265979639d1748df9e797">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad1abfbd2335265979639d1748df9e797" class="m-doc-self">sample</a>(</span><span class="m-doc-wrap">) const -&gt; const VkSampler&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a014e3e9c3cd73760bd4bfcacdc0cfb79">
-              <span class="m-doc-wrap-bumper">#define <a href="#a014e3e9c3cd73760bd4bfcacdc0cfb79" class="m-doc-self">ELASTIC_MU</a></span>
+            <dt id="a543e0700334b40f063c3703d1ad664ab">
+              <span class="m-doc-wrap-bumper">auto <a href="#a543e0700334b40f063c3703d1ad664ab" class="m-doc-self">sample</a>(</span><span class="m-doc-wrap">) -&gt; VkSampler&amp;</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a943f07034774ef1261d62cd0d3d1fec9">
-              <span class="m-doc-wrap-bumper">#define <a href="#a943f07034774ef1261d62cd0d3d1fec9" class="m-doc-self">DT</a></span>
+            <dt id="aa42b98adf30dada86de1c31425a40b10">
+              <span class="m-doc-wrap-bumper">void <a href="#aa42b98adf30dada86de1c31425a40b10" class="m-doc-self">createSample</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
