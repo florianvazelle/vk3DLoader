@@ -4,12 +4,16 @@
 #include <common/VulkanHeader.hpp>
 #include <glm/glm.hpp>
 #include <vector>
+#include <iostream>
 
 namespace vkl {
   // Pour plus de commentaire regarder Vertex.hpp
   struct Particle {
-    glm::vec4 pos;  // xyz = position, w = mass
-    glm::vec4 vel;  // xyz = velocity, w = gradient texture position
+    alignas(8) glm::vec2 pos;  // position "vec2" because this mpm example works in 2D
+    alignas(8) glm::vec2 vel;  // velocity
+    alignas(16) glm::mat2 C;    // affine momentum matrix
+    alignas(4) float mass;
+    alignas(4) float volume_0;  // initial volume
 
     static VkVertexInputBindingDescription getBindingDescription() {
       // Binding description
@@ -29,15 +33,33 @@ namespace vkl {
           {
               .location = 0,
               .binding  = 0,
-              .format   = VK_FORMAT_R32G32B32A32_SFLOAT,
+              .format   = VK_FORMAT_R32G32_SFLOAT,
               .offset   = offsetof(Particle, pos),
           },
           // velocity
           {
               .location = 1,
               .binding  = 0,
-              .format   = VK_FORMAT_R32G32B32A32_SFLOAT,
+              .format   = VK_FORMAT_R32G32_SFLOAT,
               .offset   = offsetof(Particle, vel),
+          },
+          {
+              .location = 2,
+              .binding  = 0,
+              .format   = VK_FORMAT_R32G32B32A32_SFLOAT,
+              .offset   = offsetof(Particle, C),
+          },
+          {
+              .location = 3,
+              .binding  = 0,
+              .format   = VK_FORMAT_R32_SFLOAT,
+              .offset   = offsetof(Particle, mass),
+          },
+          {
+              .location = 4,
+              .binding  = 0,
+              .format   = VK_FORMAT_R32_SFLOAT,
+              .offset   = offsetof(Particle, volume_0),
           },
       };
 

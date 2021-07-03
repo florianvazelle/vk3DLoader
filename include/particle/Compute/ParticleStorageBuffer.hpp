@@ -58,12 +58,10 @@ namespace vkl {
                                  + glm::vec3(rndDist(rndEngine), rndDist(rndEngine), rndDist(rndEngine) * 0.025f);
 
             float mass   = (rndDist(rndEngine) * 0.5f + 0.5f) * 75.0f;
-            particle.pos = glm::vec4(position, mass);
-            particle.vel = glm::vec4(velocity, 0.0f);
+            particle.pos = glm::vec2(position);
+            particle.vel = glm::vec2(velocity);
+            particle.mass = mass;
           }
-
-          // Color gradient offset
-          particle.vel.w = (float)i * 1.0f / static_cast<uint32_t>(attractors.size());
         }
       }
 
