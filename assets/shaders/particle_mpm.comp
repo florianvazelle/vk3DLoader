@@ -25,7 +25,7 @@ struct Cell {
 // Binding 0 : Position storage buffer
 layout(std140, binding = 0) buffer Pos 
 {
-   Particle particles[];
+   Particle particles[]; //ps
 };
 
 // ************************************* MPM *************************************
@@ -33,7 +33,7 @@ layout(std140, binding = 0) buffer Pos
 Cell grid[];
 // deformation gradient. stored as a separate array to use same rendering code for all demos, but feel free to store this field in the particle struct instead
 mat2 Fs[];
-vec2 weights[3];
+vec2 weights[3]; // initialised in C++
 int num_particles;
 // vec4 temp_positions[]; // Only used in start() -> c++  float2 -> vec4 for 3D
 // *******************************************************************************
@@ -72,7 +72,7 @@ layout (constant_id = 7) const float ELASTIC_MU = 20.0f;
 // Share data between computer shader invocations to speed up caluclations
 shared vec4 sharedData[SHARED_DATA_SIZE];
 
-void main() 
+void main() // Simulate
 {
 	// old_function();
 
@@ -115,7 +115,7 @@ void job_ClearGrid() {
 void job_P2G() { // P2G, first round
 	uint index = gl_GlobalInvocationID.x;
 	// Only on one thread
-	if (index == 0)
+	if (index != 0)
 		return;
 	
 	vec2 weights[3]; // redefined
@@ -207,6 +207,22 @@ void update_grid () {
 	if (index >= num_cells)
 		return;
 	
+	Cell cell = grid[index];
+
+	if (cell.mass > 0) {
+		// convert momentum to velocity, apply gravity
+		cell.v /= cell.mass;
+		cell.v += dt * math.float2(0, gravity);
+
+		// 'slip' boundary conditions
+		int x = i / grid_res;
+		int y = i % grid_res;
+		if (x < 2 || x > grid_res - 3) { cell.v.x = 0; }
+		if (y < 2 || y > grid_res - 3) { cell.v.y = 0; }
+
+		grid[index] = cell;
+	}
+
 	// wait all the threads to finish
 	memoryBarrierShared();
 	barrier();
