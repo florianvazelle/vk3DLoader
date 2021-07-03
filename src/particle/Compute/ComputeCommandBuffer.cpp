@@ -11,7 +11,7 @@
 #include <common/CommandBuffers.hpp>
 #include <common/Device.hpp>
 #include <common/Semaphore.hpp>
-#include <particle/Compute/ParticleStorageBuffer.hpp>
+#include <particle/Compute/MPMStorageBuffer.hpp>
 // clang-format on
 
 // https://community.khronos.org/t/why-i-am-getting-this-validator-message-memory-buffer-barrier/106638

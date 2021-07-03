@@ -26,7 +26,7 @@
 #include <cstdlib>                                       // for size_t
 #include <functional>                                    // for function
 #include <particle/Compute/ComputeCommandBuffer.hpp>     // for ComputeComma...
-#include <particle/Compute/ParticleStorageBuffer.hpp>
+#include <particle/Compute/MPMStorageBuffer.hpp>
 #include <particle/Compute/ComputeDescriptorSets.hpp>    // for ComputeDescr...
 #include <particle/Compute/ComputePipeline.hpp>          // for ComputePipeline
 #include <particle/Graphic/GraphicCommandBuffers.hpp>    // for GraphicComma...
@@ -63,7 +63,7 @@ namespace vkl {
 
     // Buffers
     UniformBuffers<ParticleMVP> uniformBuffersGraphic;
-    ParticleStorageBuffer storageBuffer;
+    MPMStorageBuffer storageBuffer;
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 
     // Vector Buffer

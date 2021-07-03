@@ -16,7 +16,7 @@ layout(std140, binding = 0) buffer Pos
 
 layout (local_size_x = 256) in;
 
-layout (binding = 1) uniform UBO 
+layout (binding = 3) uniform UBO 
 {
 	float deltaT;
 	int particleCount;

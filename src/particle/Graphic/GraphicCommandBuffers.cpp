@@ -11,7 +11,7 @@
 #include <common/RenderPass.hpp>            // for RenderPass
 #include <common/SwapChain.hpp>             // for SwapChain
 #include <common/buffer/StorageBuffer.hpp>  // for StorageBuffer
-#include <particle/Compute/ParticleStorageBuffer.hpp>
+#include <particle/Compute/MPMStorageBuffer.hpp>
 // clang-format on
 
 using namespace vkl;

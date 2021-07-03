@@ -8,15 +8,31 @@ struct Particle {
 	float volume_0; // initial volume
 };
 
+struct Cell {
+	vec2 vel; // velocity
+	float mass;
+	float padding; // unused
+};
+
 // Binding 0 : Position storage buffer
 layout(std140, binding = 0) buffer Pos 
 {
    Particle particles[ ];
 };
 
+layout(std140, binding = 1) buffer _grid 
+{
+   Cell grid[ ];
+};
+
+layout(std140, binding = 2) buffer _fs 
+{
+   mat2 fs[ ];
+};
+
 layout (local_size_x = 256) in;
 
-layout (binding = 1) uniform UBO 
+layout (binding = 3) uniform UBO 
 {
 	float deltaT;
 	int particleCount;
