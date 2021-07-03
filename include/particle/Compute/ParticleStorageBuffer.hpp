@@ -7,13 +7,17 @@
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/StorageBuffer.hpp>
 #include <common/struct/Particle.hpp>
+#include <common/struct/Cell.hpp>
 
 #include <random>
 #include <vector>
 
-#define PARTICLES_PER_ATTRACTOR 4 * 1024
-#define ATTRACTORS 6
-#define NUM_PARTICLE (ATTRACTORS * PARTICLES_PER_ATTRACTOR)
+#define NUM_PARTICLE 4096
+#define GRID_RESOLUTION 64
+#define NUM_CELLS (GRID_RESOLUTION * GRID_RESOLUTION)
+#define ELASTIC_LAMBDA 10.0f
+#define ELASTIC_MU 20.0f
+#define DT 0.1f
 
 namespace vkl {
 
@@ -24,48 +28,83 @@ namespace vkl {
                           VkBufferUsageFlags usage,
                           VkMemoryPropertyFlags properties)
         : StorageBuffer(device, NUM_PARTICLE * sizeof(Particle), usage, properties) {
-      // TODO : replace here to fill particleBuffer with correct initial value
+      // STEP 1 - we populate our array of particles
 
-      std::vector<glm::vec3> attractors = {
-          glm::vec3(5.0f, 0.0f, 0.0f),  glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 5.0f),
-          glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 4.0f, 0.0f),  glm::vec3(0.0f, -8.0f, 0.0f),
-      };
+      std::vector<glm::vec2> temp_positions;
 
-      // Initial particle positions
-      std::vector<Particle> particleBuffer(NUM_PARTICLE);
+      const int x     = GRID_RESOLUTION / 2;
+      const int y     = GRID_RESOLUTION / 2;
+      const int box_x = 32;
+      const int box_y = 32;
 
-      std::default_random_engine rndEngine((unsigned)time(nullptr));
-      std::normal_distribution<float> rndDist(0.0f, 1.0f);
-
-      for (uint32_t i = 0; i < static_cast<uint32_t>(attractors.size()); i++) {
-        for (uint32_t j = 0; j < PARTICLES_PER_ATTRACTOR; j++) {
-          Particle& particle = particleBuffer[i * PARTICLES_PER_ATTRACTOR + j];
-
-          // First particle in group as heavy center of gravity
-          if (j == 0) {
-            particle.pos = glm::vec4(attractors[i] * 1.5f, 90000.0f);
-            particle.vel = glm::vec4(glm::vec4(0.0f));
-          } else {
-            // Position
-            glm::vec3 position(attractors[i]
-                               + glm::vec3(rndDist(rndEngine), rndDist(rndEngine), rndDist(rndEngine)) * 0.75f);
-            float len = glm::length(glm::normalize(position - attractors[i]));
-            position.y *= 2.0f - (len * len);
-
-            // Velocity
-            glm::vec3 angular  = glm::vec3(0.5f, 1.5f, 0.5f) * (((i % 2) == 0) ? 1.0f : -1.0f);
-            glm::vec3 velocity = glm::cross((position - attractors[i]), angular)
-                                 + glm::vec3(rndDist(rndEngine), rndDist(rndEngine), rndDist(rndEngine) * 0.025f);
-
-            float mass   = (rndDist(rndEngine) * 0.5f + 0.5f) * 75.0f;
-            particle.pos = glm::vec4(position, mass);
-            particle.vel = glm::vec4(velocity, 0.0f);
-          }
-
-          // Color gradient offset
-          particle.vel.w = (float)i * 1.0f / static_cast<uint32_t>(attractors.size());
+      const float spacing = 0.5f;
+      for (float i = -box_x / 2; i < box_x / 2; i += spacing) {
+        for (float j = -box_y / 2; j < box_y / 2; j += spacing) {
+          temp_positions.push_back(glm::vec2(x + i, y + j));
         }
       }
+
+      std::vector<Particle> particleBuffer(NUM_PARTICLE);
+      std::vector<glm::mat2> Fs(NUM_PARTICLE);
+
+      // STEP 2 - initialise particles
+
+      for (int i = 0; i < NUM_PARTICLE; ++i) {
+        particleBuffer[i] = {
+            .pos  = temp_positions[i],
+            .vel  = glm::vec2(0, 0),
+            .C    = glm::mat2(0, 0, 0, 0),
+            .mass = 1.0f,
+        };
+
+        // deformation gradient initialised to the identity
+        Fs[i] = glm::mat2(1, 0, 0, 1);
+      }
+
+      std::vector<Cell> grid(NUM_CELLS);
+
+      for (int i = 0; i < NUM_CELLS; ++i) {
+        grid[i] = {
+            .vel = glm::vec2(0, 0),
+        };
+      }
+
+      // MPM course, equation 152
+
+      // STEP 3 - launch a P2G job to scatter particle mass to the grid
+      
+      Job_P2G(particleBuffer, Fs, grid);
+
+      std::vector<glm::vec2> weights(3);
+
+      for (int i = 0; i < NUM_PARTICLE; ++i) {
+        Particle& p = particleBuffer[i];
+
+        // quadratic interpolation weights
+        glm::vec2 cell_idx  = glm::floor(p.pos);
+        glm::vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
+        weights[0]          = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
+        weights[1]          = 0.75f - (cell_diff * cell_diff);
+        weights[2]          = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
+
+        float density = 0.0f;
+        // iterate over neighbouring 3x3 cells
+        for (int gx = 0; gx < 3; ++gx) {
+          for (int gy = 0; gy < 3; ++gy) {
+            float weight = weights[gx].x * weights[gy].y;
+
+            // map 2D to 1D index in grid
+            int cell_index = ((int)cell_idx.x + (gx - 1)) * GRID_RESOLUTION + ((int)cell_idx.y + gy - 1);
+            density += grid[cell_index].mass * weight;
+          }
+        }
+
+        // per-particle volume estimate has now been computed
+        float volume = p.mass / density;
+        p.volume_0   = volume;
+      }
+
+      // ----- Copy particle buffer -----
 
       Buffer<Particle> stagingBuffer(device, particleBuffer, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -96,6 +135,81 @@ namespace vkl {
                                    0, 0, nullptr, 1, &buffer_barrier, 0, nullptr);
             }
           });
+    }
+
+    // TODO : maybe use Compute Shader
+    void Job_P2G(const std::vector<Particle>& particleBuffer,
+                 const std::vector<glm::mat2>& Fs,
+                 std::vector<Cell>& grid) {
+      std::vector<glm::vec2> weights(3);
+
+      for (int i = 0; i < NUM_PARTICLE; ++i) {
+        const Particle& p = particleBuffer[i];
+
+        glm::mat2 stress = glm::mat2(0, 0, 0, 0);
+
+        // deformation gradient
+        const glm::mat2& F = Fs[i];
+
+        float J = glm::determinant(F);
+
+        // MPM course, page 46
+        float volume = p.volume_0 * J;
+
+        // useful matrices for Neo-Hookean model
+        glm::mat2 F_T             = glm::transpose(F);
+        glm::mat2 F_inv_T         = glm::inverse(F_T);
+        glm::mat2 F_minus_F_inv_T = F - F_inv_T;
+
+        // MPM course equation 48
+        glm::mat2 P_term_0 = ELASTIC_MU * (F_minus_F_inv_T);
+        glm::mat2 P_term_1 = ELASTIC_LAMBDA * glm::log(J) * F_inv_T;
+        glm::mat2 P        = P_term_0 + P_term_1;
+
+        // cauchy_stress = (1 / det(F)) * P * F_T
+        // equation 38, MPM course
+        stress = (1.0f / J) * (P * F_T);
+
+        // (M_p)^-1 = 4, see APIC paper and MPM course page 42
+        // this term is used in MLS-MPM paper eq. 16. with quadratic weights, Mp = (1/4) * (delta_x)^2.
+        // in this simulation, delta_x = 1, because i scale the rendering of the domain rather than the domain itself.
+        // we multiply by dt as part of the process of fusing the momentum and force update for MLS-MPM
+        glm::mat2 eq_16_term_0 = -volume * 4 * stress * DT;
+
+        // quadratic interpolation weights
+        glm::vec2 cell_idx  = glm::floor(p.pos);  // uvec2 -> unsigned
+        glm::vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
+        weights[0] = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
+        weights[1] = 0.75f - (cell_diff * cell_diff);
+        weights[2] = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
+
+        // for all surrounding 9 cells
+        for (unsigned int gx = 0; gx < 3; ++gx) {
+          for (unsigned int gy = 0; gy < 3; ++gy) {
+            float weight = weights[gx].x * weights[gy].y;
+
+            glm::uvec2 cell_x   = glm::uvec2(cell_idx.x + gx - 1, cell_idx.y + gy - 1);  // uint2
+            glm::vec2 cell_dist = (glm::vec2(cell_x) - p.pos) + 0.5f;                    // cast uvec2 into vec2
+            glm::vec2 Q         = p.C * cell_dist;
+
+            // scatter mass and momentum to the grid
+            int cell_index = (int)cell_x.x * GRID_RESOLUTION + (int)cell_x.y;
+            Cell& cell      = grid[cell_index];
+
+            // MPM course, equation 172
+            float weighted_mass = weight * p.mass;
+            cell.mass += weighted_mass;
+
+            // APIC P2G momentum contribution
+            cell.vel += weighted_mass * (p.vel + Q);
+
+            // fused force/momentum update from MLS-MPM
+            // see MLS-MPM paper, equation listed after eqn. 28
+            glm::vec2 momentum = (eq_16_term_0 * weight) * cell_dist;
+            cell.vel += momentum;
+          }
+        }
+      }
     }
   };
 }  // namespace vkl

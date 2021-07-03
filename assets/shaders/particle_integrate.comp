@@ -1,9 +1,11 @@
 #version 450
 
-struct Particle
-{
-	vec4 pos;
-	vec4 vel;
+struct Particle {
+	vec2 pos; // position "vec2" because this mpm example works in 2D
+	vec2 vel; // velocity 
+	mat2 C; // affine momentum matrix
+	float mass;
+	float volume_0; // initial volume
 };
 
 // Binding 0 : Position storage buffer
@@ -23,8 +25,8 @@ layout (binding = 1) uniform UBO
 void main() 
 {
 	int index = int(gl_GlobalInvocationID);
-	vec4 position = particles[index].pos;
-	vec4 velocity = particles[index].vel;
+	vec2 position = particles[index].pos;
+	vec2 velocity = particles[index].vel;
 	position += ubo.deltaT * velocity;
 	particles[index].pos = position;
 }
