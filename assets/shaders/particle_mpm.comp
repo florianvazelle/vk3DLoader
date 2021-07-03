@@ -32,9 +32,9 @@ layout(std140, binding = 0) buffer Pos
 // initiate cells array in the shader
 Cell grid[];
 // deformation gradient. stored as a separate array to use same rendering code for all demos, but feel free to store this field in the particle struct instead
-mat2 Fs[];
+mat2 Fs[]; // One gradient per particle
 vec2 weights[3]; // initialised in C++
-int num_particles;
+int num_particles; // initialised in C++
 // vec4 temp_positions[]; // Only used in start() -> c++  float2 -> vec4 for 3D
 // *******************************************************************************
 
@@ -75,7 +75,7 @@ shared vec4 sharedData[SHARED_DATA_SIZE];
 void main() // Simulate
 {
 	// old_function();
-
+	num_particles = UBO.particleCount; // we can rename num_particles after
 	// *** MPM loop ***
 
 	// clear the grid of cells
@@ -212,7 +212,7 @@ void update_grid () {
 	if (cell.mass > 0) {
 		// convert momentum to velocity, apply gravity
 		cell.v /= cell.mass;
-		cell.v += dt * math.float2(0, gravity);
+		cell.v += dt * vec2(0.0, gravity);
 
 		// 'slip' boundary conditions
 		int x = i / grid_res;
@@ -229,9 +229,63 @@ void update_grid () {
 }
 
 void job_G2P () {
+	uint index = gl_GlobalInvocationID.x;
+	// if we create more threads than cells
+	if (index >= num_particles)
+		return;
 
+	Particle p = ps[index];
+
+	// reset particle velocity. we calculate it from scratch each step using the grid
+	p.vel = 0.0;
+
+	
+	// quadratic interpolation weights
+	vec2 cell_idx = floor(p.pos); // uvec2 -> unsigned
+	vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
+	float2 weights[3] = {
+		0.5 * pow(0.5 - cell_diff, 2),
+		0.75 - pow(cell_diff, 2), 
+		0.5 * pow(0.5 + cell_diff, 2)
+	};
+
+	// constructing affine per-particle momentum matrix from APIC / MLS-MPM.
+	// see APIC paper (https://web.archive.org/web/20190427165435/https://www.math.ucla.edu/~jteran/papers/JSSTS15.pdf), page 6
+	// below equation 11 for clarification. this is calculating C = B * (D^-1) for APIC equation 8,
+	// where B is calculated in the inner loop at (D^-1) = 4 is a constant when using quadratic interpolation functions
+	mat2 B = (0.0);
+	for (uint gx = 0; gx < 3; ++gx) {
+		for (uint gy = 0; gy < 3; ++gy) {
+			float weight = weights[gx].x * weights[gy].y;
+
+			uvec2 cell_x = uvec2(cell_idx.x + gx - 1, cell_idx.y + gy - 1);
+			int cell_index = (int)cell_x.x * grid_res + (int)cell_x.y;
+			
+			vec2 dist = (cell_x - p.pos) + 0.5;
+			vec2 weighted_velocity = grid[cell_index].vel * weight;
+
+			// APIC paper equation 10, constructing inner term for B
+			mat2 term = mat2(weighted_velocity * dist.x, weighted_velocity * dist.y);
+
+			B += term;
+
+			p.vel += weighted_velocity;
+		}
+	}
+	p.C = B * 4;
+
+	// advect particles
+	p.pos += p.vel * dt;
+
+	// safety clamp to ensure particles don't exit simulation domain
+	p.pos = clamp(p.pos, 1, grid_res - 2);
+
+	mat2 Fp_new = mat2(1, 0,
+					   0, 1);
+	Fp_new += dt * p.C;
+	Fs[index] = Fp_new * Fs[index];
+	particles[index] = p;
 }
-
 
 void old_function() {
 	// Current SSBO index
