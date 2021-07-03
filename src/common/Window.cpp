@@ -68,7 +68,10 @@ void Window::mainLoop() {
     m_drawFrameFunc(m_framebufferResized);
   } while (m_androidApp->destroyRequested == 0);
 #else
-  while (!glfwWindowShouldClose(m_window)) {
+#  ifndef __CI_MODE__
+  while (!glfwWindowShouldClose(m_window))
+#  endif
+  {
     glfwPollEvents();
     m_drawFrameFunc(m_framebufferResized);
   }

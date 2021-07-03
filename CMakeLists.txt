@@ -92,6 +92,16 @@ if(BUILD_APPS)
     endif()
 endif()
 
+#
+# CI
+#
+
+option(CI_MODE "Disable infinite loop to test/run app in CI" OFF)
+
+if(CI_MODE)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC __CI_MODE__)
+endif()
+
 
 #
 # Tests

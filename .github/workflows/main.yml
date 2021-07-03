@@ -101,7 +101,7 @@ jobs:
           cmake \
             $GITHUB_WORKSPACE \
             -G Ninja \
-            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON \
+            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON -DCI_MODE=ON \
             -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
 
       - name: Build
@@ -109,6 +109,15 @@ jobs:
         shell: bash
         # Execute the build. You can specify a specific target with "--target <NAME>"
         run: ninja
+
+      - name: Run apps
+        working-directory: ${{ runner.workspace }}
+        env:
+          CTEST_OUTPUT_ON_FAILURE: 1
+          VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
+        run: |
+          ./build/bin/vk3DLoader ./assets/models/chair.obj -d 2 -e
+          ./build/bin/vkLavaMpm -d 2 -e
 
       - name: Run tests
         working-directory: ${{ runner.workspace }}/build
@@ -188,7 +197,7 @@ jobs:
         run: |
           cmake \
             $GITHUB_WORKSPACE \
-            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON \
+            -DBUILD_TESTING=ON -DBUILD_DOCS=ON -DINSTALL_APPS=ON -DCI_MODE=ON \
             -DCMAKE_INSTALL_PREFIX="${{ runner.workspace }}/instdir"
 
       - name: Build
@@ -197,6 +206,15 @@ jobs:
         run: cmake --build . --config Release
         env:
           VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
+
+      - name: Run apps
+        working-directory: ${{ runner.workspace }}
+        env:
+          CTEST_OUTPUT_ON_FAILURE: 1
+          VULKAN_SDK: "C:\\VulkanSDK\\${{ env.WINDOWS_VULKAN_VERSION }}"
+        run: |
+          ./build/bin/vk3DLoader.exe ./assets/models/chair.obj -d 2 -e
+          ./build/bin/vkLavaMpm.exe -d 2 -e
 
       - name: Run tests
         working-directory: ${{ runner.workspace }}/build
