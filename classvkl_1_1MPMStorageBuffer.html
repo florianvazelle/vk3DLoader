@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>particle/Compute/ParticleStorageBuffer.hpp file | vkCommon</title>
+  <title>vkl::MPMStorageBuffer class | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,7 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_0707dbb66d1b2649f3f4e64719d1c2a3.html">particle</a>/</span><span class="m-breadcrumb"><a href="dir_4cca763f47657497dd4ad7f441d24d6a.html">Compute</a>/</span>ParticleStorageBuffer.hpp <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>MPMStorageBuffer <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="MPMStorageBuffer_8hpp.html">&lt;particle/Compute/MPMStorageBuffer.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -52,42 +53,37 @@
             <li>
               Reference
               <ul>
-                <li><a href="#namespaces">Namespaces</a></li>
-                <li><a href="#nested-classes">Classes</a></li>
-                <li><a href="#define-members">Defines</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-attribs">Public variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="namespaces">
-          <h2><a href="#namespaces">Namespaces</a></h2>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt>namespace <a href="namespacevkl.html" class="m-doc">vkl</a></dt>
-            <dd>Vulkan Loader.</dd>
-          </dl>
-        </section>
-        <section id="nested-classes">
-          <h2><a href="#nested-classes">Classes</a></h2>
-          <dl class="m-doc">
-            <dt>
-              class <a href="classvkl_1_1ParticleStorageBuffer.html" class="m-doc">vkl::ParticleStorageBuffer</a>
+            <dt id="ac2983931d87d3ea21f0de5d836afb3b8">
+              <span class="m-doc-wrap-bumper"><a href="#ac2983931d87d3ea21f0de5d836afb3b8" class="m-doc-self">MPMStorageBuffer</a>(</span><span class="m-doc-wrap">const <a href="classvkl_1_1Device.html" class="m-doc">Device</a>&amp; device,
+              const <a href="classvkl_1_1CommandPool.html" class="m-doc">CommandPool</a>&amp; commandPool,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags properties)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="define-members">
-          <h2><a href="#define-members">Defines</a></h2>
+        <section id="pub-attribs">
+          <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
-            <dt id="a0caf3b8718757c1b2766698c8153ad4b">
-              <span class="m-doc-wrap-bumper">#define <a href="#a0caf3b8718757c1b2766698c8153ad4b" class="m-doc-self">PARTICLES_PER_ATTRACTOR</a></span>
+            <dt id="af2622981e22b9be6daa07ae8a083c39b">
+              <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a> <a href="#af2622981e22b9be6daa07ae8a083c39b" class="m-doc-self">ps</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a366f355a16f1d44e4219dbb4c9d568ce">
-              <span class="m-doc-wrap-bumper">#define <a href="#a366f355a16f1d44e4219dbb4c9d568ce" class="m-doc-self">ATTRACTORS</a></span>
+            <dt id="a768f6f1d8d63420439bb14670f8ea1bc">
+              <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a> <a href="#a768f6f1d8d63420439bb14670f8ea1bc" class="m-doc-self">grid</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a79e218ac28e5bd79b72c266e1b60e008">
-              <span class="m-doc-wrap-bumper">#define <a href="#a79e218ac28e5bd79b72c266e1b60e008" class="m-doc-self">NUM_PARTICLE</a></span>
+            <dt id="a4dcbef8dcdb06d25c7e96b5ec2fdaf67">
+              <a href="classvkl_1_1StorageBuffer.html" class="m-doc">StorageBuffer</a> <a href="#a4dcbef8dcdb06d25c7e96b5ec2fdaf67" class="m-doc-self">fs</a>
             </dt>
             <dd><span></span></dd>
           </dl>

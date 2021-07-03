@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>vkl::Particle struct | vkCommon</title>
+  <title>vkl::Cell struct | vkCommon</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -43,8 +43,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Particle <span class="m-thin">struct</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Particle_8hpp.html">&lt;common/struct/Particle.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacevkl.html">vkl</a>::<wbr/></span>Cell <span class="m-thin">struct</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="Cell_8hpp.html">&lt;common/struct/Cell.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -53,46 +53,24 @@
             <li>
               Reference
               <ul>
-                <li><a href="#pub-static-methods">Public static functions</a></li>
                 <li><a href="#pub-attribs">Public variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="pub-static-methods">
-          <h2><a href="#pub-static-methods">Public static functions</a></h2>
-          <dl class="m-doc">
-            <dt id="ab880cd4517764b01bfd2ea8f37a1d1f3">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ab880cd4517764b01bfd2ea8f37a1d1f3" class="m-doc-self">getBindingDescription</a>(</span><span class="m-doc-wrap">) -&gt; VkVertexInputBindingDescription</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a2c8caa114556fb85778f877bae0861bc">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a2c8caa114556fb85778f877bae0861bc" class="m-doc-self">getAttributeDescriptions</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;VkVertexInputAttributeDescription&gt;</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
         <section id="pub-attribs">
           <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
-            <dt id="aa3b015e44b60028c8d62c2a5ba30954f">
-              glm::vec2 <a href="#aa3b015e44b60028c8d62c2a5ba30954f" class="m-doc-self">pos</a>
+            <dt id="a95988a6fbe51dce5dbc79064e3a352fc">
+              glm::vec2 <a href="#a95988a6fbe51dce5dbc79064e3a352fc" class="m-doc-self">vel</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4e89cb3c2862d4e5a1227a8a4959f4e9">
-              glm::vec2 <a href="#a4e89cb3c2862d4e5a1227a8a4959f4e9" class="m-doc-self">vel</a>
+            <dt id="a78ac2034c6745c5a39778afbf44aa4aa">
+              float <a href="#a78ac2034c6745c5a39778afbf44aa4aa" class="m-doc-self">mass</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="ad7f460f23ee7398f9bf57b30bf682c60">
-              glm::mat2 <a href="#ad7f460f23ee7398f9bf57b30bf682c60" class="m-doc-self">C</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ad1dc6c9649804eb27207d272008fcccd">
-              float <a href="#ad1dc6c9649804eb27207d272008fcccd" class="m-doc-self">mass</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a68be4290ee59a96fa2115ef32ff45108">
-              float <a href="#a68be4290ee59a96fa2115ef32ff45108" class="m-doc-self">volume_0</a>
+            <dt id="a76a9137658954e4814ef218a2399c0e7">
+              float <a href="#a76a9137658954e4814ef218a2399c0e7" class="m-doc-self">padding</a>
             </dt>
             <dd><span></span></dd>
           </dl>
