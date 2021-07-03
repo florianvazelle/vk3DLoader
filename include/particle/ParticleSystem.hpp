@@ -64,6 +64,8 @@ namespace vkl {
     // Buffers
     UniformBuffers<ParticleMVP> uniformBuffersGraphic;
     ParticleStorageBuffer storageBuffer;
+    StorageBuffer gridBuffer;
+    StorageBuffer fsBuffer;
     UniformBuffers<ComputeParticle> uniformBuffersCompute;
 
     // Vector Buffer

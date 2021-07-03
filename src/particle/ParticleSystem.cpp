@@ -18,6 +18,7 @@
 #include <common/buffer/Buffer.hpp>                      // for Buffer
 #include <common/buffer/UniformBuffers.hpp>              // for UniformBuffers
 #include <common/struct/ComputeParticle.hpp>             // for ComputeParticle
+#include <common/struct/Cell.hpp>             // for ComputeParticle
 #include <common/struct/ParticleMVP.hpp>                 // for ParticleMVP
 #include <common/struct/Particle.hpp>                    // for Particle
 #include <glm/glm.hpp>
@@ -106,7 +107,7 @@ ParticleSystem::ParticleSystem(
       // Descriptor Pool
       ps({
           misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, swapChain.numImages()),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, swapChain.numImages() * 3),
       }),
       dpi(misc::descriptorPoolCreateInfo(
           ps,
@@ -123,6 +124,14 @@ ParticleSystem::ParticleSystem(
           commandPool,
           VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+      gridBuffer(device,
+                 NUM_CELL * sizeof(Cell),
+                 VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+      fsBuffer(device,
+               NUM_PARTICLE * sizeof(glm::mat2),
+               VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
       uniformBuffersCompute(device, swapChain, &updateComputeUniformBuffers),
 
       // ~ My Vectors
@@ -130,7 +139,7 @@ ParticleSystem::ParticleSystem(
       // et on passe le vecteur qui sera concervé dans la class Application
       vecUBGraphic({&uniformBuffersGraphic}),
       vecUBCompute({&uniformBuffersCompute}),
-      vecSBCompute({&storageBuffer}),
+      vecSBCompute({&storageBuffer, &gridBuffer, &fsBuffer}),
 
       /*
        * Basic Graphics
@@ -164,6 +173,8 @@ ParticleSystem::ParticleSystem(
           misc::descriptorSetLayoutCreateInfo({
               // Binding 0 : Particle position storage buffer
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT, 0),
+              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT, 2),
+              misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT, 3),
               // Binding 1 : Uniform buffer
               misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT, 1),
           })),

@@ -1,0 +1,70 @@
+#version 450
+
+struct Particle {
+	vec2 pos; // position "vec2" because this mpm example works in 2D
+	vec2 vel; // velocity 
+	mat2 C; // affine momentum matrix
+	float mass;
+	float volume_0; // initial volume
+};
+
+// Binding 0 : Position storage buffer
+layout(std140, binding = 0) buffer Pos 
+{
+   Particle particles[ ];
+};
+
+layout (local_size_x = 256) in;
+
+layout (binding = 1) uniform UBO 
+{
+	float deltaT;
+	int particleCount;
+} ubo;
+
+layout (constant_id = 0) const int SHARED_DATA_SIZE = 512;
+layout (constant_id = 1) const float GRAVITY = 0.002;
+layout (constant_id = 2) const float POWER = 0.75;
+layout (constant_id = 3) const float SOFTEN = 0.0075;
+
+// Share data between computer shader invocations to speed up caluclations
+shared vec3 sharedData[SHARED_DATA_SIZE];
+
+void main() 
+{
+	// Current SSBO index
+	uint index = gl_GlobalInvocationID.x;
+	if (index >= ubo.particleCount) 
+		return;	
+
+	vec2 position = particles[index].pos;
+	vec2 velocity = particles[index].vel;
+	vec2 acceleration = vec2(0.0);
+
+	for (int i = 0; i < ubo.particleCount; i += SHARED_DATA_SIZE)
+	{
+		if (i + gl_LocalInvocationID.x < ubo.particleCount)
+		{
+			sharedData[gl_LocalInvocationID.x] = vec3(particles[i + gl_LocalInvocationID.x].pos, particles[i + gl_LocalInvocationID.x].mass);
+		}
+		else
+		{
+			sharedData[gl_LocalInvocationID.x] = vec3(0.0);
+		}
+
+		memoryBarrierShared();
+		barrier();
+
+		for (int j = 0; j < gl_WorkGroupSize.x; j++)
+		{
+			vec3 other = sharedData[j];
+			vec2 len = other.xy - position.xy;
+			acceleration.xy += GRAVITY * len * other.z / pow(dot(len, len) + SOFTEN, POWER);
+		}
+
+		memoryBarrierShared();
+		barrier();
+	}
+
+	particles[index].vel.xy += ubo.deltaT * acceleration.xy;
+}

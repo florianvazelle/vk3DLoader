@@ -17,8 +17,9 @@ void ComputeDescriptorSets::createDescriptorSets() {
 
   std::vector<VkWriteDescriptorSet> writeDescriptorSets;
 
-  const IBuffer* storageBuffer                   = m_buffers[0];
-  const VkDescriptorBufferInfo storageBufferInfo = storageBuffer->descriptor();
+  const VkDescriptorBufferInfo psInfo            = m_buffers[0]->descriptor();
+  const VkDescriptorBufferInfo gridInfo          = m_buffers[1]->descriptor();
+  const VkDescriptorBufferInfo fsInfo            = m_buffers[2]->descriptor();
 
   // On paramètre les descripteurs (on se rappelle que l'on en a mit un par frame)
   const IUniformBuffers* ubo = m_uniformBuffers[0];
@@ -27,7 +28,9 @@ void ComputeDescriptorSets::createDescriptorSets() {
 
     writeDescriptorSets = {
         // Binding 0 :
-        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 0, &storageBufferInfo),
+        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 0, &psInfo),
+        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 2, &gridInfo),
+        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3, &fsInfo),
         // Binding 1 :
         misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, &bufferInfo),
     };

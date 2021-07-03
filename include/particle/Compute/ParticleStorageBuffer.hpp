@@ -15,6 +15,9 @@
 #define ATTRACTORS 6
 #define NUM_PARTICLE (ATTRACTORS * PARTICLES_PER_ATTRACTOR)
 
+#define GRID_RESOLUTION 64
+#define NUM_CELL (GRID_RESOLUTION * GRID_RESOLUTION)
+
 namespace vkl {
 
   class ParticleStorageBuffer : public StorageBuffer {
