@@ -75,8 +75,10 @@ void updateComputeUniformBuffers(const Device& device,
                                  uint32_t currentImage) {
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
-  ubo.deltaT        = isPause ? 0.0f : time * 0.1f;
-  ubo.particleCount = NUM_PARTICLE;
+  ubo.deltaT         = isPause ? 0.0f : DT;
+  ubo.particleCount  = NUM_PARTICLE;
+  ubo.elastic_lambda = elastic_lambda;
+  ubo.elastic_mu     = elastic_mu;
 
   void* data;
   vkMapMemory(device.logical(), uniformBuffers[currentImage].memory(), 0, sizeof(ubo), 0, &data);
@@ -322,9 +324,29 @@ void ParticleSystem::drawImGui() {
     ImGui::Text("time: %.2f", time);
     ImGui::Text("fps: %.2f", ImGui::GetIO().Framerate);
 
-    if (ImGui::Button("Pause")) {
+    ImGui::Separator();
+    if (ImGui::Button(isPause ? "Play" : "Pause")) {
       isPause = !isPause;
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Restart")) {
+      storageBuffer.recreate();
+    }
+
+    ImGui::Separator();
+    ImGui::Text("MPM Settings");
+    if (ImGui::Button("Solid")) {
+      elastic_lambda = 10.0f;
+      elastic_mu     = 20.0f;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Liquid")) {
+      elastic_lambda = 100.0f;
+      elastic_mu     = 0.1f;
+    }
+
+    ImGui::SliderFloat("lambda", &(elastic_lambda), 10.0f, 100.0f);
+    ImGui::SliderFloat("mu", &(elastic_mu), 0.1f, 20.0f);
   }
 
   ImGui::End();

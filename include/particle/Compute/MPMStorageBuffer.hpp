@@ -14,12 +14,15 @@
 
 #define NUM_PARTICLE 4096
 #define GRID_RESOLUTION 64
-#define NUM_CELLS 4096
+#define NUM_CELLS (GRID_RESOLUTION * GRID_RESOLUTION)
 #define ELASTIC_LAMBDA 10.0f
 #define ELASTIC_MU 20.0f
 #define DT 0.1f
 
 namespace vkl {
+
+  static float elastic_lambda = ELASTIC_LAMBDA;
+  static float elastic_mu     = ELASTIC_MU;
 
   class MPMStorageBuffer {
   public:
@@ -31,9 +34,15 @@ namespace vkl {
                      const CommandPool& commandPool,
                      VkBufferUsageFlags usage,
                      VkMemoryPropertyFlags properties)
-        : ps(device, NUM_PARTICLE * sizeof(Particle), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | usage, properties),
+        : m_device(device),
+          m_commandPool(commandPool),
+          ps(device, NUM_PARTICLE * sizeof(Particle), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | usage, properties),
           grid(device, NUM_CELLS * sizeof(Cell), usage, properties),
           fs(device, NUM_PARTICLE * sizeof(glm::mat2), usage, properties) {
+      createMPMStorageBuffer();
+    }
+
+    void createMPMStorageBuffer() {
       // STEP 1 - we populate our array of particles
 
       std::vector<glm::vec2> temp_positions;
@@ -112,12 +121,17 @@ namespace vkl {
 
       // ----- Copy particle buffer -----
 
-      CopyVertexBuffer(device, commandPool, particleBuffer, ps);
-      CopyBuffer(device, commandPool, gridBuffer, grid);
-      CopyBuffer(device, commandPool, FsBuffer, fs);
+      CopyVertexBuffer(m_device, m_commandPool, particleBuffer, ps);
+      CopyBuffer(m_device, m_commandPool, gridBuffer, grid);
+      CopyBuffer(m_device, m_commandPool, FsBuffer, fs);
     }
 
+    void recreate() { createMPMStorageBuffer(); }
+
   private:
+    const Device& m_device;
+    const CommandPool& m_commandPool;
+
     // TODO : maybe use Compute Shader
     void Job_P2G(const std::vector<Particle>& particleBuffer,
                  const std::vector<glm::mat2>& Fs,
@@ -143,8 +157,8 @@ namespace vkl {
         glm::mat2 F_minus_F_inv_T = F - F_inv_T;
 
         // MPM course equation 48
-        glm::mat2 P_term_0 = ELASTIC_MU * (F_minus_F_inv_T);
-        glm::mat2 P_term_1 = ELASTIC_LAMBDA * glm::log(J) * F_inv_T;
+        glm::mat2 P_term_0 = elastic_mu * (F_minus_F_inv_T);
+        glm::mat2 P_term_1 = elastic_lambda * glm::log(J) * F_inv_T;
         glm::mat2 P        = P_term_0 + P_term_1;
 
         // cauchy_stress = (1 / det(F)) * P * F_T

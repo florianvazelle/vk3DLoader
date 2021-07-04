@@ -3,9 +3,11 @@
 
 namespace vkl {
 
-  struct ComputeParticle {
+  struct alignas(16) ComputeParticle {
     float deltaT;  // Frame delta time
-    size_t particleCount;
+    float particleCount;
+    float elastic_lambda;
+    float elastic_mu;
   };
 
 }  // namespace vkl
