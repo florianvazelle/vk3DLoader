@@ -16,9 +16,9 @@ struct Cell {
 };
 
 layout(local_size_x = 1) in;
-layout(std430, binding = 0) buffer readonly Pos { Particle particles[]; };
-layout(std430, binding = 1) buffer cells { Cell grid[]; };
-layout(std430, binding = 2) buffer readonly deformationGradient { mat2 Fs[]; };
+layout(set = 0, binding = 0) buffer readonly Pos { Particle particles[]; };
+layout(set = 0, binding = 1) buffer cells { Cell grid[]; };
+layout(set = 0, binding = 2) buffer readonly deformationGradient { mat2 Fs[]; };
 layout(binding = 3) uniform UBO {
   float deltaT;
   float particleCount;
