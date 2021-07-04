@@ -22,7 +22,7 @@ void main() {
 
   vec4 eyePos          = ubo.view * (ubo.model * vec4(inPos.x, inPos.y, 0.0, 1.0));
   vec4 projectedCorner = ubo.proj * vec4(0.5 * spriteSize, 0.5 * spriteSize, eyePos.z, eyePos.w);
-  gl_PointSize         = clamp(ubo.screendim.x * projectedCorner.x / projectedCorner.w, 1.0, 128.0);
+  gl_PointSize         = 2.0;  // clamp(ubo.screendim.x * projectedCorner.x / projectedCorner.w, 1.0, 128.0);
 
   gl_Position = ubo.proj * eyePos;
 }

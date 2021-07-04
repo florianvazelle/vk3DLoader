@@ -54,7 +54,7 @@ void updateGraphicsUniformBuffers(const Device& device,
   // rotM           = glm::rotate(rotM, glm::radians(75.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   // rotM           = glm::rotate(rotM, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  ubo.view = glm::translate(glm::mat4(1.0f), glm::vec3(-32.0f, -32.0f, -7.0f)) * rotM;
+  ubo.view = glm::translate(glm::mat4(1.0f), glm::vec3(-32.0f, -32.0f, -5.0f)) * rotM;
 
   const float aspect = swapChain.extent().width / (float)swapChain.extent().height;
   ubo.proj           = glm::perspective(60.0f, aspect, 0.1f, 512.0f);

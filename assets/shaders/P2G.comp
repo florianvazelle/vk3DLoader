@@ -27,8 +27,10 @@ ubo;
 
 const int GRID_RESOLUTION  = 64;
 const float ELASTIC_LAMBDA = 10.0;
-const float ELASTIC_MU     = 20.0;
-const float GRAVITY        = 0.3;
+// const float ELASTIC_LAMBDA = 100.0;
+const float ELASTIC_MU = 20.0;
+// const float ELASTIC_MU = 0.1;
+const float GRAVITY = 0.3;
 
 void main() {
   for (int i = 0; i < ubo.particleCount; ++i) {

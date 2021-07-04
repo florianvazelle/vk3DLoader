@@ -140,7 +140,7 @@ void ComputeCommandBuffer::createCommandBuffers() {
   vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(0));
   vkCmdBindDescriptorSets(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.layout(), 0, 1,
                           &m_descriptorSets.descriptor(0), 0, 0);
-  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
+  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 256, 1, 1);
 
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
   const VkBufferMemoryBarrier bufferBarrier1 = {
@@ -180,7 +180,7 @@ void ComputeCommandBuffer::createCommandBuffers() {
   // 3 pass: Update Grid
   // -------------------------------------------------------------------------------------------------------
   vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(2));
-  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
+  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 256, 1, 1);
 
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
   const VkBufferMemoryBarrier bufferBarrier3 = {
