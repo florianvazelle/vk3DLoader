@@ -75,7 +75,7 @@ void updateComputeUniformBuffers(const Device& device,
                                  uint32_t currentImage) {
   ComputeParticle& ubo = uniformBuffers.at(currentImage).data().at(0);
 
-  ubo.deltaT        = isPause ? 0.0f : time * 0.0005f;
+  ubo.deltaT        = isPause ? 0.0f : time * 0.1f;
   ubo.particleCount = NUM_PARTICLE;
 
   void* data;
@@ -105,24 +105,27 @@ ParticleSystem::ParticleSystem(
 
       // Descriptor Pool
       ps({
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages() * 2),
-          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, swapChain.numImages() * 3),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, swapChain.numImages()),
       }),
-      dpi(misc::descriptorPoolCreateInfo(
-          ps,
-          swapChain.numImages() * 2)),  // * 2 car on utilise le meme descriptor pool pour les Graphic et Compute
+      dpi(misc::descriptorPoolCreateInfo(ps, swapChain.numImages())),
       dp(device, dpi),
+
+      psCompute({
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1),
+          misc::descriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3),
+      }),
+      dpiCompute(misc::descriptorPoolCreateInfo(psCompute, 4)),
+      dpCompute(device, dpiCompute),
 
       // Buffer
       // Graphic
       uniformBuffersGraphic(device, swapChain, &updateGraphicsUniformBuffers),
 
       // Compute
-      storageBuffer(
-          device,
-          commandPool,
-          VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+      storageBuffer(device,
+                    commandPool,
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
       uniformBuffersCompute(device, swapChain, &updateComputeUniformBuffers),
 
       // ~ My Vectors
@@ -142,7 +145,7 @@ ParticleSystem::ParticleSystem(
       // 2. Descriptor Set Layout
       dslGraphic(device,
                  misc::descriptorSetLayoutCreateInfo({
-                     misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 2),
+                     misc::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
                  })),
 
       // 3. Graphic Pipeline
@@ -171,14 +174,14 @@ ParticleSystem::ParticleSystem(
           })),
 
       // 5. Descriptor Sets
-      dsCompute(device, swapChain, dslCompute, dp, vecSBCompute, vecUBCompute),
+      dsCompute(device, swapChain, dslCompute, dpCompute, vecSBCompute, vecUBCompute),
 
       // 3. Compute Pipeline
       gpCompute(device, swapChain, rpGraphic, dslCompute),
 
       semaphoreCompute(device),
 
-      cbCompute(device, rpGraphic, gpCompute, storageBuffer.ps, commandPoolCompute, dsCompute),
+      cbCompute(device, rpGraphic, gpCompute, vecSBCompute, commandPoolCompute, dsCompute),
 
       cbGraphic(device, rpGraphic, swapChain, gpGraphic, commandPool, dsGraphic, vecSBCompute)
 #ifndef __ANDROID__
@@ -361,6 +364,7 @@ void ParticleSystem::recreateSwapChain(bool& framebufferResized) {
    * Compute
    */
   gpCompute.recreate();
+  dpCompute.recreate();
   dsCompute.recreate();
   cbCompute.recreate();
 

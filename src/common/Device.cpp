@@ -116,12 +116,11 @@ VkPhysicalDevice Device::PickPhysicalDevice(const VkInstance& instance,
     std::cout << "- " << deviceProperties.deviceName << '\n';
   }
 
+  // return devices[0];
 
-  return devices[0];
-
- int indice = 0;
+  int indice = 0;
   for (const auto& device : devices) {
-    if (IsDeviceSuitable(device, surface) && indice == 1) {
+    if (IsDeviceSuitable(device, surface)) {
       VkPhysicalDeviceProperties deviceProperties;
       vkGetPhysicalDeviceProperties(device, &deviceProperties);
       std::cout << "Pick: " << deviceProperties.deviceName << "\n\n";

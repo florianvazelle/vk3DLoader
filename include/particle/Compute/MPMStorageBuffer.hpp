@@ -6,15 +6,15 @@
 #include <common/Device.hpp>
 #include <common/buffer/Buffer.hpp>
 #include <common/buffer/StorageBuffer.hpp>
-#include <common/struct/Particle.hpp>
 #include <common/struct/Cell.hpp>
+#include <common/struct/Particle.hpp>
 
 #include <random>
 #include <vector>
 
 #define NUM_PARTICLE 4096
 #define GRID_RESOLUTION 64
-#define NUM_CELLS (GRID_RESOLUTION * GRID_RESOLUTION)
+#define NUM_CELLS 4096
 #define ELASTIC_LAMBDA 10.0f
 #define ELASTIC_MU 20.0f
 #define DT 0.1f
@@ -22,102 +22,102 @@
 namespace vkl {
 
   class MPMStorageBuffer {
-public:
-  StorageBuffer ps;
-  StorageBuffer grid;
-  StorageBuffer fs;
+  public:
+    StorageBuffer ps;
+    StorageBuffer grid;
+    StorageBuffer fs;
 
-  MPMStorageBuffer(const Device& device,
-                   const CommandPool& commandPool,
-                   VkBufferUsageFlags usage,
-                   VkMemoryPropertyFlags properties)
-      : ps(device, NUM_PARTICLE * sizeof(Particle), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | usage, properties),
-        grid(device, NUM_CELLS * sizeof(Cell), usage, properties),
-        fs(device, NUM_PARTICLE * sizeof(glm::mat2), usage, properties) {
-    // STEP 1 - we populate our array of particles
+    MPMStorageBuffer(const Device& device,
+                     const CommandPool& commandPool,
+                     VkBufferUsageFlags usage,
+                     VkMemoryPropertyFlags properties)
+        : ps(device, NUM_PARTICLE * sizeof(Particle), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | usage, properties),
+          grid(device, NUM_CELLS * sizeof(Cell), usage, properties),
+          fs(device, NUM_PARTICLE * sizeof(glm::mat2), usage, properties) {
+      // STEP 1 - we populate our array of particles
 
-    std::vector<glm::vec2> temp_positions;
+      std::vector<glm::vec2> temp_positions;
 
-    const int x     = GRID_RESOLUTION / 2;
-    const int y     = GRID_RESOLUTION / 2;
-    const int box_x = 32;
-    const int box_y = 32;
+      const int x     = GRID_RESOLUTION / 2;
+      const int y     = GRID_RESOLUTION / 2;
+      const int box_x = 32;
+      const int box_y = 32;
 
-    const float spacing = 0.5f;
-    for (float i = -box_x / 2; i < box_x / 2; i += spacing) {
-      for (float j = -box_y / 2; j < box_y / 2; j += spacing) {
-        temp_positions.push_back(glm::vec2(x + i, y + j));
-      }
-    }
-
-    std::vector<Particle> particleBuffer(NUM_PARTICLE);
-    std::vector<glm::mat2> FsBuffer(NUM_PARTICLE);
-
-    // STEP 2 - initialise particles
-
-    for (int i = 0; i < NUM_PARTICLE; ++i) {
-      particleBuffer[i] = {
-          .pos  = temp_positions[i],
-          .vel  = glm::vec2(0, 0),
-          .C    = glm::mat2(0, 0, 0, 0),
-          .mass = 1.0f,
-      };
-
-      // deformation gradient initialised to the identity
-      FsBuffer[i] = glm::mat2(1, 0, 0, 1);
-    }
-
-    std::vector<Cell> gridBuffer(NUM_CELLS);
-
-    for (int i = 0; i < NUM_CELLS; ++i) {
-      gridBuffer[i] = {
-          .vel = glm::vec2(0, 0),
-      };
-    }
-
-    // MPM course, equation 152
-
-    // STEP 3 - launch a P2G job to scatter particle mass to the grid
-
-    Job_P2G(particleBuffer, FsBuffer, gridBuffer);
-
-    std::vector<glm::vec2> weights(3);
-
-    for (int i = 0; i < NUM_PARTICLE; ++i) {
-      Particle& p = particleBuffer[i];
-
-      // quadratic interpolation weights
-      glm::vec2 cell_idx  = glm::floor(p.pos);
-      glm::vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
-      weights[0]          = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
-      weights[1]          = 0.75f - (cell_diff * cell_diff);
-      weights[2]          = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
-
-      float density = 0.0f;
-      // iterate over neighbouring 3x3 cells
-      for (int gx = 0; gx < 3; ++gx) {
-        for (int gy = 0; gy < 3; ++gy) {
-          float weight = weights[gx].x * weights[gy].y;
-
-          // map 2D to 1D index in grid
-          int cell_index = ((int)cell_idx.x + (gx - 1)) * GRID_RESOLUTION + ((int)cell_idx.y + gy - 1);
-          density += gridBuffer[cell_index].mass * weight;
+      const float spacing = 0.5f;
+      for (float i = -box_x / 2; i < box_x / 2; i += spacing) {
+        for (float j = -box_y / 2; j < box_y / 2; j += spacing) {
+          temp_positions.push_back(glm::vec2(x + i, y + j));
         }
       }
 
-      // per-particle volume estimate has now been computed
-      float volume = p.mass / density;
-      p.volume_0   = volume;
+      std::vector<Particle> particleBuffer(NUM_PARTICLE);
+      std::vector<glm::mat2> FsBuffer(NUM_PARTICLE);
+
+      // STEP 2 - initialise particles
+
+      for (int i = 0; i < NUM_PARTICLE; ++i) {
+        particleBuffer[i] = {
+            .pos  = temp_positions[i],
+            .vel  = glm::vec2(0, 0),
+            .C    = glm::mat2(0, 0, 0, 0),
+            .mass = 1.0f,
+        };
+
+        // deformation gradient initialised to the identity
+        FsBuffer[i] = glm::mat2(1.0f);
+      }
+
+      std::vector<Cell> gridBuffer(NUM_CELLS);
+
+      for (int i = 0; i < NUM_CELLS; ++i) {
+        gridBuffer[i] = {
+            .vel = glm::vec2(0, 0),
+        };
+      }
+
+      // MPM course, equation 152
+
+      // STEP 3 - launch a P2G job to scatter particle mass to the grid
+
+      Job_P2G(particleBuffer, FsBuffer, gridBuffer);
+
+      std::vector<glm::vec2> weights(3);
+
+      for (int i = 0; i < NUM_PARTICLE; ++i) {
+        Particle& p = particleBuffer[i];
+
+        // quadratic interpolation weights
+        glm::vec2 cell_idx  = glm::ivec2(p.pos);
+        glm::vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
+        weights[0]          = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
+        weights[1]          = 0.75f - (cell_diff * cell_diff);
+        weights[2]          = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
+
+        float density = 0.0f;
+        // iterate over neighbouring 3x3 cells
+        for (int gx = 0; gx < 3; ++gx) {
+          for (int gy = 0; gy < 3; ++gy) {
+            float weight = weights[gx].x * weights[gy].y;
+
+            // map 2D to 1D index in grid
+            int cell_index = (cell_idx.x + (gx - 1)) * GRID_RESOLUTION + (cell_idx.y + gy - 1);
+            density += gridBuffer[cell_index].mass * weight;
+          }
+        }
+
+        // per-particle volume estimate has now been computed
+        float volume = p.mass / density;
+        p.volume_0   = volume;
+      }
+
+      // ----- Copy particle buffer -----
+
+      CopyVertexBuffer(device, commandPool, particleBuffer, ps);
+      CopyBuffer(device, commandPool, gridBuffer, grid);
+      CopyBuffer(device, commandPool, FsBuffer, fs);
     }
 
-    // ----- Copy particle buffer -----
-
-    CopyBuffer(device, commandPool, particleBuffer, ps);
-    // CopyBuffer(device, commandPool, gridBuffer, grid);
-    // CopyBuffer(device, commandPool, FsBuffer, fs);
-  }
-
-private:
+  private:
     // TODO : maybe use Compute Shader
     void Job_P2G(const std::vector<Particle>& particleBuffer,
                  const std::vector<glm::mat2>& Fs,
@@ -158,24 +158,24 @@ private:
         glm::mat2 eq_16_term_0 = -volume * 4 * stress * DT;
 
         // quadratic interpolation weights
-        glm::vec2 cell_idx  = glm::floor(p.pos);  // uvec2 -> unsigned
+        glm::vec2 cell_idx  = glm::ivec2(p.pos);  // uvec2 -> unsigned
         glm::vec2 cell_diff = (p.pos - cell_idx) - 0.5f;
-        weights[0] = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
-        weights[1] = 0.75f - (cell_diff * cell_diff);
-        weights[2] = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
+        weights[0]          = 0.5f * ((0.5f - cell_diff) * (0.5f - cell_diff));
+        weights[1]          = 0.75f - (cell_diff * cell_diff);
+        weights[2]          = 0.5f * ((0.5f + cell_diff) * (0.5f + cell_diff));
 
         // for all surrounding 9 cells
         for (unsigned int gx = 0; gx < 3; ++gx) {
           for (unsigned int gy = 0; gy < 3; ++gy) {
             float weight = weights[gx].x * weights[gy].y;
 
-            glm::uvec2 cell_x   = glm::uvec2(cell_idx.x + gx - 1, cell_idx.y + gy - 1);  // uint2
-            glm::vec2 cell_dist = (glm::vec2(cell_x) - p.pos) + 0.5f;                    // cast uvec2 into vec2
+            glm::vec2 cell_x    = glm::ivec2(cell_idx.x + gx - 1, cell_idx.y + gy - 1);  // uint2
+            glm::vec2 cell_dist = (cell_x - p.pos) + 0.5f;                               // cast uvec2 into vec2
             glm::vec2 Q         = p.C * cell_dist;
 
             // scatter mass and momentum to the grid
-            int cell_index = (int)cell_x.x * GRID_RESOLUTION + (int)cell_x.y;
-            Cell& cell      = grid[cell_index];
+            int cell_index = cell_x.x * GRID_RESOLUTION + cell_x.y;
+            Cell& cell     = grid[cell_index];
 
             // MPM course, equation 172
             float weighted_mass = weight * p.mass;
@@ -193,9 +193,31 @@ private:
       }
     }
 
-    template <typename T> void CopyBuffer(const Device& device, const CommandPool& commandPool, const std::vector<T>& vec, StorageBuffer& storageBuffer) const {
+    template <typename T> void CopyBuffer(const Device& device,
+                                          const CommandPool& commandPool,
+                                          const std::vector<T>& vec,
+                                          StorageBuffer& storageBuffer) const {
       Buffer<T> stagingBuffer(device, vec, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                              VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+      CommandBuffers::SingleTimeCommands(
+          device, commandPool, device.graphicsQueue(), [&](const VkCommandBuffer& cmdBuffer) {
+            VkBufferCopy copyRegion = {
+                .size = storageBuffer.size(),
+            };
+            vkCmdCopyBuffer(cmdBuffer, stagingBuffer.buffer(), storageBuffer.buffer(), 1, &copyRegion);
+
+            vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0,
+                                 0, nullptr, 0, nullptr, 0, nullptr);
+          });
+    }
+
+    template <typename T> void CopyVertexBuffer(const Device& device,
+                                                const CommandPool& commandPool,
+                                                const std::vector<T>& vec,
+                                                StorageBuffer& storageBuffer) const {
+      Buffer<T> stagingBuffer(device, vec, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                              VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
       CommandBuffers::SingleTimeCommands(
           device, commandPool, device.graphicsQueue(), [&](const VkCommandBuffer& cmdBuffer) {

@@ -61,6 +61,10 @@ namespace vkl {
     VkDescriptorPoolCreateInfo dpi;
     DescriptorPool dp;
 
+    const std::vector<VkDescriptorPoolSize> psCompute;
+    VkDescriptorPoolCreateInfo dpiCompute;
+    DescriptorPool dpCompute;
+
     // Buffers
     UniformBuffers<ParticleMVP> uniformBuffersGraphic;
     MPMStorageBuffer storageBuffer;

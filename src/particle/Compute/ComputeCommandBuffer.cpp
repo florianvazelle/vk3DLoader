@@ -21,13 +21,13 @@ using namespace vkl;
 ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
                                            const RenderPass& renderPass,
                                            const ComputePipeline& computePipeline,
-                                           const StorageBuffer& storageBuffer,
+                                           const std::vector<const IBuffer*>& storageBuffers,
                                            const CommandPool& commandPool,
                                            const DescriptorSets& descriptorSets)
     : m_device(device),
       m_renderPass(renderPass),
       m_computePipeline(computePipeline),
-      m_storageBuffer(storageBuffer),
+      m_storageBuffers(storageBuffers),
       m_commandPool(commandPool),
       m_descriptorSets(descriptorSets) {
   createCommandBuffers();
@@ -45,9 +45,9 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
               .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
               .srcQueueFamilyIndex = graphicsFamily.value(),
               .dstQueueFamilyIndex = computeFamily.value(),
-              .buffer              = m_storageBuffer.buffer(),
+              .buffer              = m_storageBuffers[0]->buffer(),
               .offset              = 0,
-              .size                = m_storageBuffer.size(),
+              .size                = m_storageBuffers[0]->size(),
           };
 
           vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
@@ -59,9 +59,9 @@ ComputeCommandBuffer::ComputeCommandBuffer(const Device& device,
               .dstAccessMask       = 0,
               .srcQueueFamilyIndex = computeFamily.value(),
               .dstQueueFamilyIndex = graphicsFamily.value(),
-              .buffer              = m_storageBuffer.buffer(),
+              .buffer              = m_storageBuffers[0]->buffer(),
               .offset              = 0,
-              .size                = m_storageBuffer.size(),
+              .size                = m_storageBuffers[0]->size(),
           };
 
           vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,
@@ -126,41 +126,93 @@ void ComputeCommandBuffer::createCommandBuffers() {
         .dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT,
         .srcQueueFamilyIndex = graphicsFamily.value(),
         .dstQueueFamilyIndex = computeFamily.value(),
-        .buffer              = m_storageBuffer.buffer(),
+        .buffer              = m_storageBuffers[0]->buffer(),
         .offset              = 0,
-        .size                = m_storageBuffer.size(),
+        .size                = m_storageBuffers[0]->size(),
     };
 
     vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
                          0, nullptr, 1, &acquire_barrier, 0, nullptr);
   }
 
-  // First pass: Calculate particle movement
+  // First pass: Clear Grid
   // -------------------------------------------------------------------------------------------------------
-  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipelineCalculate());
+  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(0));
   vkCmdBindDescriptorSets(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.layout(), 0, 1,
                           &m_descriptorSets.descriptor(0), 0, 0);
-  vkCmdDispatch(m_commandBuffer, NUM_PARTICLE / 256, 1, 1);
+  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
+
+  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
+                       nullptr, 0, nullptr, 0, nullptr);
 
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
-  const VkBufferMemoryBarrier bufferBarrier = {
+  const VkBufferMemoryBarrier bufferBarrier1 = {
       .sType         = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
       .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
       .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
       // Transfer ownership if compute and graphics queue family indices differ
       .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
       .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-      .buffer              = m_storageBuffer.buffer(),
-      .size                = m_storageBuffer.descriptor().range,
+      .buffer              = m_storageBuffers[1]->buffer(),
+      .size                = m_storageBuffers[1]->descriptor().range,
   };
 
   vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
-                       0, nullptr, 1, &bufferBarrier, 0, nullptr);
+                       0, nullptr, 1, &bufferBarrier1, 0, nullptr);
 
-  // Second pass: Integrate particles
+  // Second pass: P2G
   // -------------------------------------------------------------------------------------------------------
-  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipelineIntegrate());
+  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(1));
+  vkCmdDispatch(m_commandBuffer, 1, 1, 1);
+
+  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
+                       nullptr, 0, nullptr, 0, nullptr);
+
+  // Add memory barrier to ensure that the computer shader has finished writing to the buffer
+  const VkBufferMemoryBarrier bufferBarrier2 = {
+      .sType         = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+      .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+      .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+      // Transfer ownership if compute and graphics queue family indices differ
+      .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+      .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+      .buffer              = m_storageBuffers[1]->buffer(),
+      .size                = m_storageBuffers[1]->descriptor().range,
+  };
+
+  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
+                       0, nullptr, 1, &bufferBarrier2, 0, nullptr);
+
+  // 3 pass: Update Grid
+  // -------------------------------------------------------------------------------------------------------
+  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(2));
+  vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
+
+  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
+                       nullptr, 0, nullptr, 0, nullptr);
+
+  // Add memory barrier to ensure that the computer shader has finished writing to the buffer
+  const VkBufferMemoryBarrier bufferBarrier3 = {
+      .sType         = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+      .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+      .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+      // Transfer ownership if compute and graphics queue family indices differ
+      .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+      .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+      .buffer              = m_storageBuffers[1]->buffer(),
+      .size                = m_storageBuffers[1]->descriptor().range,
+  };
+
+  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
+                       0, nullptr, 1, &bufferBarrier3, 0, nullptr);
+
+  // 4 pass: G2P
+  // -------------------------------------------------------------------------------------------------------
+  vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(3));
   vkCmdDispatch(m_commandBuffer, NUM_PARTICLE / 256, 1, 1);
+
+  // vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
+  //                      nullptr, 0, nullptr, 0, nullptr);
 
   // Release barrier
   if (graphicsFamily.value() != computeFamily.value()) {
@@ -170,9 +222,9 @@ void ComputeCommandBuffer::createCommandBuffers() {
         .dstAccessMask       = 0,
         .srcQueueFamilyIndex = computeFamily.value(),
         .dstQueueFamilyIndex = graphicsFamily.value(),
-        .buffer              = m_storageBuffer.buffer(),
+        .buffer              = m_storageBuffers[0]->buffer(),
         .offset              = 0,
-        .size                = m_storageBuffer.size(),
+        .size                = m_storageBuffers[0]->size(),
     };
 
     vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, 0,

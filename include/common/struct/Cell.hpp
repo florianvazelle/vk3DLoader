@@ -6,9 +6,8 @@
 namespace vkl {
 
   struct Cell {
-    glm::vec2 vel;  // velocity
-    float mass;
-    float padding;  // unused
+    alignas(8) glm::vec2 vel;  // velocity
+    alignas(4) float mass;
   };
 
 }  // namespace vkl

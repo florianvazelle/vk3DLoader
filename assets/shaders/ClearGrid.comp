@@ -1,0 +1,40 @@
+#version 450
+
+struct Particle {
+  vec2 pos;
+  vec2 vel;
+  mat2 C;
+  float mass;
+  float volume_0;
+};
+
+struct Cell {
+  vec2 vel;
+  float mass;
+};
+
+layout(local_size_x = 16) in;
+layout(binding = 0) buffer Pos { Particle particles[]; };
+layout(binding = 1) buffer cells { Cell grid[]; };
+layout(binding = 2) buffer deformationGradient { mat2 Fs[]; };
+layout(binding = 3) uniform UBO {
+  float deltaT;
+  int particleCount;
+}
+ubo;
+
+const int GRID_RESOLUTION  = 64;
+const float ELASTIC_LAMBDA = 10.0;
+const float ELASTIC_MU     = 20.0;
+const float GRAVITY        = 0.3;
+
+void main() {
+  int index = int(gl_GlobalInvocationID);
+
+  Cell cell = grid[index];
+
+  cell.vel  = vec2(0, 0);
+  cell.mass = 0.0;
+
+  grid[index] = cell;
+}

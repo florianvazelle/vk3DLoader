@@ -23,7 +23,7 @@ void GraphicDescriptorSets::createDescriptorSets() {
 
     writeDescriptorSets = {
         // Binding 2 :
-        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2, &bufferInfo),
+        misc::writeDescriptorSet(m_descriptorSets.at(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &bufferInfo),
     };
 
     vkUpdateDescriptorSets(m_device.logical(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);

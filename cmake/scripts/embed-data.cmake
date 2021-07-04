@@ -26,7 +26,7 @@ if(EXISTS "${PATH}")
     set(array_definition "static const std::vector<unsigned char> ${GLOBAL} =\n{\n${content}\n};")
     
     get_filename_component(file_name ${HEADER} NAME)
-    set(source "/**\n * @file ${file_name}\n * @brief Auto generated file.\n */\n#include <vector>\n${array_definition}\n")
+    set(source "/**\n * @file ${file_name}\n * @brief Auto generated file.\n */\n#pragma once\n#include <vector>\n${array_definition}\n")
 
     file(WRITE "${HEADER}" "${source}")
 else()

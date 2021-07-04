@@ -23,11 +23,10 @@ namespace vkl {
 
     void recreate() final;
 
-    inline const VkPipeline& pipelineCalculate() const { return m_pipelineCalculate; }
-    inline const VkPipeline& pipelineIntegrate() const { return m_pipelineIntegrate; }
+    inline const VkPipeline& pipeline(int i) const { return m_pipelines[i]; }
 
   private:
-    VkPipeline m_pipelineCalculate, m_pipelineIntegrate;
+    std::vector<VkPipeline> m_pipelines;
 
     void createPipeline() final;
     void destroyComputePipeline();
