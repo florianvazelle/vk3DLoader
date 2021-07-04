@@ -57,9 +57,9 @@ namespace vkl {
 
       for (int i = 0; i < NUM_PARTICLE; ++i) {
         particleBuffer[i] = {
+            .C    = glm::mat2(0, 0, 0, 0),
             .pos  = temp_positions[i],
             .vel  = glm::vec2(0, 0),
-            .C    = glm::mat2(0, 0, 0, 0),
             .mass = 1.0f,
         };
 

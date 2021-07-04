@@ -5,9 +5,10 @@
 
 namespace vkl {
 
-  struct Cell {
+  struct alignas(16) Cell {
     alignas(8) glm::vec2 vel;  // velocity
     alignas(4) float mass;
+    alignas(4) float padding;
   };
 
 }  // namespace vkl

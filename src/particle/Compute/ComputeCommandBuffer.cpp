@@ -142,9 +142,6 @@ void ComputeCommandBuffer::createCommandBuffers() {
                           &m_descriptorSets.descriptor(0), 0, 0);
   vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
 
-  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
-                       nullptr, 0, nullptr, 0, nullptr);
-
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
   const VkBufferMemoryBarrier bufferBarrier1 = {
       .sType         = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
@@ -165,9 +162,6 @@ void ComputeCommandBuffer::createCommandBuffers() {
   vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(1));
   vkCmdDispatch(m_commandBuffer, 1, 1, 1);
 
-  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
-                       nullptr, 0, nullptr, 0, nullptr);
-
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
   const VkBufferMemoryBarrier bufferBarrier2 = {
       .sType         = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
@@ -187,9 +181,6 @@ void ComputeCommandBuffer::createCommandBuffers() {
   // -------------------------------------------------------------------------------------------------------
   vkCmdBindPipeline(m_commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, m_computePipeline.pipeline(2));
   vkCmdDispatch(m_commandBuffer, NUM_CELLS / 16, 1, 1);
-
-  vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
-                       nullptr, 0, nullptr, 0, nullptr);
 
   // Add memory barrier to ensure that the computer shader has finished writing to the buffer
   const VkBufferMemoryBarrier bufferBarrier3 = {

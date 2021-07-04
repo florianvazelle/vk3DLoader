@@ -8,12 +8,13 @@
 
 namespace vkl {
   // Pour plus de commentaire regarder Vertex.hpp
-  struct Particle {
+  struct alignas(16) Particle {
+    alignas(16) glm::mat2 C;   // affine momentum matrix
     alignas(8) glm::vec2 pos;  // position "vec2" because this mpm example works in 2D
     alignas(8) glm::vec2 vel;  // velocity
-    alignas(16) glm::mat2 C;   // affine momentum matrix
     alignas(4) float mass;
     alignas(4) float volume_0;  // initial volume
+    alignas(8) glm::vec2 padding;
 
     static VkVertexInputBindingDescription getBindingDescription() {
       // Binding description
