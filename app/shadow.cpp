@@ -3,9 +3,8 @@
 #include <cxxopts.hpp>               // for Options, ParseResult, value, Opt...
 #include <iostream>                  // for operator<<, cout, ostream, basic...
 #include <memory>                    // for allocator, shared_ptr
-#include <shadow/ShadowMapping.hpp>  // for glfwInit, glfwTerminate, glfwWin...
+#include <ShadowMapping.hpp>  // for glfwInit, glfwTerminate, glfwWin...
 #include <string>                    // for string, operator<<, char_traits
-#include <common/Application.hpp>    // for DebugOption
 // clang-format on
 
 int main(int argc, char** argv) {
@@ -45,7 +44,7 @@ int main(int argc, char** argv) {
     debugLevel = result["debug"].as<int>();
   }
 
-  vkl::DebugOption debugOption = {
+  poike::DebugOption debugOption = {
       .debugLevel  = debugLevel,
       .exitOnError = result.count("error-exit") > 0,
   };
