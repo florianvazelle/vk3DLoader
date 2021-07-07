@@ -83,13 +83,3 @@ target_set_warnings(
 file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/assets/shaders/*.vert" "${CMAKE_SOURCE_DIR}/assets/shaders/*.frag")
 
 compile_shaders(TARGETS ${SHADERS})
-
-#
-# Install
-#
-
-option(INSTALL_APPS "Enable installation of the application." OFF)
-
-if (INSTALL_APPS)
-    install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} DESTINATION .)
-endif()
